@@ -1275,12 +1275,18 @@ class Component extends DCLogic {
   document.addEventListener('click', function (e) { if (!root.contains(e.target)) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
+  // Hide the contact button while a project (lightbox) is open; restore on close.
+  function projectOpen() { var lb = document.querySelector('.lb-scroll'); return !!(lb && lb.getClientRects().length); }
+  function syncVis() { root.style.display = projectOpen() ? 'none' : ''; }
+  document.addEventListener('click', function () { setTimeout(syncVis, 60); }, true);
+
   apply(detectLang());
-  // React re-renders on language toggle; re-detect when the DOM changes.
+  syncVis();
+  // React re-renders on language toggle / project open-close; re-sync on DOM changes.
   var scheduled = false;
   var obs = new MutationObserver(function () {
     if (scheduled) return; scheduled = true;
-    requestAnimationFrame(function () { scheduled = false; apply(detectLang()); });
+    requestAnimationFrame(function () { scheduled = false; apply(detectLang()); syncVis(); });
   });
   obs.observe(document.body, { childList: true, subtree: true, characterData: true });
 })();
