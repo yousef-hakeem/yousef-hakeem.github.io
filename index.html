@@ -1286,4 +1286,169 @@ class Component extends DCLogic {
 })();
 </script>
 
+<!-- yh-gallery-zoom: mobile-friendly vertical gallery + full-screen pinch/zoom viewer -->
+<style id="yh-gallery-style">
+  /* Every project screen is tappable to zoom */
+  .lb-scroll img { cursor: zoom-in; }
+
+  /* On phones: stack every screen full-width, natural height — scroll straight down. */
+  @media (max-width: 700px) {
+    .lb-scroll { padding: 12px !important; }
+    .lb-scroll > div { display: block !important; }
+    .lb-scroll img {
+      aspect-ratio: auto !important;
+      height: auto !important;
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 0 12px !important;
+    }
+  }
+
+  #yh-zoom { position: fixed; inset: 0; z-index: 2147483600; display: none;
+    background: rgba(11,13,11,.95); touch-action: none; overscroll-behavior: contain;
+    -webkit-user-select: none; user-select: none; }
+  #yh-zoom.yh-open { display: block; }
+  #yh-zoom img { position: absolute; top: 0; left: 0; -webkit-user-drag: none;
+    will-change: left, top, width; border-radius: 4px; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
+  #yh-zoom .yh-zc { position: fixed; top: 14px; right: 14px; width: 46px; height: 46px;
+    border-radius: 50%; border: none; background: rgba(255,255,255,.15); color: #fff;
+    font-size: 25px; line-height: 1; cursor: pointer; z-index: 3; display: flex;
+    align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+  #yh-zoom .yh-zc:hover { background: rgba(255,255,255,.28); }
+  #yh-zoom .yh-zhint { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,.82); font: 12px/1.4 'IBM Plex Mono', ui-monospace, monospace;
+    background: rgba(0,0,0,.4); padding: 7px 14px; border-radius: 999px; z-index: 3;
+    pointer-events: none; transition: opacity .5s ease; white-space: nowrap; }
+</style>
+
+<div id="yh-zoom" role="dialog" aria-modal="true">
+  <img alt="">
+  <button class="yh-zc" type="button" aria-label="close">&times;</button>
+  <div class="yh-zhint"></div>
+</div>
+
+<script id="yh-gallery-zoom-script">
+(function () {
+  const ov = document.getElementById('yh-zoom');
+  const img = ov.querySelector('img');
+  const closeBtn = ov.querySelector('.yh-zc');
+  const hint = ov.querySelector('.yh-zhint');
+
+  function isEn() {
+    const els = document.querySelectorAll('button, a, [role="button"]');
+    for (const el of els) { const t = (el.textContent || '').trim(); if (t === 'ع' || t === 'AR') return true; if (t === 'EN') return false; }
+    return false;
+  }
+
+  let vw = window.innerWidth, vh = window.innerHeight;
+  let fitW = 0, maxW = 0, natRatio = 1;
+  const pointers = new Map();
+  let lastMid = null, lastDist = 0, lastTap = 0;
+
+  function clampPos() {
+    const w = img.offsetWidth, h = img.offsetHeight;
+    let left = parseFloat(img.style.left) || 0, top = parseFloat(img.style.top) || 0;
+    left = w <= vw ? (vw - w) / 2 : Math.min(0, Math.max(vw - w, left));
+    top  = h <= vh ? (vh - h) / 2 : Math.min(0, Math.max(vh - h, top));
+    img.style.left = left + 'px'; img.style.top = top + 'px';
+  }
+  function setWidth(w, fx, fy) {
+    const rect = img.getBoundingClientRect();
+    const nw = Math.max(fitW, Math.min(maxW, w));
+    const px = rect.width ? (fx - rect.left) / rect.width : 0.5;
+    const py = rect.height ? (fy - rect.top) / rect.height : 0.5;
+    const nh = nw / natRatio;
+    img.style.width = nw + 'px';
+    img.style.left = (fx - px * nw) + 'px';
+    img.style.top = (fy - py * nh) + 'px';
+    clampPos();
+    ov.classList.toggle('yh-zoomed', nw > fitW + 1);
+    img.style.cursor = nw > fitW + 1 ? 'grab' : 'zoom-in';
+  }
+  function fit() { img.style.width = fitW + 'px'; img.style.height = 'auto'; clampPos(); ov.classList.remove('yh-zoomed'); img.style.cursor = 'zoom-in'; }
+
+  function layout() {
+    vw = window.innerWidth; vh = window.innerHeight;
+    const nw = img.naturalWidth || 1200, nh = img.naturalHeight || 800;
+    natRatio = nw / nh;
+    const r = Math.min((vw * 0.96) / nw, (vh * 0.92) / nh);
+    fitW = nw * r; maxW = Math.max(fitW * 5.5, nw * 1.5);
+    fit();
+  }
+
+  function open(src) {
+    img.src = src;
+    if (img.complete && img.naturalWidth) layout();
+    ov.classList.add('yh-open');
+    document.documentElement.style.overflow = 'hidden';
+    hint.textContent = isEn() ? 'Pinch or double-tap to zoom · drag to move' : 'قرّب بإصبعين أو انقر مرتين · اسحب للتحريك';
+    hint.style.opacity = '1';
+    clearTimeout(open._t); open._t = setTimeout(() => { hint.style.opacity = '0'; }, 2600);
+  }
+  function close() { ov.classList.remove('yh-open'); document.documentElement.style.overflow = ''; img.removeAttribute('src'); }
+
+  img.addEventListener('load', layout);
+  window.addEventListener('resize', () => { if (ov.classList.contains('yh-open')) layout(); });
+
+  // Open when a project screen is tapped.
+  document.addEventListener('click', function (e) {
+    const t = e.target;
+    if (t && t.tagName === 'IMG' && t.closest('.lb-scroll')) {
+      e.preventDefault(); e.stopPropagation();
+      open(t.currentSrc || t.src);
+    }
+  }, true);
+
+  closeBtn.addEventListener('click', close);
+  ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('yh-open')) close(); });
+
+  // Desktop wheel zoom
+  ov.addEventListener('wheel', function (e) {
+    if (!ov.classList.contains('yh-open')) return;
+    e.preventDefault();
+    setWidth(img.offsetWidth * (e.deltaY < 0 ? 1.18 : 1 / 1.18), e.clientX, e.clientY);
+  }, { passive: false });
+
+  function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+  function mid(a, b) { return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; }
+
+  ov.addEventListener('pointerdown', function (e) {
+    if (e.target === closeBtn) return;
+    ov.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2) {
+      const [a, b] = [...pointers.values()];
+      lastDist = dist(a, b); lastMid = mid(a, b);
+    } else if (pointers.size === 1) {
+      // double-tap / double-click to toggle zoom
+      const now = Date.now();
+      if (now - lastTap < 300) {
+        if (img.offsetWidth > fitW + 1) fit();
+        else setWidth(fitW * 2.4, e.clientX, e.clientY);
+        lastTap = 0;
+      } else { lastTap = now; }
+    }
+  });
+  ov.addEventListener('pointermove', function (e) {
+    const p = pointers.get(e.pointerId); if (!p) return;
+    const prev = { x: p.x, y: p.y };
+    p.x = e.clientX; p.y = e.clientY;
+    if (pointers.size === 2) {
+      const [a, b] = [...pointers.values()];
+      const d = dist(a, b), m = mid(a, b);
+      if (lastDist) setWidth(img.offsetWidth * (d / lastDist), m.x, m.y);
+      lastDist = d; lastMid = m;
+    } else if (pointers.size === 1 && img.offsetWidth > fitW + 1) {
+      img.style.left = (parseFloat(img.style.left) + (p.x - prev.x)) + 'px';
+      img.style.top = (parseFloat(img.style.top) + (p.y - prev.y)) + 'px';
+      clampPos();
+    }
+  });
+  function up(e) { pointers.delete(e.pointerId); if (pointers.size < 2) lastDist = 0; }
+  ov.addEventListener('pointerup', up);
+  ov.addEventListener('pointercancel', up);
+})();
+</script>
+
 </body></html>
