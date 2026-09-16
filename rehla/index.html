@@ -82,7 +82,7 @@
     display:inline-flex; gap:8px; align-items:center;
   }
   .score-badge .star{color:var(--gold-soft);}
-  .motiv{color:#2c4763; font-size:14px; margin:2px 0 18px; font-weight:500;}
+  .motiv{color:#2c4763; font-size:14px; margin:2px 0 18px; font-weight:500; min-height:20px; transition:opacity .3s;}
 
   /* progress track (RTL: fill starts from the right = 0 side) */
   .track-wrap{position:relative; margin:44px 6px 8px;}
@@ -560,8 +560,10 @@ function enterApp(){
     document.querySelector('.topbar .title').textContent = '🎒 رحلتي';
   }
   renderAll();
+  startMotiv();
 }
 function logout(){
+  if(motivTimer){ clearInterval(motivTimer); motivTimer=null; }
   role=null; selectedId=null; pendingDeleteId=null;
   document.getElementById('app').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
@@ -680,6 +682,35 @@ function logFor(id){
     .filter(e=>e.studentId===id).sort((a,b)=>b.ts-a.ts);
 }
 
+/* =================== عبارات تحفيزية =================== */
+const MOTIVS = [
+  'تقدّم… فأنت تستطيع 💪',
+  'المثابر لا يستسلم أبدًا 🌟',
+  'كل نقطة تقرّبك من القمة ⛰️',
+  'الأبطال يصنعون طريقهم خطوة بخطوة 🚀',
+  'استمر… النجاح عادة تُبنى يومًا بعد يوم 🔥',
+  'ثابر اليوم لتفخر غدًا ✨',
+  'قدراتك أكبر مما تتخيّل، انطلق! 💯',
+  'الطريق للقمة يبدأ بخطوة… وأنت بدأت 🏔️',
+  'لا تلتفت للخلف، القمة تنتظرك 👑',
+  'اجتهادك اليوم هو نجاحك غدًا 🌱',
+  'خطوة بخطوة تُصنع البطولة 🏆',
+  'أنت أقرب مما تظن، واصل 🌤️',
+];
+let motivIdx=0, motivTimer=null;
+function updateMotiv(){
+  const el=document.getElementById('jMotiv'); if(!el)return;
+  const s=selectedId?state.students[selectedId]:null;
+  if(!s){ el.textContent=''; return; }
+  const {pct}=stationInfo(clampPts(s.points));
+  el.textContent = pct>=100 ? 'وصلت القمة! بطل حقيقي 🏆' : MOTIVS[motivIdx % MOTIVS.length];
+}
+function startMotiv(){
+  if(motivTimer) clearInterval(motivTimer);
+  updateMotiv();
+  motivTimer=setInterval(()=>{ motivIdx++; updateMotiv(); }, 4000);
+}
+
 /* =================== RENDER =================== */
 function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
@@ -710,8 +741,7 @@ function renderJourney(){
   document.getElementById('sCur').textContent=cur.name;
   document.getElementById('sNext').textContent= next? next.name : 'اكتملت الرحلة';
   document.getElementById('sRem').textContent= next? rem+' نقطة' : '🎉';
-  document.getElementById('jMotiv').textContent = pct>=100 ? 'وصلت القمة! بطل حقيقي 🏆'
-      : pct>=50 ? 'أنت في منتصف الطريق.. وما زال في جعبتك الكثير' : 'كل نقطة تقرّبك من أهدافك — انطلق!';
+  updateMotiv();
   document.getElementById('jNextMsg').textContent = next
       ? '🎯 مهمتك القادمة: اجمع '+rem+' نقطة لتصل إلى «'+next.name+'»!'
       : '🎉 مبروك! أكملت رحلتك ووصلت «البطل».';
