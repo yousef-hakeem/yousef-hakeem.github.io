@@ -282,7 +282,7 @@
       <div id="adminControls">
         <div class="pts-ctrl">
           <button class="step minus" onclick="stepPoints(-10)">−10</button>
-          <input id="ptsInput" type="number" min="0" max="500" inputmode="numeric">
+          <input id="ptsInput" type="number" min="0" max="2000" inputmode="numeric">
           <button class="step plus" onclick="stepPoints(10)">+10</button>
         </div>
         <div class="item-btns" id="quickItems"></div>
@@ -319,6 +319,13 @@
         </div>
         <div class="items-list" id="itemsList"></div>
       </div>
+    </div>
+
+    <!-- ===== STUDENT: items info (read-only) ===== -->
+    <div class="card" id="studentItemsCard" style="display:none">
+      <h2>🏷️ بنود النقاط <span id="studentItemsWho" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
+      <p style="color:var(--muted);font-size:13px;margin:-8px 0 4px">هذه الأنشطة تكسّبك نقاطًا في رحلتك:</p>
+      <div class="items-list" id="studentItems"></div>
     </div>
 
     <!-- ===== LOG (both views) ===== -->
@@ -377,16 +384,16 @@ const firebaseConfig = {
 };
 
 const DEFAULT_PIN = "1234";           // رمز المشرف الافتراضي (يمكن تغييره من الإعدادات)
-const MAX_POINTS = 500;
+const MAX_POINTS = 2000;
 const MAX_PER_SECTION = 30;           // الحد الأقصى لكل قسم
 const SECTION_LABELS = { fursan:'الفرسان', fityan:'الفتيان' };
 const STATIONS = [
-  {p:0,   name:'البداية',   icon:'🚩'},
-  {p:50,  name:'أول خطوة',  icon:'🌱'},
-  {p:100, name:'المستكشف',  icon:'🧭'},
-  {p:200, name:'المتقدم',   icon:'⛰️'},
-  {p:300, name:'القمة',     icon:'👑'},
-  {p:500, name:'البطل',     icon:'🏆'},
+  {p:0,    name:'البداية',   icon:'🚩'},
+  {p:200,  name:'أول خطوة',  icon:'🌱'},
+  {p:400,  name:'المستكشف',  icon:'🧭'},
+  {p:800,  name:'المتقدم',   icon:'⛰️'},
+  {p:1200, name:'القمة',     icon:'👑'},
+  {p:2000, name:'البطل',     icon:'🏆'},
 ];
 
 /* ---------- state ---------- */
@@ -513,6 +520,7 @@ function enterApp(){
   const admin = role==='admin';
   document.getElementById('adminControls').style.display = admin?'block':'none';
   document.getElementById('adminOnly').style.display = admin?'block':'none';
+  document.getElementById('studentItemsCard').style.display = admin?'none':'block';
   document.getElementById('roleChip').textContent = admin?'خروج المشرف':'خروج';
   if(!admin){
     // student: lock selection to own id
@@ -627,7 +635,7 @@ function logFor(id){
 }
 
 /* =================== RENDER =================== */
-function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderLog(); }
+function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
 function renderJourney(){
   const s = selectedId ? state.students[selectedId] : null;
@@ -667,7 +675,7 @@ function renderJourney(){
   document.getElementById('logWho').textContent = '— '+s.name;
 }
 function buildMarkers(pts){
-  // RTL: position from the right using `right:%`; 0 => right edge, 500 => left edge
+  // RTL: position from the right using `right:%`; 0 => right edge, 2000 => left edge
   let html='';
   STATIONS.forEach(st=>{
     const rightPct = st.p/MAX_POINTS*100;
@@ -701,7 +709,7 @@ function renderRoster(){
     return `<div class="rrow ${sel}">
       <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
       <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
-      <div class="rpts">${clampPts(s.points)}/500</div>
+      <div class="rpts">${clampPts(s.points)}/${MAX_POINTS}</div>
       ${delUI}
     </div>`;
   }).join('');
@@ -725,6 +733,19 @@ function renderQuickItems(){
   const secOfSel = selectedId ? (state.students[selectedId]?.section||'fursan') : activeSection;
   const arr=itemsArr(secOfSel);
   box.innerHTML=arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('');
+}
+
+function renderStudentItems(){
+  if(role!=='student')return;
+  const box=document.getElementById('studentItems'); if(!box)return;
+  const sec = selectedId ? (state.students[selectedId]?.section||'fursan') : 'fursan';
+  const who=document.getElementById('studentItemsWho'); if(who) who.textContent='— قسم '+SECTION_LABELS[sec];
+  const arr=itemsArr(sec);
+  if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود بعد.</div>'; return; }
+  box.innerHTML=arr.map(it=>`<div class="irow">
+    <div class="in">${escapeHtml(it.name)}</div>
+    <div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div>
+  </div>`).join('');
 }
 
 function renderLog(){
