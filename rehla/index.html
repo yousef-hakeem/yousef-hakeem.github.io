@@ -232,7 +232,7 @@
     </div>
 
     <div class="gate-form" id="formStudent">
-      <input id="studentCode" type="text" placeholder="كود الطالب (5 رموز)" maxlength="5" style="text-transform:uppercase">
+      <input id="studentCode" type="text" inputmode="numeric" placeholder="كود الطالب (3 أرقام)" maxlength="3">
       <button class="big-btn" onclick="loginStudent()">عرض رحلتي</button>
       <div class="err" id="studentErr"></div>
       <button class="link-back" onclick="showGate('choose')">رجوع</button>
@@ -459,9 +459,8 @@ function dbPush(path, value){
 /* =================== helpers =================== */
 function uid(){ return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
 function genCode(){
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const used = Object.values(state.students).map(s=>s.code);
-  let c; do{ c=''; for(let i=0;i<5;i++) c+=chars[Math.floor(Math.random()*chars.length)]; }while(used.includes(c));
+  let c; do{ c=String(Math.floor(100+Math.random()*900)); }while(used.includes(c)); // 3 أرقام (100-999)
   return c;
 }
 function clampPts(p){ p=parseInt(p,10)||0; return Math.max(0,Math.min(MAX_POINTS,p)); }
@@ -503,7 +502,7 @@ function loginAdmin(){
   else document.getElementById('adminErr').textContent='الرمز غير صحيح';
 }
 function loginStudent(){
-  const code=document.getElementById('studentCode').value.trim().toUpperCase();
+  const code=document.getElementById('studentCode').value.trim();
   const found=studentsArr().find(s=>s.code===code);
   if(found){ role='student'; selectedId=found.id; enterApp(); }
   else document.getElementById('studentErr').textContent='الكود غير موجود، تأكد منه';
