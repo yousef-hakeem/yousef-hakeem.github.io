@@ -101,6 +101,7 @@
   .marker .lbl.cur{background:var(--gold); color:#3a2c00;}
   .marker .foot{margin-top:8px; font-size:12px; color:var(--navy); white-space:nowrap; font-weight:700;}
   .marker .foot .ic{font-size:15px; display:block;}
+  .marker .foot .num{display:none;}   /* على الكمبيوتر الرقم يظهر في الفقاعة العلوية */
 
   /* stats row */
   .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:34px;}
@@ -207,12 +208,14 @@
     .stats{grid-template-columns:repeat(2,1fr);}
     .journey .who .name{font-size:19px;}
     .rrow .mini{display:none;}
-    /* 10 محطات على الجوال: نُظهر الاسم بخط صغير ونخفي فقاعة الرقم المزدحمة */
-    .track-wrap{margin:30px 2px 8px;}
+    /* 10 محطات على الجوال: نرتّبها عموديًا (إيموجي + اسم + رقم) بدل الفقاعة المزدحمة */
+    .track-wrap{margin:26px 4px 12px;}
     .marker .lbl{display:none;}
-    .marker .foot{font-size:7.5px; white-space:normal; max-width:34px; margin:6px auto 0; line-height:1.1; font-weight:700;}
-    .marker .foot .ic{font-size:13px; display:block; margin-bottom:1px;}
-    .marker .node{width:16px; height:16px; border-width:2px;}
+    .marker .foot{font-size:8px; white-space:normal; max-width:34px; margin:7px auto 0; line-height:1.2; font-weight:700;}
+    .marker .foot .ic{font-size:14px; display:block; margin-bottom:2px;}
+    .marker .foot .nm{display:block;}
+    .marker .foot .num{display:block; color:#c98f00; font-weight:800; font-size:8.5px; margin-top:1px;}
+    .marker .node{width:15px; height:15px; border-width:2px;}
     .marker.current .node{box-shadow:0 0 0 3px rgba(245,179,1,.3);}
   }
 </style>
@@ -771,7 +774,7 @@ function buildMarkers(pts){
     html+=`<div class="marker ${done?'done':''} ${isCur?'current':''}" style="right:${rightPct}%">
       <div class="lbl ${isCur?'cur':''}">${st.p}</div>
       <div class="node"></div>
-      <div class="foot"><span class="ic">${st.icon}</span><span>${st.name}</span></div>
+      <div class="foot"><span class="ic">${st.icon}</span><span class="nm">${st.name}</span><span class="num">${st.p}</span></div>
     </div>`;
   });
   return html;
