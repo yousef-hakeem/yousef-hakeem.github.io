@@ -282,7 +282,7 @@
       <div id="adminControls">
         <div class="pts-ctrl">
           <button class="step minus" onclick="stepPoints(-10)">−10</button>
-          <input id="ptsInput" type="number" min="0" max="500" inputmode="numeric">
+          <input id="ptsInput" type="number" min="0" max="2000" inputmode="numeric">
           <button class="step plus" onclick="stepPoints(10)">+10</button>
         </div>
         <div class="item-btns" id="quickItems"></div>
@@ -384,16 +384,16 @@ const firebaseConfig = {
 };
 
 const DEFAULT_PIN = "1234";           // رمز المشرف الافتراضي (يمكن تغييره من الإعدادات)
-const MAX_POINTS = 500;
+const MAX_POINTS = 2000;
 const MAX_PER_SECTION = 30;           // الحد الأقصى لكل قسم
 const SECTION_LABELS = { fursan:'الفرسان', fityan:'الفتيان' };
 const STATIONS = [
-  {p:0,   name:'البداية',   icon:'🚩'},
-  {p:50,  name:'أول خطوة',  icon:'🌱'},
-  {p:100, name:'المستكشف',  icon:'🧭'},
-  {p:200, name:'المتقدم',   icon:'⛰️'},
-  {p:300, name:'القمة',     icon:'👑'},
-  {p:500, name:'البطل',     icon:'🏆'},
+  {p:0,    name:'البداية',   icon:'🚩'},
+  {p:200,  name:'أول خطوة',  icon:'🌱'},
+  {p:400,  name:'المستكشف',  icon:'🧭'},
+  {p:800,  name:'المتقدم',   icon:'⛰️'},
+  {p:1200, name:'القمة',     icon:'👑'},
+  {p:2000, name:'البطل',     icon:'🏆'},
 ];
 
 /* ---------- state ---------- */
@@ -675,7 +675,7 @@ function renderJourney(){
   document.getElementById('logWho').textContent = '— '+s.name;
 }
 function buildMarkers(pts){
-  // RTL: position from the right using `right:%`; 0 => right edge, 500 => left edge
+  // RTL: position from the right using `right:%`; 0 => right edge, 2000 => left edge
   let html='';
   STATIONS.forEach(st=>{
     const rightPct = st.p/MAX_POINTS*100;
@@ -709,7 +709,7 @@ function renderRoster(){
     return `<div class="rrow ${sel}">
       <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
       <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
-      <div class="rpts">${clampPts(s.points)}/500</div>
+      <div class="rpts">${clampPts(s.points)}/${MAX_POINTS}</div>
       ${delUI}
     </div>`;
   }).join('');
