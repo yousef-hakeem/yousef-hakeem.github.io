@@ -153,6 +153,12 @@
   .rrow .confirm-del .yes{background:var(--danger); color:#fff;}
   .rrow .confirm-del .no{background:var(--line); color:var(--ink);}
 
+  /* section tabs */
+  .section-tabs{display:flex; gap:8px; margin-bottom:14px;}
+  .sec-tab{flex:1; padding:12px; border-radius:14px; background:var(--blue-soft); color:var(--navy); font-size:15px; border:2px solid transparent; transition:.15s;}
+  .sec-tab.active{background:var(--navy); color:#fff; border-color:var(--gold);}
+  .sec-badge{display:inline-block; background:rgba(44,62,80,.12); color:var(--navy); font-size:12px; font-weight:700; padding:2px 10px; border-radius:8px; margin-top:4px;}
+
   /* ===== Items admin ===== */
   .items-list{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
   .irow{display:flex; align-items:center; gap:10px; padding:9px 12px; border:2px solid var(--line); border-radius:12px;}
@@ -250,7 +256,10 @@
     <!-- Journey banner (shared by admin selected student & student view) -->
     <div class="journey" id="journey">
       <div class="who">
-        <div class="name" id="jName">—</div>
+        <div>
+          <div class="name" id="jName">—</div>
+          <span class="sec-badge" id="jSection"></span>
+        </div>
         <div class="score-badge"><span class="star">★</span><span id="jScore">0</span> نقطة</div>
       </div>
       <div class="motiv" id="jMotiv"></div>
@@ -289,6 +298,10 @@
           <button onclick="openImport()">📥 استيراد نسخة</button>
           <button onclick="openSettings()">⚙️ الإعدادات</button>
         </div>
+        <div class="section-tabs">
+          <button id="tabFursan" class="sec-tab active" onclick="setSection('fursan')">🐎 الفرسان</button>
+          <button id="tabFityan" class="sec-tab" onclick="setSection('fityan')">🧒 الفتيان</button>
+        </div>
         <h2>👥 الطلاب <span id="rosterCount" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
         <div class="add-row">
           <input id="newStudent" placeholder="اسم الطالب الجديد" onkeydown="if(event.key==='Enter')addStudent()">
@@ -298,7 +311,7 @@
       </div>
 
       <div class="card">
-        <h2>🏷️ بنود النقاط</h2>
+        <h2>🏷️ بنود النقاط <span id="itemsWho" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
         <div class="add-row">
           <input id="itemName" placeholder="اسم البند (مثال: حضور)" onkeydown="if(event.key==='Enter')addItem()">
           <input id="itemPts" type="number" placeholder="النقاط (±)" style="max-width:130px" onkeydown="if(event.key==='Enter')addItem()">
@@ -365,7 +378,8 @@ const firebaseConfig = {
 
 const DEFAULT_PIN = "1234";           // رمز المشرف الافتراضي (يمكن تغييره من الإعدادات)
 const MAX_POINTS = 500;
-const MAX_STUDENTS = 40;
+const MAX_PER_SECTION = 30;           // الحد الأقصى لكل قسم
+const SECTION_LABELS = { fursan:'الفرسان', fityan:'الفتيان' };
 const STATIONS = [
   {p:0,   name:'البداية',   icon:'🚩'},
   {p:50,  name:'أول خطوة',  icon:'🌱'},
@@ -381,6 +395,7 @@ let state = { students:{}, items:{}, log:{}, meta:{pin:DEFAULT_PIN} };
 let role=null;                 // 'admin' | 'student'
 let selectedId=null;           // admin: selected student id ; student: own id
 let pendingDeleteId=null;
+let activeSection='fursan';    // 'fursan' | 'fityan'
 const LS_KEY='rehla_students_v2';
 
 /* =================== Firebase init =================== */
@@ -455,6 +470,8 @@ function studentsArr(){
     .map(([id,s])=>({id,...s}))
     .sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
 }
+function sectionArr(sec){ return studentsArr().filter(s=>(s.section||'fursan')===sec); }
+function itemsArr(sec){ return Object.entries(state.items).map(([id,it])=>({id,...it})).filter(it=>(it.section||'fursan')===sec); }
 function stationInfo(pts){
   pts=clampPts(pts);
   let cur=STATIONS[0], next=null;
@@ -517,16 +534,25 @@ function logout(){
 function addStudent(){
   const inp=document.getElementById('newStudent'); const name=inp.value.trim();
   if(!name) return;
-  if(studentsArr().length>=MAX_STUDENTS){ toast('الحد الأقصى '+MAX_STUDENTS+' طالب', true); return; }
+  if(sectionArr(activeSection).length>=MAX_PER_SECTION){ toast('الحد الأقصى '+MAX_PER_SECTION+' طالب في قسم '+SECTION_LABELS[activeSection], true); return; }
   const id=uid();
-  state.students[id]={ name, points:0, code:genCode(), createdAt:Date.now() };
+  state.students[id]={ name, points:0, code:genCode(), section:activeSection, createdAt:Date.now() };
   dbSet('students/'+id, state.students[id]);
   inp.value='';
-  if(!selectedId) selectedId=id;
+  selectedId=id;
   renderAll();
-  toast('تمت إضافة الطالب');
+  toast('تمت إضافة الطالب في قسم '+SECTION_LABELS[activeSection]);
 }
 function selectStudent(id){ if(role!=='admin')return; selectedId=id; pendingDeleteId=null; renderAll(); }
+function setSection(sec){
+  activeSection=sec; pendingDeleteId=null;
+  const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
+  if(tf) tf.classList.toggle('active', sec==='fursan');
+  if(ty) ty.classList.toggle('active', sec==='fityan');
+  const first=sectionArr(sec)[0];
+  selectedId = first ? first.id : null;
+  renderAll();
+}
 function askDelete(id){ pendingDeleteId=id; renderRoster(); }
 function cancelDelete(){ pendingDeleteId=null; renderRoster(); }
 function confirmDelete(id){
@@ -535,7 +561,7 @@ function confirmDelete(id){
   // remove that student's log entries
   Object.entries(state.log).forEach(([k,e])=>{ if(e.studentId===id){ delete state.log[k]; if(db&&online) db.ref('log/'+k).remove(); }});
   cacheLocal();
-  if(selectedId===id) selectedId=studentsArr()[0]?.id||null;
+  if(selectedId===id) selectedId=sectionArr(activeSection)[0]?.id||null;
   pendingDeleteId=null;
   renderAll();
   toast('تم حذف الطالب');
@@ -569,12 +595,12 @@ function addItem(){
   const p=parseInt(document.getElementById('itemPts').value,10);
   if(!n || isNaN(p)){ toast('اكتب اسم البند والنقاط',true); return; }
   const id='i'+Date.now().toString(36);
-  state.items[id]={name:n, points:p};
+  state.items[id]={name:n, points:p, section:activeSection};
   dbSet('items/'+id, state.items[id]);
   document.getElementById('itemName').value='';
   document.getElementById('itemPts').value='';
   renderItems(); renderQuickItems();
-  toast('تمت إضافة البند');
+  toast('تمت إضافة البند في قسم '+SECTION_LABELS[activeSection]);
 }
 function deleteItem(id){ delete state.items[id]; if(db&&online)db.ref('items/'+id).remove(); cacheLocal(); renderItems(); renderQuickItems(); }
 function applyItem(id){
@@ -618,6 +644,7 @@ function renderJourney(){
     document.getElementById('sRem').textContent='—';
     document.getElementById('jMotiv').textContent='';
     document.getElementById('jNextMsg').textContent='';
+    document.getElementById('jSection').textContent='';
     return;
   }
   const pts=clampPts(s.points);
@@ -635,6 +662,7 @@ function renderJourney(){
   document.getElementById('jNextMsg').textContent = next
       ? '🎯 مهمتك القادمة: اجمع '+rem+' نقطة لتصل إلى «'+next.name+'»!'
       : '🎉 مبروك! أكملت رحلتك ووصلت «البطل».';
+  document.getElementById('jSection').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan'];
   const inp=document.getElementById('ptsInput');
   if(inp && document.activeElement!==inp) inp.value=pts;
   document.getElementById('logWho').textContent = '— '+s.name;
@@ -659,9 +687,12 @@ function buildMarkers(pts){
 function renderRoster(){
   if(role!=='admin')return;
   const box=document.getElementById('roster'); if(!box)return;
-  const arr=studentsArr();
-  document.getElementById('rosterCount').textContent='('+arr.length+'/'+MAX_STUDENTS+')';
-  if(!arr.length){ box.innerHTML='<div class="empty">لا يوجد طلاب بعد — أضف أول طالب.</div>'; return; }
+  const arr=sectionArr(activeSection);
+  document.getElementById('rosterCount').textContent='('+arr.length+'/'+MAX_PER_SECTION+' — '+SECTION_LABELS[activeSection]+')';
+  const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
+  if(tf) tf.textContent='🐎 الفرسان ('+sectionArr('fursan').length+')';
+  if(ty) ty.textContent='🧒 الفتيان ('+sectionArr('fityan').length+')';
+  if(!arr.length){ box.innerHTML='<div class="empty">لا يوجد طلاب في هذا القسم — أضف أول طالب.</div>'; return; }
   box.innerHTML = arr.map(s=>{
     const {pct}=stationInfo(s.points);
     const sel = s.id===selectedId ? 'sel':'';
@@ -680,8 +711,9 @@ function renderRoster(){
 function renderItems(){
   if(role!=='admin')return;
   const box=document.getElementById('itemsList'); if(!box)return;
-  const arr=Object.entries(state.items).map(([id,it])=>({id,...it}));
-  if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود — أضف بندًا (مثل «حضور +10»).</div>'; return; }
+  const iw=document.getElementById('itemsWho'); if(iw) iw.textContent='— '+SECTION_LABELS[activeSection];
+  const arr=itemsArr(activeSection);
+  if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود في هذا القسم — أضف بندًا (مثل «حضور +10»).</div>'; return; }
   box.innerHTML=arr.map(it=>`<div class="irow">
     <div class="in">${escapeHtml(it.name)}</div>
     <div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div>
@@ -691,7 +723,8 @@ function renderItems(){
 function renderQuickItems(){
   if(role!=='admin')return;
   const box=document.getElementById('quickItems'); if(!box)return;
-  const arr=Object.entries(state.items).map(([id,it])=>({id,...it}));
+  const secOfSel = selectedId ? (state.students[selectedId]?.section||'fursan') : activeSection;
+  const arr=itemsArr(secOfSel);
   box.innerHTML=arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('');
 }
 
