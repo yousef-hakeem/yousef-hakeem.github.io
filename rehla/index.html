@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رحلة الطلاب نحو القمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2c3e50; --navy2:#22303f; --gold:#f5b301; --gold-soft:#ffd35c;
+    --blue:#3f7cc4; --blue-soft:#eaf2fb; --bg:#dceafc; --card:#ffffff;
+    --track:#d5dee8; --ink:#2c3e50; --muted:#7c8a99; --danger:#e05353;
+    --ok:#2e9e5b; --line:#e4ebf3;
+  }
+  *{box-sizing:border-box; font-family:'Tajawal',system-ui,'Segoe UI',sans-serif;}
+  html,body{margin:0; padding:0;}
+  body{
+    background:linear-gradient(180deg,#dceafc 0%, #eef4fc 40%, #f6f9fd 100%);
+    color:var(--ink); min-height:100vh; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:1040px; margin:0 auto; padding:16px;}
+  button{cursor:pointer; font-weight:700; border:none;}
+  input{font-size:16px;}
+
+  /* ===== Gate ===== */
+  #gate{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;}
+  .gate-card{
+    background:var(--card); border-radius:24px; padding:34px 26px; width:100%; max-width:420px;
+    box-shadow:0 18px 45px rgba(44,62,80,.18); text-align:center;
+  }
+  .gate-card h1{margin:6px 0 4px; font-size:26px; color:var(--navy);}
+  .gate-card p{margin:0 0 22px; color:var(--muted); font-size:15px;}
+  .peak{font-size:40px;}
+  .gate-btns{display:flex; flex-direction:column; gap:12px;}
+  .big-btn{
+    padding:16px; border-radius:16px; font-size:17px; color:#fff;
+    background:linear-gradient(135deg,#3f7cc4,#2c5f9e); box-shadow:0 8px 18px rgba(63,124,196,.35);
+    transition:transform .12s;
+  }
+  .big-btn.gold{background:linear-gradient(135deg,#f5b301,#e39c00); color:#3a2c00; box-shadow:0 8px 18px rgba(245,179,1,.4);}
+  .big-btn:active{transform:scale(.97);}
+  .gate-form{display:none; margin-top:18px;}
+  .gate-form.show{display:block;}
+  .gate-form input{
+    width:100%; padding:14px; border-radius:14px; border:2px solid var(--line);
+    text-align:center; font-size:20px; letter-spacing:2px; margin-bottom:10px; outline:none;
+  }
+  .gate-form input:focus{border-color:var(--blue);}
+  .link-back{background:none; color:var(--muted); font-size:14px; margin-top:6px;}
+  .err{color:var(--danger); font-size:14px; min-height:18px; margin-top:4px;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--navy); color:#fff; padding:12px 16px; border-radius:18px; margin-bottom:14px;
+    box-shadow:0 8px 20px rgba(44,62,80,.2);
+  }
+  .topbar .title{font-size:19px; font-weight:800; display:flex; gap:8px; align-items:center;}
+  .topbar .right{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .chip{background:rgba(255,255,255,.14); padding:7px 12px; border-radius:10px; color:#fff; font-size:13px;}
+  .chip.live{display:flex; align-items:center; gap:6px;}
+  .dot{width:9px;height:9px;border-radius:50%;background:#8b97a5;}
+  .dot.on{background:#41d17f; box-shadow:0 0 0 3px rgba(65,209,127,.25);}
+  .chip.btn{cursor:pointer; background:rgba(255,255,255,.2);}
+
+  /* ===== Cards ===== */
+  .card{background:var(--card); border-radius:20px; padding:18px; margin-bottom:14px; box-shadow:0 8px 22px rgba(44,62,80,.08);}
+  .card h2{margin:0 0 14px; font-size:17px; color:var(--navy); display:flex; align-items:center; gap:8px;}
+
+  /* ===== Journey banner ===== */
+  .journey{
+    background:linear-gradient(180deg,#bcd8f7 0%, #a9cef4 100%);
+    border-radius:20px; padding:20px 18px 26px; margin-bottom:14px; position:relative; overflow:hidden;
+    box-shadow:0 8px 22px rgba(44,62,80,.12);
+  }
+  .journey .who{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;}
+  .journey .who .name{font-size:22px; font-weight:800; color:var(--navy);}
+  .score-badge{
+    background:var(--navy); color:#fff; border-radius:14px; padding:8px 16px; font-size:20px; font-weight:800;
+    display:inline-flex; gap:8px; align-items:center;
+  }
+  .score-badge .star{color:var(--gold-soft);}
+  .motiv{color:#2c4763; font-size:14px; margin:2px 0 18px; font-weight:500;}
+
+  /* progress track (RTL: fill starts from the right = 0 side) */
+  .track-wrap{position:relative; margin:44px 6px 8px;}
+  .track{position:relative; height:12px; border-radius:20px; background:rgba(255,255,255,.65);}
+  .fill{position:absolute; top:0; right:0; height:100%; border-radius:20px;
+        background:linear-gradient(270deg,#f5b301,#ffd35c); transition:width .5s ease;}
+  .marker{position:absolute; top:50%; transform:translate(50%,-50%); text-align:center;}
+  .marker .node{
+    width:22px; height:22px; border-radius:50%; background:#fff; border:3px solid var(--track);
+    margin:0 auto; transition:.4s;
+  }
+  .marker.done .node{border-color:var(--gold); background:var(--gold);}
+  .marker.current .node{border-color:var(--gold); background:#fff; box-shadow:0 0 0 5px rgba(245,179,1,.3);}
+  .marker .lbl{position:absolute; bottom:30px; right:50%; transform:translateX(50%); white-space:nowrap;
+        background:var(--navy); color:#fff; font-size:11px; padding:3px 8px; border-radius:8px;}
+  .marker .lbl.cur{background:var(--gold); color:#3a2c00;}
+  .marker .foot{margin-top:8px; font-size:12px; color:var(--navy); white-space:nowrap; font-weight:700;}
+  .marker .foot .ic{font-size:15px; display:block;}
+
+  /* stats row */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:34px;}
+  .stat{background:rgba(255,255,255,.75); border-radius:14px; padding:12px 8px; text-align:center;}
+  .stat .v{font-size:20px; font-weight:800; color:var(--navy);}
+  .stat .k{font-size:12px; color:#456; margin-top:2px;}
+  .stat .v.gold{color:#c98f00;}
+
+  .next-msg{
+    margin-top:14px; background:#fff; border-radius:14px; padding:12px 16px; text-align:center;
+    font-weight:700; color:var(--navy); border:2px dashed var(--gold);
+  }
+
+  /* ===== Points controls ===== */
+  .pts-ctrl{display:flex; gap:8px; align-items:center; justify-content:center; margin-top:16px; flex-wrap:wrap;}
+  .pts-ctrl input{width:110px; text-align:center; font-size:22px; font-weight:800; padding:10px; border-radius:12px; border:2px solid var(--line); color:var(--navy);}
+  .step{width:52px; height:48px; border-radius:12px; font-size:18px; color:#fff;}
+  .step.plus{background:var(--ok);}
+  .step.minus{background:var(--danger);}
+
+  /* item quick buttons */
+  .item-btns{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; justify-content:center;}
+  .item-btn{
+    background:linear-gradient(135deg,#f5b301,#e39c00); color:#3a2c00; padding:9px 14px; border-radius:12px;
+    font-size:14px; box-shadow:0 4px 10px rgba(245,179,1,.35);
+  }
+  .item-btn.neg{background:linear-gradient(135deg,#f0a5a5,#e05353); color:#3a0000;}
+  .item-btn:active{transform:scale(.95);}
+  .hint{color:var(--muted); font-size:13px; text-align:center; margin-top:8px;}
+
+  /* ===== Roster ===== */
+  .add-row{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+  .add-row input{flex:1; min-width:140px; padding:12px; border-radius:12px; border:2px solid var(--line); outline:none;}
+  .add-row input:focus{border-color:var(--blue);}
+  .add-row button{padding:12px 18px; border-radius:12px; background:var(--blue); color:#fff;}
+  .add-row .count{align-self:center; color:var(--muted); font-size:13px;}
+
+  .roster{display:flex; flex-direction:column; gap:8px;}
+  .rrow{display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--line); border-radius:14px; transition:.15s;}
+  .rrow.sel{border-color:var(--gold); background:#fffaf0;}
+  .rrow .rname{font-weight:700; flex:1; cursor:pointer; min-width:0;}
+  .rrow .rname .code{font-size:12px; color:var(--muted); font-weight:500; margin-inline-start:8px;}
+  .rrow .mini{flex:1.2; min-width:90px;}
+  .mini-track{height:8px; background:var(--track); border-radius:10px; position:relative; overflow:hidden;}
+  .mini-fill{position:absolute; top:0; right:0; height:100%; background:linear-gradient(270deg,#f5b301,#ffd35c); border-radius:10px;}
+  .rrow .rpts{font-weight:800; color:#c98f00; min-width:78px; text-align:left; font-size:14px;}
+  .rrow .del{background:#fbeaea; color:var(--danger); width:34px; height:34px; border-radius:10px; font-size:16px;}
+  .rrow .confirm-del{display:flex; gap:6px; align-items:center;}
+  .rrow .confirm-del button{padding:6px 10px; border-radius:9px; font-size:12px;}
+  .rrow .confirm-del .yes{background:var(--danger); color:#fff;}
+  .rrow .confirm-del .no{background:var(--line); color:var(--ink);}
+
+  /* ===== Items admin ===== */
+  .items-list{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  .irow{display:flex; align-items:center; gap:10px; padding:9px 12px; border:2px solid var(--line); border-radius:12px;}
+  .irow .in{flex:1; font-weight:700;}
+  .irow .ip{font-weight:800;}
+  .irow .ip.pos{color:var(--ok);} .irow .ip.neg{color:var(--danger);}
+  .irow .idel{background:#fbeaea; color:var(--danger); width:30px; height:30px; border-radius:9px;}
+
+  /* ===== Log ===== */
+  .log{display:flex; flex-direction:column; gap:6px; max-height:340px; overflow:auto;}
+  .lrow{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 12px; background:#f7fafd; border-radius:11px; font-size:14px;}
+  .lrow .ld{color:var(--muted); font-size:12px;}
+  .lrow .lv{font-weight:800;}
+  .lrow .lv.pos{color:var(--ok);} .lrow .lv.neg{color:var(--danger);}
+  .empty{color:var(--muted); text-align:center; padding:14px; font-size:14px;}
+
+  /* ===== toast / banners ===== */
+  .toast{
+    position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(120px);
+    background:var(--navy); color:#fff; padding:12px 20px; border-radius:14px; font-weight:700;
+    box-shadow:0 10px 30px rgba(0,0,0,.25); transition:transform .3s; z-index:60; max-width:90vw; text-align:center;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.err{background:var(--danger);}
+  .banner{padding:10px 14px; border-radius:12px; font-size:13px; margin-bottom:12px; font-weight:500;}
+  .banner.warn{background:#fff4d6; color:#8a6400; border:1px solid #f2d488;}
+  .banner.info{background:#e7f1fb; color:#2c5f9e; border:1px solid #bcd8f7;}
+
+  /* backup buttons */
+  .tools-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;}
+  .tools-row button{padding:9px 14px; border-radius:11px; font-size:13px; background:var(--blue-soft); color:var(--navy);}
+
+  /* modal */
+  .modal{position:fixed; inset:0; background:rgba(20,30,45,.55); display:none; align-items:center; justify-content:center; z-index:70; padding:18px;}
+  .modal.show{display:flex;}
+  .modal-card{background:#fff; border-radius:18px; padding:20px; width:100%; max-width:440px;}
+  .modal-card h3{margin:0 0 10px; color:var(--navy);}
+  .modal-card textarea{width:100%; height:150px; border-radius:12px; border:2px solid var(--line); padding:10px; font-size:13px; resize:vertical;}
+  .modal-actions{display:flex; gap:8px; justify-content:flex-end; margin-top:12px;}
+  .modal-actions button{padding:10px 16px; border-radius:11px;}
+  .modal-actions .primary{background:var(--blue); color:#fff;}
+  .modal-actions .ghost{background:var(--line); color:var(--ink);}
+
+  .hidden{display:none !important;}
+  @media(max-width:560px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .marker .foot span:not(.ic){display:none;}
+    .journey .who .name{font-size:19px;}
+    .rrow .mini{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ GATE ============ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="peak">⛰️</div>
+    <h1>رحلة الطلاب نحو القمة</h1>
+    <p>اختر طريقة الدخول</p>
+    <div class="gate-btns" id="gateChoose">
+      <button class="big-btn gold" onclick="showGate('admin')">👨‍🏫 دخول المشرف</button>
+      <button class="big-btn" onclick="showGate('student')">🎒 دخول الطالب</button>
+    </div>
+
+    <div class="gate-form" id="formAdmin">
+      <input id="adminPin" type="password" inputmode="numeric" placeholder="رمز المشرف">
+      <button class="big-btn gold" onclick="loginAdmin()">دخول</button>
+      <div class="err" id="adminErr"></div>
+      <button class="link-back" onclick="showGate('choose')">رجوع</button>
+    </div>
+
+    <div class="gate-form" id="formStudent">
+      <input id="studentCode" type="text" placeholder="كود الطالب (5 رموز)" maxlength="5" style="text-transform:uppercase">
+      <button class="big-btn" onclick="loginStudent()">عرض رحلتي</button>
+      <div class="err" id="studentErr"></div>
+      <button class="link-back" onclick="showGate('choose')">رجوع</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" class="hidden">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">⛰️ رحلة الطلاب</div>
+      <div class="right">
+        <span class="chip live"><span class="dot" id="liveDot"></span><span id="liveTxt">جارٍ الاتصال…</span></span>
+        <span class="chip btn" id="roleChip" onclick="logout()">خروج</span>
+      </div>
+    </div>
+
+    <div id="dataBanner"></div>
+
+    <!-- Journey banner (shared by admin selected student & student view) -->
+    <div class="journey" id="journey">
+      <div class="who">
+        <div class="name" id="jName">—</div>
+        <div class="score-badge"><span class="star">★</span><span id="jScore">0</span> نقطة</div>
+      </div>
+      <div class="motiv" id="jMotiv"></div>
+
+      <div class="track-wrap">
+        <div class="track"><div class="fill" id="jFill" style="width:0%"></div></div>
+        <div id="jMarkers"></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="v gold" id="sPct">0%</div><div class="k">نسبة التقدم</div></div>
+        <div class="stat"><div class="v" id="sCur">—</div><div class="k">محطتك الحالية</div></div>
+        <div class="stat"><div class="v" id="sNext">—</div><div class="k">المحطة القادمة</div></div>
+        <div class="stat"><div class="v" id="sRem">—</div><div class="k">باقي لك</div></div>
+      </div>
+
+      <div class="next-msg" id="jNextMsg"></div>
+
+      <!-- admin-only controls -->
+      <div id="adminControls">
+        <div class="pts-ctrl">
+          <button class="step minus" onclick="stepPoints(-10)">−10</button>
+          <input id="ptsInput" type="number" min="0" max="500" inputmode="numeric">
+          <button class="step plus" onclick="stepPoints(10)">+10</button>
+        </div>
+        <div class="item-btns" id="quickItems"></div>
+        <div class="hint">اختر طالبًا من القائمة، ثم عدّل نقاطه مباشرة أو اضغط بندًا لتسجيله في السجل.</div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN ONLY SECTIONS ===== -->
+    <div id="adminOnly">
+      <div class="card">
+        <div class="tools-row">
+          <button onclick="exportData()">📋 نسخة احتياطية</button>
+          <button onclick="openImport()">📥 استيراد نسخة</button>
+          <button onclick="openSettings()">⚙️ الإعدادات</button>
+        </div>
+        <h2>👥 الطلاب <span id="rosterCount" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
+        <div class="add-row">
+          <input id="newStudent" placeholder="اسم الطالب الجديد" onkeydown="if(event.key==='Enter')addStudent()">
+          <button onclick="addStudent()">إضافة طالب</button>
+        </div>
+        <div class="roster" id="roster"></div>
+      </div>
+
+      <div class="card">
+        <h2>🏷️ بنود النقاط</h2>
+        <div class="add-row">
+          <input id="itemName" placeholder="اسم البند (مثال: حضور)" onkeydown="if(event.key==='Enter')addItem()">
+          <input id="itemPts" type="number" placeholder="النقاط (±)" style="max-width:130px" onkeydown="if(event.key==='Enter')addItem()">
+          <button onclick="addItem()">إضافة بند</button>
+        </div>
+        <div class="items-list" id="itemsList"></div>
+      </div>
+    </div>
+
+    <!-- ===== LOG (both views) ===== -->
+    <div class="card">
+      <h2>🧾 سجل النقاط <span id="logWho" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast"></div>
+
+<!-- import modal -->
+<div class="modal" id="importModal">
+  <div class="modal-card">
+    <h3>📥 استيراد نسخة</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 8px">الصق نص النسخة الاحتياطية هنا:</p>
+    <textarea id="importText" placeholder="{...}"></textarea>
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('importModal')">إلغاء</button>
+      <button class="primary" onclick="doImport()">استيراد</button>
+    </div>
+  </div>
+</div>
+
+<!-- settings modal -->
+<div class="modal" id="settingsModal">
+  <div class="modal-card">
+    <h3>⚙️ الإعدادات</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 6px">تغيير رمز دخول المشرف:</p>
+    <input id="newPin" type="text" inputmode="numeric" placeholder="الرمز الجديد" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--line);margin-bottom:10px">
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('settingsModal')">إغلاق</button>
+      <button class="primary" onclick="savePin()">حفظ الرمز</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* =======================================================================
+   إعداد Firebase  —  عدّل السطر databaseURL فقط لو منطقتك مختلفة.
+   قاعدتك اسمها: mothaber-trip-default-rtdb
+   • منطقة الولايات المتحدة (الافتراضي):
+       https://mothaber-trip-default-rtdb.firebaseio.com
+   • أي منطقة أخرى (أوروبا/آسيا) يكون الشكل:
+       https://mothaber-trip-default-rtdb.<region>.firebasedatabase.app
+   الرابط الصحيح تلقاه مكتوبًا بأعلى صفحة "Realtime Database → Data".
+   ======================================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDZEx5u5_XSe2MPKow5KspORxV1A6iL6Ms",
+  authDomain: "mothaber-trip.firebaseapp.com",
+  databaseURL: "https://mothaber-trip-default-rtdb.firebaseio.com",
+  projectId: "mothaber-trip",
+  storageBucket: "mothaber-trip.firebasestorage.app",
+  messagingSenderId: "396511613205",
+  appId: "1:396511613205:web:c6df0bb1fca0cb3c0ad91c"
+};
+
+const DEFAULT_PIN = "1234";           // رمز المشرف الافتراضي (يمكن تغييره من الإعدادات)
+const MAX_POINTS = 500;
+const MAX_STUDENTS = 40;
+const STATIONS = [
+  {p:0,   name:'البداية',   icon:'🚩'},
+  {p:50,  name:'أول خطوة',  icon:'🌱'},
+  {p:100, name:'المستكشف',  icon:'🧭'},
+  {p:200, name:'المتقدم',   icon:'⛰️'},
+  {p:300, name:'القمة',     icon:'👑'},
+  {p:500, name:'البطل',     icon:'🏆'},
+];
+
+/* ---------- state ---------- */
+let db=null, online=false;
+let state = { students:{}, items:{}, log:{}, meta:{pin:DEFAULT_PIN} };
+let role=null;                 // 'admin' | 'student'
+let selectedId=null;           // admin: selected student id ; student: own id
+let pendingDeleteId=null;
+const LS_KEY='rehla_students_v2';
+
+/* =================== Firebase init =================== */
+function initFirebase(){
+  try{
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    // listen to whole tree (small dataset)
+    db.ref('/').on('value', snap=>{
+      const val = snap.val() || {};
+      state.students = val.students || {};
+      state.items    = val.items || {};
+      state.log      = val.log || {};
+      state.meta     = val.meta || {pin:DEFAULT_PIN};
+      if(!state.meta.pin) state.meta.pin = DEFAULT_PIN;
+      setLive(true);
+      cacheLocal();
+      renderAll();
+    }, err=>{
+      console.warn('DB read error', err);
+      setLive(false);
+      loadLocal();
+    });
+    // connection status
+    db.ref('.info/connected').on('value', s=> setLive(!!s.val()));
+  }catch(e){
+    console.warn('Firebase init failed', e);
+    setLive(false);
+    loadLocal();
+    renderAll();
+  }
+}
+function setLive(on){
+  online = on;
+  const dot=document.getElementById('liveDot'), txt=document.getElementById('liveTxt');
+  if(!dot) return;
+  dot.className = 'dot' + (on?' on':'');
+  txt.textContent = on ? 'متصل — البيانات محفوظة' : 'غير متصل (حفظ محلي)';
+  const banner=document.getElementById('dataBanner');
+  if(banner){
+    if(on){ banner.innerHTML=''; }
+    else { banner.innerHTML='<div class="banner warn">⚠️ تعذّر الاتصال بقاعدة البيانات — يعمل الآن بالحفظ المحلي على هذا الجهاز فقط. تحقّق من قيمة <b>databaseURL</b> في الكود، وأن قاعدة البيانات مُفعّلة في وضع الاختبار.</div>'; }
+  }
+}
+
+/* =================== local cache fallback =================== */
+function cacheLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({students:state.students,items:state.items,log:state.log,meta:state.meta})); }catch(e){} }
+function loadLocal(){ try{ const r=localStorage.getItem(LS_KEY); if(r){ const d=JSON.parse(r); state.students=d.students||{}; state.items=d.items||{}; state.log=d.log||{}; state.meta=d.meta||{pin:DEFAULT_PIN}; } }catch(e){} }
+
+/* write helpers: Firebase if online, always mirror to local */
+function dbSet(path, value){
+  if(db && online){ db.ref(path).set(value).catch(e=>console.warn('set fail',e)); }
+  cacheLocal();
+}
+function dbPush(path, value){
+  if(db && online){ const ref=db.ref(path).push(); ref.set(value).catch(e=>console.warn('push fail',e)); return ref.key; }
+  const k = 'l'+Date.now()+Math.random().toString(36).slice(2,6);
+  return k;
+}
+
+/* =================== helpers =================== */
+function uid(){ return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+function genCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const used = Object.values(state.students).map(s=>s.code);
+  let c; do{ c=''; for(let i=0;i<5;i++) c+=chars[Math.floor(Math.random()*chars.length)]; }while(used.includes(c));
+  return c;
+}
+function clampPts(p){ p=parseInt(p,10)||0; return Math.max(0,Math.min(MAX_POINTS,p)); }
+function studentsArr(){
+  return Object.entries(state.students)
+    .map(([id,s])=>({id,...s}))
+    .sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+}
+function stationInfo(pts){
+  pts=clampPts(pts);
+  let cur=STATIONS[0], next=null;
+  for(let i=0;i<STATIONS.length;i++){
+    if(pts>=STATIONS[i].p) cur=STATIONS[i];
+  }
+  for(let i=0;i<STATIONS.length;i++){
+    if(STATIONS[i].p>pts){ next=STATIONS[i]; break; }
+  }
+  const pct=Math.round(pts/MAX_POINTS*100);
+  const rem= next ? next.p-pts : 0;
+  return {cur,next,pct,rem};
+}
+
+/* =================== GATE =================== */
+function showGate(which){
+  document.getElementById('gateChoose').style.display = which==='choose'?'flex':'none';
+  document.getElementById('formAdmin').classList.toggle('show', which==='admin');
+  document.getElementById('formStudent').classList.toggle('show', which==='student');
+  document.getElementById('adminErr').textContent='';
+  document.getElementById('studentErr').textContent='';
+  if(which==='admin') setTimeout(()=>document.getElementById('adminPin').focus(),50);
+  if(which==='student') setTimeout(()=>document.getElementById('studentCode').focus(),50);
+}
+function loginAdmin(){
+  const pin=document.getElementById('adminPin').value.trim();
+  const real=(state.meta&&state.meta.pin)||DEFAULT_PIN;
+  if(pin===real){ role='admin'; enterApp(); }
+  else document.getElementById('adminErr').textContent='الرمز غير صحيح';
+}
+function loginStudent(){
+  const code=document.getElementById('studentCode').value.trim().toUpperCase();
+  const found=studentsArr().find(s=>s.code===code);
+  if(found){ role='student'; selectedId=found.id; enterApp(); }
+  else document.getElementById('studentErr').textContent='الكود غير موجود، تأكد منه';
+}
+function enterApp(){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  const admin = role==='admin';
+  document.getElementById('adminControls').style.display = admin?'block':'none';
+  document.getElementById('adminOnly').style.display = admin?'block':'none';
+  document.getElementById('roleChip').textContent = admin?'خروج المشرف':'خروج';
+  if(!admin){
+    // student: lock selection to own id
+    document.querySelector('.topbar .title').textContent = '🎒 رحلتي';
+  }
+  renderAll();
+}
+function logout(){
+  role=null; selectedId=null; pendingDeleteId=null;
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('gate').classList.remove('hidden');
+  showGate('choose');
+  document.getElementById('adminPin').value='';
+  document.getElementById('studentCode').value='';
+}
+
+/* =================== ADMIN: students =================== */
+function addStudent(){
+  const inp=document.getElementById('newStudent'); const name=inp.value.trim();
+  if(!name) return;
+  if(studentsArr().length>=MAX_STUDENTS){ toast('الحد الأقصى '+MAX_STUDENTS+' طالب', true); return; }
+  const id=uid();
+  state.students[id]={ name, points:0, code:genCode(), createdAt:Date.now() };
+  dbSet('students/'+id, state.students[id]);
+  inp.value='';
+  if(!selectedId) selectedId=id;
+  renderAll();
+  toast('تمت إضافة الطالب');
+}
+function selectStudent(id){ if(role!=='admin')return; selectedId=id; pendingDeleteId=null; renderAll(); }
+function askDelete(id){ pendingDeleteId=id; renderRoster(); }
+function cancelDelete(){ pendingDeleteId=null; renderRoster(); }
+function confirmDelete(id){
+  delete state.students[id];
+  if(db&&online) db.ref('students/'+id).remove();
+  // remove that student's log entries
+  Object.entries(state.log).forEach(([k,e])=>{ if(e.studentId===id){ delete state.log[k]; if(db&&online) db.ref('log/'+k).remove(); }});
+  cacheLocal();
+  if(selectedId===id) selectedId=studentsArr()[0]?.id||null;
+  pendingDeleteId=null;
+  renderAll();
+  toast('تم حذف الطالب');
+}
+function setPoints(id,pts){
+  if(!state.students[id])return;
+  state.students[id].points=clampPts(pts);
+  dbSet('students/'+id+'/points', state.students[id].points);
+  renderJourney(); renderRoster();
+}
+function stepPoints(delta){
+  if(!selectedId)return;
+  const cur=state.students[selectedId].points||0;
+  const nv=clampPts(cur+delta);
+  const applied=nv-cur;
+  setPoints(selectedId,nv);
+  if(applied!==0) addLog(selectedId, delta>0?'إضافة يدوية':'خصم يدوي', applied);
+}
+function onPtsInput(){
+  if(!selectedId)return;
+  const v=clampPts(document.getElementById('ptsInput').value);
+  const cur=state.students[selectedId].points||0;
+  const applied=v-cur;
+  setPoints(selectedId,v);
+  if(applied!==0) addLog(selectedId,'تعديل يدوي',applied);
+}
+
+/* =================== ADMIN: items =================== */
+function addItem(){
+  const n=document.getElementById('itemName').value.trim();
+  const p=parseInt(document.getElementById('itemPts').value,10);
+  if(!n || isNaN(p)){ toast('اكتب اسم البند والنقاط',true); return; }
+  const id='i'+Date.now().toString(36);
+  state.items[id]={name:n, points:p};
+  dbSet('items/'+id, state.items[id]);
+  document.getElementById('itemName').value='';
+  document.getElementById('itemPts').value='';
+  renderItems(); renderQuickItems();
+  toast('تمت إضافة البند');
+}
+function deleteItem(id){ delete state.items[id]; if(db&&online)db.ref('items/'+id).remove(); cacheLocal(); renderItems(); renderQuickItems(); }
+function applyItem(id){
+  if(!selectedId){ toast('اختر طالبًا أولاً',true); return; }
+  const it=state.items[id]; if(!it)return;
+  const cur=state.students[selectedId].points||0;
+  const nv=clampPts(cur+it.points);
+  const applied=nv-cur;
+  setPoints(selectedId,nv);
+  addLog(selectedId, it.name, applied);
+  toast(it.name+' ('+(applied>=0?'+':'')+applied+')');
+}
+
+/* =================== log =================== */
+function addLog(studentId, itemName, delta){
+  const entry={ studentId, itemName, delta, ts:Date.now() };
+  const key=dbPush('log', entry);
+  state.log[key]=entry;
+  cacheLocal();
+  renderLog();
+}
+function logFor(id){
+  return Object.entries(state.log).map(([k,e])=>({k,...e}))
+    .filter(e=>e.studentId===id).sort((a,b)=>b.ts-a.ts);
+}
+
+/* =================== RENDER =================== */
+function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderLog(); }
+
+function renderJourney(){
+  const s = selectedId ? state.students[selectedId] : null;
+  const nameEl=document.getElementById('jName');
+  if(!s){
+    nameEl.textContent = role==='admin' ? 'اختر طالبًا من القائمة' : '—';
+    document.getElementById('jScore').textContent='0';
+    document.getElementById('jFill').style.width='0%';
+    document.getElementById('jMarkers').innerHTML=buildMarkers(0);
+    document.getElementById('sPct').textContent='0%';
+    document.getElementById('sCur').textContent='—';
+    document.getElementById('sNext').textContent='—';
+    document.getElementById('sRem').textContent='—';
+    document.getElementById('jMotiv').textContent='';
+    document.getElementById('jNextMsg').textContent='';
+    return;
+  }
+  const pts=clampPts(s.points);
+  const {cur,next,pct,rem}=stationInfo(pts);
+  nameEl.textContent = (role==='admin'?'رحلة ':'') + s.name;
+  document.getElementById('jScore').textContent=pts;
+  document.getElementById('jFill').style.width=pct+'%';
+  document.getElementById('jMarkers').innerHTML=buildMarkers(pts);
+  document.getElementById('sPct').textContent=pct+'%';
+  document.getElementById('sCur').textContent=cur.name;
+  document.getElementById('sNext').textContent= next? next.name : 'اكتملت الرحلة';
+  document.getElementById('sRem').textContent= next? rem+' نقطة' : '🎉';
+  document.getElementById('jMotiv').textContent = pct>=100 ? 'وصلت القمة! بطل حقيقي 🏆'
+      : pct>=50 ? 'أنت في منتصف الطريق.. وما زال في جعبتك الكثير' : 'كل نقطة تقرّبك من أهدافك — انطلق!';
+  document.getElementById('jNextMsg').textContent = next
+      ? '🎯 مهمتك القادمة: اجمع '+rem+' نقطة لتصل إلى «'+next.name+'»!'
+      : '🎉 مبروك! أكملت رحلتك ووصلت «البطل».';
+  const inp=document.getElementById('ptsInput');
+  if(inp && document.activeElement!==inp) inp.value=pts;
+  document.getElementById('logWho').textContent = '— '+s.name;
+}
+function buildMarkers(pts){
+  // RTL: position from the right using `right:%`; 0 => right edge, 500 => left edge
+  let html='';
+  STATIONS.forEach(st=>{
+    const rightPct = st.p/MAX_POINTS*100;
+    const done = pts>=st.p;
+    const {cur}=stationInfo(pts);
+    const isCur = cur.p===st.p;
+    html+=`<div class="marker ${done?'done':''} ${isCur?'current':''}" style="right:${rightPct}%">
+      <div class="lbl ${isCur?'cur':''}">${st.p}</div>
+      <div class="node"></div>
+      <div class="foot"><span class="ic">${st.icon}</span><span>${st.name}</span></div>
+    </div>`;
+  });
+  return html;
+}
+
+function renderRoster(){
+  if(role!=='admin')return;
+  const box=document.getElementById('roster'); if(!box)return;
+  const arr=studentsArr();
+  document.getElementById('rosterCount').textContent='('+arr.length+'/'+MAX_STUDENTS+')';
+  if(!arr.length){ box.innerHTML='<div class="empty">لا يوجد طلاب بعد — أضف أول طالب.</div>'; return; }
+  box.innerHTML = arr.map(s=>{
+    const {pct}=stationInfo(s.points);
+    const sel = s.id===selectedId ? 'sel':'';
+    const delUI = pendingDeleteId===s.id
+      ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد الحذف ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
+      : `<button class="del" onclick="askDelete('${s.id}')" title="حذف">✕</button>`;
+    return `<div class="rrow ${sel}">
+      <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
+      <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
+      <div class="rpts">${clampPts(s.points)}/500</div>
+      ${delUI}
+    </div>`;
+  }).join('');
+}
+
+function renderItems(){
+  if(role!=='admin')return;
+  const box=document.getElementById('itemsList'); if(!box)return;
+  const arr=Object.entries(state.items).map(([id,it])=>({id,...it}));
+  if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود — أضف بندًا (مثل «حضور +10»).</div>'; return; }
+  box.innerHTML=arr.map(it=>`<div class="irow">
+    <div class="in">${escapeHtml(it.name)}</div>
+    <div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div>
+    <button class="idel" onclick="deleteItem('${it.id}')">✕</button>
+  </div>`).join('');
+}
+function renderQuickItems(){
+  if(role!=='admin')return;
+  const box=document.getElementById('quickItems'); if(!box)return;
+  const arr=Object.entries(state.items).map(([id,it])=>({id,...it}));
+  box.innerHTML=arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('');
+}
+
+function renderLog(){
+  const box=document.getElementById('log'); if(!box)return;
+  const id = selectedId;
+  const arr = id ? logFor(id) : [];
+  if(!id){ box.innerHTML='<div class="empty">اختر طالبًا لعرض سجله.</div>'; return; }
+  if(!arr.length){ box.innerHTML='<div class="empty">لا توجد حركات بعد.</div>'; return; }
+  box.innerHTML=arr.slice(0,100).map(e=>`<div class="lrow">
+    <div><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
+    <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+  </div>`).join('');
+}
+
+/* =================== backup / import =================== */
+function exportData(){
+  const payload=JSON.stringify({students:state.students,items:state.items,log:state.log},null,0);
+  navigator.clipboard?.writeText(payload).then(
+    ()=>toast('تم نسخ النسخة الاحتياطية'),
+    ()=>{ prompt('انسخ النص التالي واحفظه:',payload); }
+  );
+}
+function openImport(){ document.getElementById('importText').value=''; openModal('importModal'); }
+function doImport(){
+  try{
+    const d=JSON.parse(document.getElementById('importText').value.trim());
+    if(d.students){ state.students=d.students; dbSet('students', d.students); }
+    if(d.items){ state.items=d.items; dbSet('items', d.items); }
+    if(d.log){ state.log=d.log; dbSet('log', d.log); }
+    closeModal('importModal'); renderAll(); toast('تم الاستيراد بنجاح');
+  }catch(e){ toast('النص غير صالح',true); }
+}
+function openSettings(){ document.getElementById('newPin').value=''; openModal('settingsModal'); }
+function savePin(){
+  const p=document.getElementById('newPin').value.trim();
+  if(!p){ toast('اكتب رمزًا',true); return; }
+  state.meta.pin=p; dbSet('meta/pin',p); dbSet('meta', state.meta);
+  closeModal('settingsModal'); toast('تم تغيير الرمز');
+}
+
+/* =================== ui utils =================== */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+let toastT;
+function toast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(err?' err':'');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.className='toast'+(err?' err':''),2200);
+}
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtDate(ts){
+  const d=new Date(ts);
+  return d.toLocaleDateString('ar-SA',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+}
+
+/* points input listener */
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp=document.getElementById('ptsInput');
+  inp.addEventListener('change', onPtsInput);
+  loadLocal();          // show cached data instantly
+  initFirebase();       // then sync live
+  renderAll();
+});
+</script>
+</body>
+</html>
