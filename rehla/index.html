@@ -511,6 +511,19 @@ function stationInfo(pts){
   const rem= next ? next.p-pts : 0;
   return {cur,next,pct,rem};
 }
+// نسبة تعبئة الشريط بمسافات متساوية بين المحطات (عشان يكون متناسقًا بصريًا)
+function fillPct(pts){
+  pts=clampPts(pts);
+  const n=STATIONS.length;
+  for(let i=0;i<n-1;i++){
+    if(pts<=STATIONS[i+1].p){
+      const span=STATIONS[i+1].p-STATIONS[i].p || 1;
+      const seg=(pts-STATIONS[i].p)/span;
+      return ((i+seg)/(n-1))*100;
+    }
+  }
+  return 100;
+}
 
 /* =================== GATE =================== */
 function showGate(which){
@@ -691,7 +704,7 @@ function renderJourney(){
   const {cur,next,pct,rem}=stationInfo(pts);
   nameEl.textContent = (role==='admin'?'رحلة ':'') + s.name;
   document.getElementById('jScore').textContent=pts;
-  document.getElementById('jFill').style.width=pct+'%';
+  document.getElementById('jFill').style.width=fillPct(pts)+'%';
   document.getElementById('jMarkers').innerHTML=buildMarkers(pts);
   document.getElementById('sPct').textContent=pct+'%';
   document.getElementById('sCur').textContent=cur.name;
@@ -708,10 +721,10 @@ function renderJourney(){
   document.getElementById('logWho').textContent = '— '+s.name;
 }
 function buildMarkers(pts){
-  // RTL: position from the right using `right:%`; 0 => right edge, 2000 => left edge
+  // RTL: markers evenly spaced by index (0 => right edge, last => left edge)
   let html='';
-  STATIONS.forEach(st=>{
-    const rightPct = st.p/MAX_POINTS*100;
+  STATIONS.forEach((st,i)=>{
+    const rightPct = STATIONS.length>1 ? (i/(STATIONS.length-1))*100 : 0;
     const done = pts>=st.p;
     const {cur}=stationInfo(pts);
     const isCur = cur.p===st.p;
@@ -734,7 +747,7 @@ function renderRoster(){
   if(ty) ty.textContent='🧒 الفتيان ('+sectionArr('fityan').length+')';
   if(!arr.length){ box.innerHTML='<div class="empty">لا يوجد طلاب في هذا القسم — أضف أول طالب.</div>'; return; }
   box.innerHTML = arr.map(s=>{
-    const {pct}=stationInfo(s.points);
+    const pct=fillPct(s.points);
     const sel = s.id===selectedId ? 'sel':'';
     const delUI = pendingDeleteId===s.id
       ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد الحذف ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
