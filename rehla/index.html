@@ -317,6 +317,7 @@
           <input id="itemPts" type="number" placeholder="النقاط (±)" style="max-width:130px" onkeydown="if(event.key==='Enter')addItem()">
           <button onclick="addItem()">إضافة بند</button>
         </div>
+        <button onclick="loadPreset()" style="width:100%;padding:11px;border-radius:12px;background:#eaf6ee;color:var(--ok);border:2px dashed var(--ok);margin-bottom:6px">⭐ إضافة بنود نافس الجاهزة لهذا القسم</button>
         <div class="items-list" id="itemsList"></div>
       </div>
     </div>
@@ -387,6 +388,25 @@ const DEFAULT_PIN = "1234";           // رمز المشرف الافتراضي 
 const MAX_POINTS = 2000;
 const MAX_PER_SECTION = 30;           // الحد الأقصى لكل قسم
 const SECTION_LABELS = { fursan:'الفرسان', fityan:'الفتيان' };
+// بنود نافس الجاهزة (تُضاف بضغطة زر للقسم النشط)
+const PRESET_ITEMS = [
+  {name:'حضور', points:30},
+  {name:'مبادر', points:30},
+  {name:'متأخر', points:20},
+  {name:'الأذان', points:30},
+  {name:'الكلمة', points:30},
+  {name:'بونص', points:60},
+  {name:'نقاط للمشرف', points:10},
+  {name:'المركز الأول', points:150},
+  {name:'المركز الثاني', points:100},
+  {name:'المركز الثالث', points:70},
+  {name:'المركز الرابع', points:50},
+  {name:'التنبيه الأول', points:-10},
+  {name:'التنبيه الثاني', points:-20},
+  {name:'التنبيه الثالث', points:-50},
+  {name:'التحذير', points:-50},
+  {name:'الملاحظة', points:-150},
+];
 const STATIONS = [
   {p:0,    name:'البداية',   icon:'🚩'},
   {p:200,  name:'أول خطوة',  icon:'🌱'},
@@ -610,6 +630,19 @@ function addItem(){
   toast('تمت إضافة البند في قسم '+SECTION_LABELS[activeSection]);
 }
 function deleteItem(id){ delete state.items[id]; if(db&&online)db.ref('items/'+id).remove(); cacheLocal(); renderItems(); renderQuickItems(); }
+function loadPreset(){
+  const existing = itemsArr(activeSection).map(it=>it.name);
+  let added=0;
+  PRESET_ITEMS.forEach((p,idx)=>{
+    if(existing.includes(p.name)) return;
+    const id='i'+Date.now().toString(36)+idx;
+    state.items[id]={name:p.name, points:p.points, section:activeSection};
+    dbSet('items/'+id, state.items[id]);
+    added++;
+  });
+  renderItems(); renderQuickItems();
+  toast(added? ('تمت إضافة '+added+' بند في قسم '+SECTION_LABELS[activeSection]) : 'كل البنود موجودة مسبقًا');
+}
 function applyItem(id){
   if(!selectedId){ toast('اختر طالبًا أولاً',true); return; }
   const it=state.items[id]; if(!it)return;
