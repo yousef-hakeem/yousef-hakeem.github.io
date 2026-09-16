@@ -321,6 +321,13 @@
       </div>
     </div>
 
+    <!-- ===== STUDENT: items info (read-only) ===== -->
+    <div class="card" id="studentItemsCard" style="display:none">
+      <h2>🏷️ بنود النقاط <span id="studentItemsWho" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
+      <p style="color:var(--muted);font-size:13px;margin:-8px 0 4px">هذه الأنشطة تكسّبك نقاطًا في رحلتك:</p>
+      <div class="items-list" id="studentItems"></div>
+    </div>
+
     <!-- ===== LOG (both views) ===== -->
     <div class="card">
       <h2>🧾 سجل النقاط <span id="logWho" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
@@ -513,6 +520,7 @@ function enterApp(){
   const admin = role==='admin';
   document.getElementById('adminControls').style.display = admin?'block':'none';
   document.getElementById('adminOnly').style.display = admin?'block':'none';
+  document.getElementById('studentItemsCard').style.display = admin?'none':'block';
   document.getElementById('roleChip').textContent = admin?'خروج المشرف':'خروج';
   if(!admin){
     // student: lock selection to own id
@@ -627,7 +635,7 @@ function logFor(id){
 }
 
 /* =================== RENDER =================== */
-function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderLog(); }
+function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
 function renderJourney(){
   const s = selectedId ? state.students[selectedId] : null;
@@ -725,6 +733,19 @@ function renderQuickItems(){
   const secOfSel = selectedId ? (state.students[selectedId]?.section||'fursan') : activeSection;
   const arr=itemsArr(secOfSel);
   box.innerHTML=arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('');
+}
+
+function renderStudentItems(){
+  if(role!=='student')return;
+  const box=document.getElementById('studentItems'); if(!box)return;
+  const sec = selectedId ? (state.students[selectedId]?.section||'fursan') : 'fursan';
+  const who=document.getElementById('studentItemsWho'); if(who) who.textContent='— قسم '+SECTION_LABELS[sec];
+  const arr=itemsArr(sec);
+  if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود بعد.</div>'; return; }
+  box.innerHTML=arr.map(it=>`<div class="irow">
+    <div class="in">${escapeHtml(it.name)}</div>
+    <div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div>
+  </div>`).join('');
 }
 
 function renderLog(){
