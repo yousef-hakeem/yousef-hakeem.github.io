@@ -314,7 +314,7 @@
       <div id="adminControls">
         <div class="pts-ctrl">
           <button class="step minus" onclick="stepPoints(-10)">−10</button>
-          <input id="ptsInput" type="number" min="0" max="2000" inputmode="numeric">
+          <input id="ptsInput" type="text" inputmode="numeric">
           <button class="step plus" onclick="stepPoints(10)">+10</button>
         </div>
         <div class="item-btns" id="quickItems"></div>
@@ -347,7 +347,7 @@
         <h2>🏷️ بنود النقاط <span id="itemsWho" style="font-weight:500;color:var(--muted);font-size:13px"></span></h2>
         <div class="add-row">
           <input id="itemName" placeholder="اسم البند (مثال: حضور)" onkeydown="if(event.key==='Enter')addItem()">
-          <input id="itemPts" type="number" placeholder="النقاط (±)" style="max-width:130px" onkeydown="if(event.key==='Enter')addItem()">
+          <input id="itemPts" type="text" inputmode="numeric" placeholder="النقاط (±)" style="max-width:130px" onkeydown="if(event.key==='Enter')addItem()">
           <button onclick="addItem()">إضافة بند</button>
         </div>
         <button onclick="loadPreset()" style="width:100%;padding:11px;border-radius:12px;background:#eaf6ee;color:var(--ok);border:2px dashed var(--ok);margin-bottom:6px">⭐ إضافة بنود نافس الجاهزة لهذا القسم</button>
@@ -528,7 +528,16 @@ function genCode(){
   let c; do{ c=String(Math.floor(100+Math.random()*900)); }while(used.includes(c)); // 3 أرقام (100-999)
   return c;
 }
-function clampPts(p){ p=parseInt(p,10)||0; return Math.max(0,Math.min(MAX_POINTS,p)); }
+// تحويل الأرقام العربية (٠-٩) والفارسية إلى إنجليزية + توحيد علامة السالب
+function normNum(s){
+  return String(s==null?'':s)
+    .replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-0x0660))
+    .replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-0x06F0))
+    .replace(/[−‒–—﹣－]/g,'-')
+    .trim();
+}
+function parseNum(s){ return parseInt(normNum(s),10); }
+function clampPts(p){ p=parseInt(normNum(p),10)||0; return Math.max(0,Math.min(MAX_POINTS,p)); }
 function studentsArr(){
   return Object.entries(state.students)
     .map(([id,s])=>({id,...s}))
@@ -651,7 +660,7 @@ function applyBulk(){
   const targets = [...selSet].filter(id=>secIds.has(id));
   if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
   const inp=document.getElementById('bulkPts');
-  const delta=parseInt(inp.value,10);
+  const delta=parseNum(inp.value);
   if(isNaN(delta) || delta===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
   let n=0;
   targets.forEach(id=>{
@@ -729,7 +738,7 @@ function onPtsInput(){
 /* =================== ADMIN: items =================== */
 function addItem(){
   const n=document.getElementById('itemName').value.trim();
-  const p=parseInt(document.getElementById('itemPts').value,10);
+  const p=parseNum(document.getElementById('itemPts').value);
   if(!n || isNaN(p)){ toast('اكتب اسم البند والنقاط',true); return; }
   const id='i'+Date.now().toString(36);
   state.items[id]={name:n, points:p, section:activeSection};
@@ -909,7 +918,7 @@ function renderBulkBar(arr){
     <label class="ball"><input type="checkbox" ${allOn?'checked':''} onchange="toggleAll(this.checked)"> تحديد الكل</label>
     <span class="bcount">المحدد: ${n}</span>
     <span class="bspacer"></span>
-    <input class="bpts" id="bulkPts" type="number" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
+    <input class="bpts" id="bulkPts" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
     <button class="bapply" onclick="applyBulk()" ${n?'':'disabled'}>إضافة للمحددين</button>
     ${n?`<button class="bclear" onclick="clearSel()">مسح التحديد</button>`:''}
     ${n?bulkItemsHtml():''}
