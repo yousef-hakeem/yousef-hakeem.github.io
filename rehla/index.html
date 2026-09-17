@@ -149,6 +149,9 @@
   .bulk-bar .bapply{padding:9px 14px; border-radius:10px; background:var(--ok); color:#fff; font-size:14px;}
   .bulk-bar .bapply:disabled{background:#c7d3c9; cursor:default;}
   .bulk-bar .bclear{padding:9px 12px; border-radius:10px; background:var(--line); color:var(--ink); font-size:13px;}
+  .bulk-bar .bulk-items{flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px; padding-top:8px; border-top:1px dashed #c8d8ec;}
+  .bulk-bar .bulk-items .bhint{width:100%; font-size:12px; color:var(--muted); font-weight:700; margin-bottom:2px;}
+  .bulk-bar .bulk-items .item-btn{margin-top:0; padding:7px 11px; font-size:13px;}
 
   .roster{display:flex; flex-direction:column; gap:8px;}
   .rrow{display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--line); border-radius:14px; transition:.15s;}
@@ -666,6 +669,26 @@ function applyBulk(){
   renderAll();
   toast('تم '+(delta>0?'إضافة ':'خصم ')+Math.abs(delta)+' نقطة لـ '+n+' طالب');
 }
+function applyItemBulk(id){
+  const it=state.items[id]; if(!it)return;
+  const secIds=new Set(sectionArr(activeSection).map(s=>s.id));
+  const targets=[...selSet].filter(x=>secIds.has(x));
+  if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
+  let n=0;
+  targets.forEach(sid=>{
+    const cur=state.students[sid].points||0;
+    const nv=clampPts(cur+it.points);
+    const applied=nv-cur;
+    if(applied!==0){
+      state.students[sid].points=nv;
+      dbSet('students/'+sid+'/points', nv);
+      addLog(sid, it.name, applied);
+      n++;
+    }
+  });
+  renderAll();
+  toast(it.name+' ('+(it.points>=0?'+':'')+it.points+') لـ '+n+' طالب');
+}
 function askDelete(id){ pendingDeleteId=id; renderRoster(); }
 function cancelDelete(){ pendingDeleteId=null; renderRoster(); }
 function confirmDelete(id){
@@ -889,9 +912,18 @@ function renderBulkBar(arr){
     <input class="bpts" id="bulkPts" type="number" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
     <button class="bapply" onclick="applyBulk()" ${n?'':'disabled'}>إضافة للمحددين</button>
     ${n?`<button class="bclear" onclick="clearSel()">مسح التحديد</button>`:''}
+    ${n?bulkItemsHtml():''}
   `;
   const now=document.getElementById('bulkPts');
   if(now){ now.value=keepVal; if(wasFocused){ now.focus(); const l=now.value.length; try{now.setSelectionRange(l,l);}catch(e){} } }
+}
+function bulkItemsHtml(){
+  const arr=itemsArr(activeSection);
+  if(!arr.length) return `<div class="bulk-items"><span class="bhint">أضف بنودًا في «بنود النقاط» لتطبيقها على المحددين.</span></div>`;
+  return `<div class="bulk-items">
+    <span class="bhint">أو طبّق بندًا جاهزًا على المحددين:</span>
+    ${arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItemBulk('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')}
+  </div>`;
 }
 
 function renderItems(){
