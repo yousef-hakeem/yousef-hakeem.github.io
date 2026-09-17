@@ -139,9 +139,24 @@
   .add-row button{padding:12px 18px; border-radius:12px; background:var(--blue); color:#fff;}
   .add-row .count{align-self:center; color:var(--muted); font-size:13px;}
 
+  /* bulk selection bar */
+  .bulk-bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; background:var(--blue-soft); border-radius:12px; padding:8px 10px; margin-bottom:12px;}
+  .bulk-bar .ball{display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--navy); cursor:pointer;}
+  .bulk-bar .ball input{width:18px; height:18px; accent-color:var(--blue);}
+  .bulk-bar .bcount{font-size:13px; color:var(--muted); font-weight:700;}
+  .bulk-bar .bspacer{flex:1;}
+  .bulk-bar .bpts{width:92px; text-align:center; font-size:16px; font-weight:800; padding:8px; border-radius:10px; border:2px solid var(--line); color:var(--navy);}
+  .bulk-bar .bapply{padding:9px 14px; border-radius:10px; background:var(--ok); color:#fff; font-size:14px;}
+  .bulk-bar .bapply:disabled{background:#c7d3c9; cursor:default;}
+  .bulk-bar .bclear{padding:9px 12px; border-radius:10px; background:var(--line); color:var(--ink); font-size:13px;}
+
   .roster{display:flex; flex-direction:column; gap:8px;}
   .rrow{display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--line); border-radius:14px; transition:.15s;}
   .rrow.sel{border-color:var(--gold); background:#fffaf0;}
+  .rrow.checked{border-color:var(--blue); background:#f2f8ff;}
+  .rrow .rchk{width:20px; height:20px; accent-color:var(--blue); flex:none; cursor:pointer;}
+  .rrow .rank{min-width:26px; text-align:center; font-weight:800; font-size:13px; color:var(--muted); flex:none;}
+  .rrow .rank.top{color:var(--gold); font-size:15px;}
   .rrow .rname{font-weight:700; flex:1; cursor:pointer; min-width:0;}
   .rrow .rname .code{font-size:12px; color:var(--muted); font-weight:500; margin-inline-start:8px;}
   .rrow .mini{flex:1.2; min-width:90px;}
@@ -321,6 +336,7 @@
           <input id="newStudent" placeholder="اسم الطالب الجديد" onkeydown="if(event.key==='Enter')addStudent()">
           <button onclick="addStudent()">إضافة طالب</button>
         </div>
+        <div class="bulk-bar" id="bulkBar"></div>
         <div class="roster" id="roster"></div>
       </div>
 
@@ -441,6 +457,7 @@ let role=null;                 // 'admin' | 'student'
 let selectedId=null;           // admin: selected student id ; student: own id
 let pendingDeleteId=null;
 let activeSection='fursan';    // 'fursan' | 'fityan'
+let selSet=new Set();          // الطلاب المحددون للإضافة الجماعية
 const LS_KEY='rehla_students_v2';
 
 /* =================== Firebase init =================== */
@@ -605,7 +622,7 @@ function addStudent(){
 }
 function selectStudent(id){ if(role!=='admin')return; selectedId=id; pendingDeleteId=null; renderAll(); }
 function setSection(sec){
-  activeSection=sec; pendingDeleteId=null;
+  activeSection=sec; pendingDeleteId=null; selSet.clear();
   const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
   if(tf) tf.classList.toggle('active', sec==='fursan');
   if(ty) ty.classList.toggle('active', sec==='fityan');
@@ -613,10 +630,47 @@ function setSection(sec){
   selectedId = first ? first.id : null;
   renderAll();
 }
+
+/* =================== تحديد جماعي =================== */
+function toggleSel(id, on){
+  if(on) selSet.add(id); else selSet.delete(id);
+  renderRoster();
+}
+function toggleAll(on){
+  const ids=sectionArr(activeSection).map(s=>s.id);
+  if(on) ids.forEach(id=>selSet.add(id));
+  else ids.forEach(id=>selSet.delete(id));
+  renderRoster();
+}
+function clearSel(){ selSet.clear(); renderRoster(); }
+function applyBulk(){
+  const secIds = new Set(sectionArr(activeSection).map(s=>s.id));
+  const targets = [...selSet].filter(id=>secIds.has(id));
+  if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
+  const inp=document.getElementById('bulkPts');
+  const delta=parseInt(inp.value,10);
+  if(isNaN(delta) || delta===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
+  let n=0;
+  targets.forEach(id=>{
+    const cur=state.students[id].points||0;
+    const nv=clampPts(cur+delta);
+    const applied=nv-cur;
+    if(applied!==0){
+      state.students[id].points=nv;
+      dbSet('students/'+id+'/points', nv);
+      addLog(id, delta>0?'إضافة جماعية':'خصم جماعي', applied);
+      n++;
+    }
+  });
+  inp.value='';
+  renderAll();
+  toast('تم '+(delta>0?'إضافة ':'خصم ')+Math.abs(delta)+' نقطة لـ '+n+' طالب');
+}
 function askDelete(id){ pendingDeleteId=id; renderRoster(); }
 function cancelDelete(){ pendingDeleteId=null; renderRoster(); }
 function confirmDelete(id){
   delete state.students[id];
+  selSet.delete(id);
   if(db&&online) db.ref('students/'+id).remove();
   // remove that student's log entries
   Object.entries(state.log).forEach(([k,e])=>{ if(e.studentId===id){ delete state.log[k]; if(db&&online) db.ref('log/'+k).remove(); }});
@@ -789,25 +843,55 @@ function buildMarkers(pts){
 function renderRoster(){
   if(role!=='admin')return;
   const box=document.getElementById('roster'); if(!box)return;
-  const arr=sectionArr(activeSection);
+  // ترتيب تنازلي حسب النقاط (الأعلى في الأعلى) ثم الأقدم
+  const arr=sectionArr(activeSection)
+    .slice()
+    .sort((a,b)=> (clampPts(b.points)-clampPts(a.points)) || ((a.createdAt||0)-(b.createdAt||0)));
   document.getElementById('rosterCount').textContent='('+arr.length+'/'+MAX_PER_SECTION+' — '+SECTION_LABELS[activeSection]+')';
   const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
   if(tf) tf.textContent='🐎 الفرسان ('+sectionArr('fursan').length+')';
   if(ty) ty.textContent='🧒 الفتيان ('+sectionArr('fityan').length+')';
+  renderBulkBar(arr);
   if(!arr.length){ box.innerHTML='<div class="empty">لا يوجد طلاب في هذا القسم — أضف أول طالب.</div>'; return; }
-  box.innerHTML = arr.map(s=>{
+  box.innerHTML = arr.map((s,idx)=>{
     const pct=fillPct(s.points);
     const sel = s.id===selectedId ? 'sel':'';
+    const chk = selSet.has(s.id);
+    const rankIc = idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':(idx+1);
+    const rankCls = idx<3?'rank top':'rank';
     const delUI = pendingDeleteId===s.id
       ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد الحذف ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
       : `<button class="del" onclick="askDelete('${s.id}')" title="حذف">✕</button>`;
-    return `<div class="rrow ${sel}">
+    return `<div class="rrow ${sel} ${chk?'checked':''}">
+      <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
+      <div class="${rankCls}">${rankIc}</div>
       <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
       <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
       <div class="rpts">${clampPts(s.points)}/${MAX_POINTS}</div>
       ${delUI}
     </div>`;
   }).join('');
+}
+function renderBulkBar(arr){
+  const bar=document.getElementById('bulkBar'); if(!bar)return;
+  if(!arr.length){ bar.innerHTML=''; return; }
+  // نحافظ على القيمة المكتوبة والتركيز عند إعادة الرسم
+  const prev=document.getElementById('bulkPts');
+  const keepVal=prev?prev.value:'';
+  const wasFocused=prev && document.activeElement===prev;
+  const secIds=arr.map(s=>s.id);
+  const n=secIds.filter(id=>selSet.has(id)).length;
+  const allOn = n>0 && n===secIds.length;
+  bar.innerHTML=`
+    <label class="ball"><input type="checkbox" ${allOn?'checked':''} onchange="toggleAll(this.checked)"> تحديد الكل</label>
+    <span class="bcount">المحدد: ${n}</span>
+    <span class="bspacer"></span>
+    <input class="bpts" id="bulkPts" type="number" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
+    <button class="bapply" onclick="applyBulk()" ${n?'':'disabled'}>إضافة للمحددين</button>
+    ${n?`<button class="bclear" onclick="clearSel()">مسح التحديد</button>`:''}
+  `;
+  const now=document.getElementById('bulkPts');
+  if(now){ now.value=keepVal; if(wasFocused){ now.focus(); const l=now.value.length; try{now.setSelectionRange(l,l);}catch(e){} } }
 }
 
 function renderItems(){
