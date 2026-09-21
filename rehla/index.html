@@ -190,8 +190,10 @@
   .log{display:flex; flex-direction:column; gap:6px; max-height:340px; overflow:auto;}
   .lrow{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 12px; background:#f7fafd; border-radius:11px; font-size:14px;}
   .lrow .ld{color:var(--muted); font-size:12px;}
+  .lrow .linfo{flex:1; min-width:0;}
   .lrow .lv{font-weight:800;}
   .lrow .lv.pos{color:var(--ok);} .lrow .lv.neg{color:var(--danger);}
+  .lrow .ldel{background:#fbeaea; color:var(--danger); width:30px; height:30px; border-radius:9px; font-size:14px; flex:none;}
   .empty{color:var(--muted); text-align:center; padding:14px; font-size:14px;}
 
   /* ===== toast / banners ===== */
@@ -785,6 +787,15 @@ function logFor(id){
   return Object.entries(state.log).map(([k,e])=>({k,...e}))
     .filter(e=>e.studentId===id).sort((a,b)=>b.ts-a.ts);
 }
+// حذف حركة من السجل (لا يغيّر رصيد الطالب الحالي — الرصيد محفوظ كرقم مستقل)
+function deleteLog(key){
+  if(role!=='admin' || !state.log[key]) return;
+  delete state.log[key];
+  if(db&&online) db.ref('log/'+key).remove();
+  cacheLocal();
+  renderLog();
+  toast('تم حذف الحركة من السجل');
+}
 
 /* =================== عبارات تحفيزية =================== */
 const MOTIVS = [
@@ -975,8 +986,9 @@ function renderLog(){
   if(!id){ box.innerHTML='<div class="empty">اختر طالبًا لعرض سجله.</div>'; return; }
   if(!arr.length){ box.innerHTML='<div class="empty">لا توجد حركات بعد.</div>'; return; }
   box.innerHTML=arr.slice(0,100).map(e=>`<div class="lrow">
-    <div><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
+    <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
     <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+    ${role==='admin'?`<button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button>`:''}
   </div>`).join('');
 }
 
