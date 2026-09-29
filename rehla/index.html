@@ -88,8 +88,9 @@
   .avatar.editable{cursor:pointer;}
   .avatar.need{border-color:var(--blue); border-style:dashed; background:#eaf2fb; animation:avPulse 1.7s ease-in-out infinite;}
   @keyframes avPulse{0%,100%{box-shadow:0 0 0 0 rgba(63,124,196,.45);}50%{box-shadow:0 0 0 8px rgba(63,124,196,0);}}
-  .avatar-hint{font-size:12.5px; color:var(--blue); font-weight:700; margin-top:5px; cursor:pointer;
-    background:#eaf2fb; border:1px dashed var(--blue); border-radius:9px; padding:4px 9px; display:inline-block;}
+  .avatar-wrap{display:flex; flex-direction:column; align-items:center; gap:5px; flex:none;}
+  .avatar-hint{font-size:12px; color:var(--blue); font-weight:800; cursor:pointer; text-align:center;
+    background:#eaf2fb; border:1px dashed var(--blue); border-radius:9px; padding:3px 8px; white-space:nowrap;}
   .avatar .cam{position:absolute; bottom:-2px; left:-2px; width:22px; height:22px; border-radius:50%;
     background:var(--blue); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center;
     border:2px solid #fff;}
@@ -314,11 +315,13 @@
     <div class="journey" id="journey">
       <div class="who">
         <div class="who-left">
-          <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
+          <div class="avatar-wrap">
+            <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
+            <div class="avatar-hint" id="avatarHint" onclick="onAvatarClick()" style="display:none">📷 أضف صورتك</div>
+          </div>
           <div>
             <div class="name" id="jName">—</div>
             <span class="sec-badge" id="jSection"></span>
-            <div class="avatar-hint" id="avatarHint" onclick="onAvatarClick()" style="display:none"></div>
           </div>
         </div>
         <div class="score-badge"><span class="star">★</span><span id="jScore">0</span> نقطة</div>
@@ -875,8 +878,7 @@ function renderAvatarEl(s){
   el.classList.toggle('need', canEdit && !has);   // توهج ينبّه لإضافة الصورة
   if(hint){
     const show = canEdit && !has;
-    hint.textContent = show ? '📷 اضغط الدائرة لإضافة صورتك' : '';
-    hint.style.display = show ? 'block' : 'none';
+    hint.style.display = show ? 'inline-block' : 'none';
   }
 }
 function onAvatarClick(){
