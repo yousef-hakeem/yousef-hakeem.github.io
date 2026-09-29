@@ -75,9 +75,11 @@
     border-radius:20px; padding:20px 18px 26px; margin-bottom:14px; position:relative; overflow:hidden;
     box-shadow:0 8px 22px rgba(44,62,80,.12);
   }
-  .journey .who{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;}
-  .journey .who .who-left{display:flex; align-items:center; gap:12px; min-width:0;}
-  .journey .who .name{font-size:22px; font-weight:800; color:var(--navy);}
+  .journey .who{display:flex; align-items:flex-start; gap:14px; margin-bottom:6px;}
+  .journey .who .who-main{flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:8px;}
+  .journey .who .name{font-size:22px; font-weight:800; color:var(--navy); line-height:1.25;}
+  .journey .who .sec-badge{margin-top:0;}
+  .journey .who .score-badge{margin-top:2px;}
   /* avatar (student profile picture) */
   .avatar{position:relative; width:60px; height:60px; border-radius:50%; overflow:hidden; flex:none;
     background:#fff; border:3px solid var(--gold); display:flex; align-items:center; justify-content:center;
@@ -314,17 +316,15 @@
     <!-- Journey banner (shared by admin selected student & student view) -->
     <div class="journey" id="journey">
       <div class="who">
-        <div class="who-left">
-          <div class="avatar-wrap">
-            <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
-            <div class="avatar-hint" id="avatarHint" onclick="onAvatarClick()" style="display:none">📷 أضف صورتك</div>
-          </div>
-          <div>
-            <div class="name" id="jName">—</div>
-            <span class="sec-badge" id="jSection"></span>
-          </div>
+        <div class="avatar-wrap">
+          <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
+          <div class="avatar-hint" id="avatarHint" onclick="onAvatarClick()" style="display:none">📷 أضف صورتك</div>
         </div>
-        <div class="score-badge"><span class="star">★</span><span id="jScore">0</span> نقطة</div>
+        <div class="who-main">
+          <div class="name" id="jName">—</div>
+          <span class="sec-badge" id="jSection"></span>
+          <div class="score-badge"><span class="star">★</span><span id="jScore">0</span> نقطة</div>
+        </div>
       </div>
       <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="onAvatarPicked(this)">
       <div class="motiv" id="jMotiv"></div>
