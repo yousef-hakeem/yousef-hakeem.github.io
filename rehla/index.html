@@ -84,7 +84,12 @@
     box-shadow:0 4px 12px rgba(44,62,80,.18);}
   .avatar img{width:100%; height:100%; object-fit:cover; display:block;}
   .avatar .ph{font-size:26px; font-weight:800; color:var(--blue);}
+  .avatar .cam-ph{font-size:24px;}
   .avatar.editable{cursor:pointer;}
+  .avatar.need{border-color:var(--blue); border-style:dashed; background:#eaf2fb; animation:avPulse 1.7s ease-in-out infinite;}
+  @keyframes avPulse{0%,100%{box-shadow:0 0 0 0 rgba(63,124,196,.45);}50%{box-shadow:0 0 0 8px rgba(63,124,196,0);}}
+  .avatar-hint{font-size:12.5px; color:var(--blue); font-weight:700; margin-top:5px; cursor:pointer;
+    background:#eaf2fb; border:1px dashed var(--blue); border-radius:9px; padding:4px 9px; display:inline-block;}
   .avatar .cam{position:absolute; bottom:-2px; left:-2px; width:22px; height:22px; border-radius:50%;
     background:var(--blue); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center;
     border:2px solid #fff;}
@@ -309,10 +314,11 @@
     <div class="journey" id="journey">
       <div class="who">
         <div class="who-left">
-          <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">🧗</span></div>
+          <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
           <div>
             <div class="name" id="jName">—</div>
             <span class="sec-badge" id="jSection"></span>
+            <div class="avatar-hint" id="avatarHint" onclick="onAvatarClick()" style="display:none"></div>
           </div>
         </div>
         <div class="score-badge"><span class="star">★</span><span id="jScore">0</span> نقطة</div>
@@ -856,9 +862,22 @@ function avatarMarkup(s){
 }
 function renderAvatarEl(s){
   const el=document.getElementById('jAvatar'); if(!el) return;
-  const canEdit = !!selectedId; // الطالب لنفسه، والمشرف للطالب المحدد
-  el.innerHTML = avatarMarkup(s) + (canEdit ? '<span class="cam">📷</span>' : '');
+  const hint=document.getElementById('avatarHint');
+  const canEdit = !!selectedId;      // الطالب لنفسه، والمشرف للطالب المحدد
+  const has = !!(s && s.avatar);
+  const initial = (s && s.name) ? escapeHtml(s.name.trim().charAt(0)) : '📷';
+  if(has){
+    el.innerHTML = `<img src="${s.avatar}" alt="">` + (canEdit ? '<span class="cam">📷</span>' : '');
+  } else {
+    el.innerHTML = canEdit ? '<span class="ph cam-ph">📷</span>' : `<span class="ph">${initial}</span>`;
+  }
   el.classList.toggle('editable', canEdit);
+  el.classList.toggle('need', canEdit && !has);   // توهج ينبّه لإضافة الصورة
+  if(hint){
+    const show = canEdit && !has;
+    hint.textContent = show ? '📷 اضغط الدائرة لإضافة صورتك' : '';
+    hint.style.display = show ? 'block' : 'none';
+  }
 }
 function onAvatarClick(){
   if(!selectedId){ if(role==='admin') toast('اختر طالبًا أولاً',true); return; }
