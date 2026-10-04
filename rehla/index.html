@@ -673,8 +673,7 @@ function setSection(sec){
   const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
   if(tf) tf.classList.toggle('active', sec==='fursan');
   if(ty) ty.classList.toggle('active', sec==='fityan');
-  const first=sectionArr(sec)[0];
-  selectedId = first ? first.id : null;
+  selectedId = null;   // لا نختار أحدًا تلقائيًا — المشرف يختار بنفسه
   renderAll();
 }
 
