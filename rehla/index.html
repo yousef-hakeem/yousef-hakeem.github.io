@@ -113,6 +113,7 @@
   .grp-title{flex:1; min-width:120px; font-size:15px; color:var(--navy);}
   .grp-title .gcount{color:var(--muted); font-size:13px; font-weight:700;}
   .grp-title .glead{font-size:12px; color:#6b59c4; font-weight:700; margin-top:2px;}
+  .grp-title .chlead{background:#eae6fa; color:#6b59c4; border-radius:8px; padding:2px 8px; font-size:11px; font-weight:800; margin-inline-start:4px;}
   .grp-head .gp{width:84px; text-align:center; font-size:15px; font-weight:800; padding:7px; border-radius:10px; border:2px solid var(--line); color:var(--navy);}
   .grp-head .gadd{padding:8px 12px; border-radius:10px; background:var(--ok); color:#fff; font-size:13px;}
   .grp-head .gdel{padding:8px 10px; border-radius:10px; background:#fbeaea; color:var(--danger); font-size:14px;}
@@ -802,6 +803,13 @@ function setLeader(gid, sid){
   renderRoster();
   toast('تم تعيين القائد 👑');
 }
+function clearLeader(gid){
+  if(!state.groups[gid]) return;
+  state.groups[gid].leaderId = '';
+  dbSet('groups/'+gid+'/leaderId', '');
+  renderRoster();
+  toast('اختر القائد الجديد 👑');
+}
 function toggleGroupSel(gid, on){
   membersOf(gid).forEach(s=>{ if(on) selSet.add(s.id); else selSet.delete(s.id); });
   renderRoster();
@@ -1074,9 +1082,9 @@ function memberRowHtml(s, idx, gid){
   const sel = s.id===selectedId ? 'sel':'';
   const chk = selSet.has(s.id);
   const isLeader = !!(gid && state.groups[gid] && state.groups[gid].leaderId===s.id);
+  const hasLeader = !!(gid && state.groups[gid] && state.groups[gid].leaderId);
   let rankIc, rankCls;
   if(gid){
-    const hasLeader = !!(state.groups[gid] && state.groups[gid].leaderId);
     rankIc = isLeader ? '👑' : (hasLeader ? idx : idx+1);
     rankCls = isLeader ? 'rank top' : 'rank';
   } else {
@@ -1086,7 +1094,8 @@ function memberRowHtml(s, idx, gid){
   const delUI = pendingDeleteId===s.id
     ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
     : `<button class="del" onclick="askDelete('${s.id}')" title="حذف">✕</button>`;
-  const leadBtn = (gid && !isLeader)
+  // زر تعيين القائد يظهر فقط ما دام ما فيه قائد بعد؛ أول ما يُختار قائد تختفي الأزرار من الجميع
+  const leadBtn = (gid && !hasLeader)
     ? `<button class="lead" onclick="setLeader('${gid}','${s.id}')" title="تعيين قائدًا">👑</button>` : '';
   return `<div class="rrow ${sel} ${chk?'checked':''}">
     <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
@@ -1105,13 +1114,15 @@ function groupBlockHtml(g){
   const selCount=mem.filter(s=>selSet.has(s.id)).length;
   const allOn = n>0 && selCount===n;
   const lid=g.leaderId;
-  const leaderName = lid && state.students[lid] ? escapeHtml(state.students[lid].name) : 'لم يُعيّن';
+  const hasLeader = !!(lid && state.students[lid]);
+  const leaderName = hasLeader ? escapeHtml(state.students[lid].name) : 'لم يُعيّن (اضغط 👑 جنب الاسم)';
+  const changeLead = hasLeader ? ` <button class="chlead" onclick="clearLeader('${g.id}')">تغيير</button>` : '';
   const rows = n ? mem.map((s,idx)=>memberRowHtml(s,idx,g.id)).join('')
                  : '<div class="empty" style="padding:8px">لا أعضاء — حدّد طلابًا ثم «نقل المحددين إلى مجموعة».</div>';
   return `<div class="grp">
     <div class="grp-head">
       <label class="gchk"><input type="checkbox" ${allOn?'checked':''} onchange="toggleGroupSel('${g.id}', this.checked)"> </label>
-      <div class="grp-title"><b>🏳️ ${escapeHtml(g.name)}</b> <span class="gcount">(${n})</span><div class="glead">القائد: 👑 ${leaderName}</div></div>
+      <div class="grp-title"><b>🏳️ ${escapeHtml(g.name)}</b> <span class="gcount">(${n})</span><div class="glead">القائد: 👑 ${leaderName}${changeLead}</div></div>
       <input class="gp" id="gp_${g.id}" type="text" inputmode="numeric" placeholder="±نقاط" onkeydown="if(event.key==='Enter')applyGroupPts('${g.id}')">
       <button class="gadd" onclick="applyGroupPts('${g.id}')">إضافة</button>
       <button class="gdel" onclick="deleteGroup('${g.id}')" title="حذف المجموعة">🗑️</button>
