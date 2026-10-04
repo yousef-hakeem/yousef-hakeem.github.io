@@ -106,18 +106,19 @@
   .bulk-bar .bgrp{flex-basis:100%; margin-top:8px; padding:9px; border-radius:10px; border:2px solid #c9c0ec; background:#f3f0fc; color:var(--navy); font-weight:700; font-size:14px;}
   .grp{border:2px solid #e0dcf4; border-radius:16px; margin-bottom:14px; overflow:hidden; background:#faf9ff;}
   .grp.ungrouped{background:#f7fafd; border-color:var(--line);}
-  .grp-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 12px; background:#efeafc; border-bottom:1px solid #e0dcf4;}
+  .grp-head{display:flex; align-items:center; gap:8px; padding:9px 11px; background:#efeafc; border-bottom:1px solid #e0dcf4;}
   .grp.ungrouped .grp-head{background:#eef4fc;}
-  .grp-head .gchk{display:flex; align-items:center;}
+  .grp-head .gchk{display:flex; align-items:center; flex:none;}
   .grp-head .gchk input{width:20px; height:20px; accent-color:#6b59c4;}
-  .grp-title{flex:1; min-width:120px; font-size:15px; color:var(--navy);}
+  .grp-title{flex:1; min-width:0; font-size:15px; color:var(--navy);}
   .grp-title .gcount{color:var(--muted); font-size:13px; font-weight:700;}
   .grp-title .glead{font-size:12px; color:#6b59c4; font-weight:700; margin-top:2px;}
   .grp-title .chlead{background:#eae6fa; color:#6b59c4; border-radius:8px; padding:2px 8px; font-size:11px; font-weight:800; margin-inline-start:4px;}
-  .grp-head .gp{width:84px; text-align:center; font-size:15px; font-weight:800; padding:7px; border-radius:10px; border:2px solid var(--line); color:var(--navy);}
-  .grp-head .gadd{padding:8px 12px; border-radius:10px; background:var(--ok); color:#fff; font-size:13px;}
-  .grp-head .gdel{padding:8px 10px; border-radius:10px; background:#fbeaea; color:var(--danger); font-size:14px;}
-  .grp-members{display:flex; flex-direction:column; gap:8px; padding:10px 12px;}
+  .grp-head .gdel{padding:7px 9px; border-radius:10px; background:#fbeaea; color:var(--danger); font-size:14px; flex:none;}
+  .grp-ptsbar{display:flex; gap:8px; align-items:center; padding:9px 11px; background:#f5f2fe;}
+  .grp-ptsbar .gp{width:84px; flex:none; text-align:center; font-size:16px; font-weight:800; padding:9px; border-radius:10px; border:2px solid var(--line); color:var(--navy);}
+  .grp-ptsbar .gadd{flex:1; padding:10px; border-radius:10px; background:var(--ok); color:#fff; font-size:14px;}
+  .grp-members{display:flex; flex-direction:column; gap:7px; padding:9px 11px;}
   .score-badge{
     background:var(--navy); color:#fff; border-radius:14px; padding:8px 16px; font-size:20px; font-weight:800;
     display:inline-flex; gap:8px; align-items:center;
@@ -201,12 +202,15 @@
   .rrow .rchk{width:20px; height:20px; accent-color:var(--blue); flex:none; cursor:pointer;}
   .rrow .rank{min-width:26px; text-align:center; font-weight:800; font-size:13px; color:var(--muted); flex:none;}
   .rrow .rank.top{color:var(--gold); font-size:15px;}
-  .rrow .rname{font-weight:700; flex:1; cursor:pointer; min-width:0;}
-  .rrow .rname .code{font-size:12px; color:var(--muted); font-weight:500; margin-inline-start:8px;}
+  .rrow .rname{font-weight:700; flex:1; cursor:pointer; min-width:0; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .rrow .rname .nm{min-width:0;}
+  .rrow .rname .code{font-size:11px; color:#6b7a8a; font-weight:700; background:#eef3f8; border-radius:7px; padding:1px 7px;}
   .rrow .mini{flex:1.2; min-width:90px;}
   .mini-track{height:8px; background:var(--track); border-radius:10px; position:relative; overflow:hidden;}
   .mini-fill{position:absolute; top:0; right:0; height:100%; background:linear-gradient(270deg,#f5b301,#ffd35c); border-radius:10px;}
-  .rrow .rpts{font-weight:800; color:#c98f00; min-width:78px; text-align:left; font-size:14px;}
+  .rrow .rpts{min-width:70px; text-align:left; flex:none; line-height:1.05;}
+  .rrow .rpts .pv{font-weight:800; color:#c98f00; font-size:16px;}
+  .rrow .rpts .pm{color:var(--muted); font-size:10px; font-weight:700;}
   .rrow .del{background:#fbeaea; color:var(--danger); width:34px; height:34px; border-radius:10px; font-size:16px;}
   .rrow .confirm-del{display:flex; gap:6px; align-items:center;}
   .rrow .confirm-del button{padding:6px 10px; border-radius:9px; font-size:12px;}
@@ -273,6 +277,21 @@
     .avatar-wrap{width:58px;}
     .journey .who .name{font-size:18px;}
     .rrow .mini{display:none;}
+    /* صفوف مضغوطة ومرتبة على الجوال */
+    .rrow{padding:7px 8px; gap:6px; border-radius:12px;}
+    .rrow .rchk{width:18px; height:18px;}
+    .rrow .rank{min-width:16px; font-size:12px;}
+    .rrow .rank.top{font-size:15px;}
+    .rrow .ravatar{width:30px; height:30px;}
+    .rrow .rname{font-size:13.5px; gap:5px;}
+    .rrow .rname .nm{width:100%;}
+    .rrow .rname .code{font-size:10px; padding:1px 6px;}
+    .rrow .rpts{min-width:44px;}
+    .rrow .rpts .pv{font-size:14px;}
+    .rrow .del{width:28px; height:28px; font-size:13px;}
+    .rrow .lead{width:28px; height:28px; font-size:13px;}
+    .grp-ptsbar .gp{width:70px; font-size:15px; padding:8px;}
+    .grp-ptsbar .gadd{font-size:13px; padding:9px;}
     /* 10 محطات على الجوال: ترتيب متعرّج (واحدة فوق وواحدة تحت) لمنع تداخل الأسماء */
     .track-wrap{margin:50px 8px 50px;}
     .marker .lbl{display:none;}
@@ -1101,9 +1120,9 @@ function memberRowHtml(s, idx, gid){
     <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
     <div class="${rankCls}">${rankIc}</div>
     <div class="ravatar">${avatarMarkup(s)}</div>
-    <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
+    <div class="rname" onclick="selectStudent('${s.id}')"><span class="nm">${escapeHtml(s.name)}</span><span class="code">#${s.code}</span></div>
     <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
-    <div class="rpts">${clampPts(s.points)}/${MAX_POINTS}</div>
+    <div class="rpts"><span class="pv">${clampPts(s.points)}</span><span class="pm">/${MAX_POINTS}</span></div>
     ${leadBtn}
     ${delUI}
   </div>`;
@@ -1123,9 +1142,11 @@ function groupBlockHtml(g){
     <div class="grp-head">
       <label class="gchk"><input type="checkbox" ${allOn?'checked':''} onchange="toggleGroupSel('${g.id}', this.checked)"> </label>
       <div class="grp-title"><b>🏳️ ${escapeHtml(g.name)}</b> <span class="gcount">(${n})</span><div class="glead">القائد: 👑 ${leaderName}${changeLead}</div></div>
-      <input class="gp" id="gp_${g.id}" type="text" inputmode="numeric" placeholder="±نقاط" onkeydown="if(event.key==='Enter')applyGroupPts('${g.id}')">
-      <button class="gadd" onclick="applyGroupPts('${g.id}')">إضافة</button>
       <button class="gdel" onclick="deleteGroup('${g.id}')" title="حذف المجموعة">🗑️</button>
+    </div>
+    <div class="grp-ptsbar">
+      <input class="gp" id="gp_${g.id}" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyGroupPts('${g.id}')">
+      <button class="gadd" onclick="applyGroupPts('${g.id}')">➕ إضافة لكل المجموعة</button>
     </div>
     <div class="grp-members">${rows}</div>
   </div>`;
