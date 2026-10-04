@@ -101,6 +101,22 @@
     border:2px solid var(--line); display:flex; align-items:center; justify-content:center;}
   .rrow .ravatar img{width:100%; height:100%; object-fit:cover;}
   .rrow .ravatar .ph{font-size:14px; font-weight:800; color:var(--blue);}
+  .rrow .lead{background:#fff6da; color:#c98f00; width:30px; height:30px; border-radius:9px; font-size:14px; flex:none;}
+  /* groups */
+  .bulk-bar .bgrp{flex-basis:100%; margin-top:8px; padding:9px; border-radius:10px; border:2px solid #c9c0ec; background:#f3f0fc; color:var(--navy); font-weight:700; font-size:14px;}
+  .grp{border:2px solid #e0dcf4; border-radius:16px; margin-bottom:14px; overflow:hidden; background:#faf9ff;}
+  .grp.ungrouped{background:#f7fafd; border-color:var(--line);}
+  .grp-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 12px; background:#efeafc; border-bottom:1px solid #e0dcf4;}
+  .grp.ungrouped .grp-head{background:#eef4fc;}
+  .grp-head .gchk{display:flex; align-items:center;}
+  .grp-head .gchk input{width:20px; height:20px; accent-color:#6b59c4;}
+  .grp-title{flex:1; min-width:120px; font-size:15px; color:var(--navy);}
+  .grp-title .gcount{color:var(--muted); font-size:13px; font-weight:700;}
+  .grp-title .glead{font-size:12px; color:#6b59c4; font-weight:700; margin-top:2px;}
+  .grp-head .gp{width:84px; text-align:center; font-size:15px; font-weight:800; padding:7px; border-radius:10px; border:2px solid var(--line); color:var(--navy);}
+  .grp-head .gadd{padding:8px 12px; border-radius:10px; background:var(--ok); color:#fff; font-size:13px;}
+  .grp-head .gdel{padding:8px 10px; border-radius:10px; background:#fbeaea; color:var(--danger); font-size:14px;}
+  .grp-members{display:flex; flex-direction:column; gap:8px; padding:10px 12px;}
   .score-badge{
     background:var(--navy); color:#fff; border-radius:14px; padding:8px 16px; font-size:20px; font-weight:800;
     display:inline-flex; gap:8px; align-items:center;
@@ -374,6 +390,10 @@
           <input id="newStudent" placeholder="اسم الطالب الجديد" onkeydown="if(event.key==='Enter')addStudent()">
           <button onclick="addStudent()">إضافة طالب</button>
         </div>
+        <div class="add-row">
+          <input id="newGroup" placeholder="اسم مجموعة جديدة (مثل: اصرار)" onkeydown="if(event.key==='Enter')addGroup()">
+          <button onclick="addGroup()" style="background:#6b59c4">➕ مجموعة</button>
+        </div>
         <div class="bulk-bar" id="bulkBar"></div>
         <div class="roster" id="roster"></div>
       </div>
@@ -490,7 +510,7 @@ const STATIONS = [
 
 /* ---------- state ---------- */
 let db=null, online=false;
-let state = { students:{}, items:{}, log:{}, meta:{pin:DEFAULT_PIN} };
+let state = { students:{}, items:{}, log:{}, groups:{}, meta:{pin:DEFAULT_PIN} };
 let role=null;                 // 'admin' | 'student'
 let selectedId=null;           // admin: selected student id ; student: own id
 let pendingDeleteId=null;
@@ -509,6 +529,7 @@ function initFirebase(){
       state.students = val.students || {};
       state.items    = val.items || {};
       state.log      = val.log || {};
+      state.groups   = val.groups || {};
       state.meta     = val.meta || {pin:DEFAULT_PIN};
       if(!state.meta.pin) state.meta.pin = DEFAULT_PIN;
       setLive(true);
@@ -542,8 +563,8 @@ function setLive(on){
 }
 
 /* =================== local cache fallback =================== */
-function cacheLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({students:state.students,items:state.items,log:state.log,meta:state.meta})); }catch(e){} }
-function loadLocal(){ try{ const r=localStorage.getItem(LS_KEY); if(r){ const d=JSON.parse(r); state.students=d.students||{}; state.items=d.items||{}; state.log=d.log||{}; state.meta=d.meta||{pin:DEFAULT_PIN}; } }catch(e){} }
+function cacheLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({students:state.students,items:state.items,log:state.log,groups:state.groups,meta:state.meta})); }catch(e){} }
+function loadLocal(){ try{ const r=localStorage.getItem(LS_KEY); if(r){ const d=JSON.parse(r); state.students=d.students||{}; state.items=d.items||{}; state.log=d.log||{}; state.groups=d.groups||{}; state.meta=d.meta||{pin:DEFAULT_PIN}; } }catch(e){} }
 
 /* write helpers: Firebase if online, always mirror to local */
 function dbSet(path, value){
@@ -689,48 +710,112 @@ function toggleAll(on){
   renderRoster();
 }
 function clearSel(){ selSet.clear(); renderRoster(); }
-function applyBulk(){
-  const secIds = new Set(sectionArr(activeSection).map(s=>s.id));
-  const targets = [...selSet].filter(id=>secIds.has(id));
-  if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
-  const inp=document.getElementById('bulkPts');
-  const delta=parseNum(inp.value);
-  if(isNaN(delta) || delta===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
+// منح/خصم نقاط لمجموعة من المعرّفات مع تسجيلها — يرجع عدد من تغيّرت نقاطهم
+function awardPoints(ids, delta, label){
   let n=0;
-  targets.forEach(id=>{
+  ids.forEach(id=>{
+    if(!state.students[id]) return;
     const cur=state.students[id].points||0;
     const nv=clampPts(cur+delta);
     const applied=nv-cur;
     if(applied!==0){
       state.students[id].points=nv;
       dbSet('students/'+id+'/points', nv);
-      addLog(id, delta>0?'إضافة جماعية':'خصم جماعي', applied);
+      addLog(id, label, applied);
       n++;
     }
   });
+  return n;
+}
+function selectedTargets(){
+  const secIds = new Set(sectionArr(activeSection).map(s=>s.id));
+  return [...selSet].filter(id=>secIds.has(id));
+}
+function applyBulk(){
+  const targets = selectedTargets();
+  if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
+  const inp=document.getElementById('bulkPts');
+  const delta=parseNum(inp.value);
+  if(isNaN(delta) || delta===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
+  const n=awardPoints(targets, delta, delta>0?'إضافة جماعية':'خصم جماعي');
   inp.value='';
   renderAll();
   toast('تم '+(delta>0?'إضافة ':'خصم ')+Math.abs(delta)+' نقطة لـ '+n+' طالب');
 }
 function applyItemBulk(id){
   const it=state.items[id]; if(!it)return;
-  const secIds=new Set(sectionArr(activeSection).map(s=>s.id));
-  const targets=[...selSet].filter(x=>secIds.has(x));
+  const targets=selectedTargets();
   if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
-  let n=0;
-  targets.forEach(sid=>{
-    const cur=state.students[sid].points||0;
-    const nv=clampPts(cur+it.points);
-    const applied=nv-cur;
-    if(applied!==0){
-      state.students[sid].points=nv;
-      dbSet('students/'+sid+'/points', nv);
-      addLog(sid, it.name, applied);
-      n++;
-    }
-  });
+  const n=awardPoints(targets, it.points, it.name);
   renderAll();
   toast(it.name+' ('+(it.points>=0?'+':'')+it.points+') لـ '+n+' طالب');
+}
+
+/* =================== المجموعات =================== */
+function groupsArr(sec){
+  return Object.entries(state.groups).map(([id,g])=>({id,...g}))
+    .filter(g=>(g.section||'fursan')===sec)
+    .sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+}
+function groupName(gid){ return state.groups[gid] ? state.groups[gid].name : ''; }
+function membersOf(gid){   // القائد أولاً ثم الباقي حسب النقاط تنازليًا
+  const lid = state.groups[gid] && state.groups[gid].leaderId;
+  return studentsArr().filter(s=>s.groupId===gid).sort((a,b)=>{
+    if(a.id===lid) return -1; if(b.id===lid) return 1;
+    return (clampPts(b.points)-clampPts(a.points)) || ((a.createdAt||0)-(b.createdAt||0));
+  });
+}
+function addGroup(){
+  const inp=document.getElementById('newGroup'); const name=(inp.value||'').trim();
+  if(!name){ toast('اكتب اسم المجموعة',true); return; }
+  const id='g'+Date.now().toString(36);
+  state.groups[id]={ name, section:activeSection, leaderId:'', createdAt:Date.now() };
+  dbSet('groups/'+id, state.groups[id]);
+  inp.value='';
+  renderRoster();
+  toast('تمت إضافة مجموعة «'+name+'»');
+}
+function deleteGroup(gid){
+  if(!state.groups[gid]) return;
+  const nm=state.groups[gid].name;
+  if(!confirm('حذف مجموعة «'+nm+'»؟ (الطلاب يبقون بدون حذف)')) return;
+  Object.entries(state.students).forEach(([sid,s])=>{ if(s.groupId===gid){ s.groupId=''; dbSet('students/'+sid+'/groupId',''); }});
+  delete state.groups[gid];
+  if(db&&online) db.ref('groups/'+gid).remove();
+  cacheLocal();
+  renderRoster();
+  toast('تم حذف مجموعة «'+nm+'»');
+}
+function assignSelectedToGroup(gid){
+  if(gid==='__none') gid='';
+  const targets=selectedTargets();
+  if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
+  targets.forEach(id=>{ if(state.students[id]){ state.students[id].groupId=gid; dbSet('students/'+id+'/groupId', gid); }});
+  cacheLocal();
+  renderRoster();
+  toast(gid ? ('نُقل '+targets.length+' إلى «'+groupName(gid)+'»') : ('أُخرج '+targets.length+' من المجموعات'));
+}
+function setLeader(gid, sid){
+  if(!state.groups[gid]) return;
+  state.groups[gid].leaderId = sid;
+  dbSet('groups/'+gid+'/leaderId', sid);
+  renderRoster();
+  toast('تم تعيين القائد 👑');
+}
+function toggleGroupSel(gid, on){
+  membersOf(gid).forEach(s=>{ if(on) selSet.add(s.id); else selSet.delete(s.id); });
+  renderRoster();
+}
+function applyGroupPts(gid){
+  const inp=document.getElementById('gp_'+gid); if(!inp) return;
+  const delta=parseNum(inp.value);
+  if(isNaN(delta)||delta===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
+  const ids=membersOf(gid).map(s=>s.id);
+  if(!ids.length){ toast('المجموعة فارغة',true); return; }
+  const n=awardPoints(ids, delta, delta>0?('إضافة لمجموعة '+groupName(gid)):('خصم من مجموعة '+groupName(gid)));
+  inp.value='';
+  renderAll();
+  toast('تم '+(delta>0?'إضافة ':'خصم ')+Math.abs(delta)+' لـ '+n+' في «'+groupName(gid)+'»');
 }
 function askDelete(id){ pendingDeleteId=id; renderRoster(); }
 function cancelDelete(){ pendingDeleteId=null; renderRoster(); }
@@ -983,10 +1068,60 @@ function buildMarkers(pts){
   return html;
 }
 
+// صف طالب واحد (gid: معرّف المجموعة إن كان ضمن مجموعة، أو null للقائمة العادية)
+function memberRowHtml(s, idx, gid){
+  const pct=fillPct(s.points);
+  const sel = s.id===selectedId ? 'sel':'';
+  const chk = selSet.has(s.id);
+  const isLeader = !!(gid && state.groups[gid] && state.groups[gid].leaderId===s.id);
+  let rankIc, rankCls;
+  if(gid){
+    const hasLeader = !!(state.groups[gid] && state.groups[gid].leaderId);
+    rankIc = isLeader ? '👑' : (hasLeader ? idx : idx+1);
+    rankCls = isLeader ? 'rank top' : 'rank';
+  } else {
+    rankIc = idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':(idx+1);
+    rankCls = idx<3?'rank top':'rank';
+  }
+  const delUI = pendingDeleteId===s.id
+    ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
+    : `<button class="del" onclick="askDelete('${s.id}')" title="حذف">✕</button>`;
+  const leadBtn = (gid && !isLeader)
+    ? `<button class="lead" onclick="setLeader('${gid}','${s.id}')" title="تعيين قائدًا">👑</button>` : '';
+  return `<div class="rrow ${sel} ${chk?'checked':''}">
+    <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
+    <div class="${rankCls}">${rankIc}</div>
+    <div class="ravatar">${avatarMarkup(s)}</div>
+    <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
+    <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
+    <div class="rpts">${clampPts(s.points)}/${MAX_POINTS}</div>
+    ${leadBtn}
+    ${delUI}
+  </div>`;
+}
+function groupBlockHtml(g){
+  const mem=membersOf(g.id);
+  const n=mem.length;
+  const selCount=mem.filter(s=>selSet.has(s.id)).length;
+  const allOn = n>0 && selCount===n;
+  const lid=g.leaderId;
+  const leaderName = lid && state.students[lid] ? escapeHtml(state.students[lid].name) : 'لم يُعيّن';
+  const rows = n ? mem.map((s,idx)=>memberRowHtml(s,idx,g.id)).join('')
+                 : '<div class="empty" style="padding:8px">لا أعضاء — حدّد طلابًا ثم «نقل المحددين إلى مجموعة».</div>';
+  return `<div class="grp">
+    <div class="grp-head">
+      <label class="gchk"><input type="checkbox" ${allOn?'checked':''} onchange="toggleGroupSel('${g.id}', this.checked)"> </label>
+      <div class="grp-title"><b>🏳️ ${escapeHtml(g.name)}</b> <span class="gcount">(${n})</span><div class="glead">القائد: 👑 ${leaderName}</div></div>
+      <input class="gp" id="gp_${g.id}" type="text" inputmode="numeric" placeholder="±نقاط" onkeydown="if(event.key==='Enter')applyGroupPts('${g.id}')">
+      <button class="gadd" onclick="applyGroupPts('${g.id}')">إضافة</button>
+      <button class="gdel" onclick="deleteGroup('${g.id}')" title="حذف المجموعة">🗑️</button>
+    </div>
+    <div class="grp-members">${rows}</div>
+  </div>`;
+}
 function renderRoster(){
   if(role!=='admin')return;
   const box=document.getElementById('roster'); if(!box)return;
-  // ترتيب تنازلي حسب النقاط (الأعلى في الأعلى) ثم الأقدم
   const arr=sectionArr(activeSection)
     .slice()
     .sort((a,b)=> (clampPts(b.points)-clampPts(a.points)) || ((a.createdAt||0)-(b.createdAt||0)));
@@ -996,25 +1131,24 @@ function renderRoster(){
   if(ty) ty.textContent='🧒 الفتيان ('+sectionArr('fityan').length+')';
   renderBulkBar(arr);
   if(!arr.length){ box.innerHTML='<div class="empty">لا يوجد طلاب في هذا القسم — أضف أول طالب.</div>'; return; }
-  box.innerHTML = arr.map((s,idx)=>{
-    const pct=fillPct(s.points);
-    const sel = s.id===selectedId ? 'sel':'';
-    const chk = selSet.has(s.id);
-    const rankIc = idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':(idx+1);
-    const rankCls = idx<3?'rank top':'rank';
-    const delUI = pendingDeleteId===s.id
-      ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد الحذف ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
-      : `<button class="del" onclick="askDelete('${s.id}')" title="حذف">✕</button>`;
-    return `<div class="rrow ${sel} ${chk?'checked':''}">
-      <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
-      <div class="${rankCls}">${rankIc}</div>
-      <div class="ravatar">${avatarMarkup(s)}</div>
-      <div class="rname" onclick="selectStudent('${s.id}')">${escapeHtml(s.name)}<span class="code">${s.code}</span></div>
-      <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
-      <div class="rpts">${clampPts(s.points)}/${MAX_POINTS}</div>
-      ${delUI}
+
+  const groups=groupsArr(activeSection);
+  if(!groups.length){
+    // لا مجموعات: قائمة عادية (لوحة صدارة)
+    box.innerHTML = arr.map((s,idx)=>memberRowHtml(s,idx,null)).join('');
+    return;
+  }
+  // مع مجموعات: كل مجموعة ببلوك، ثم «بدون مجموعة»
+  let html = groups.map(g=>groupBlockHtml(g)).join('');
+  const groupIds = new Set(groups.map(g=>g.id));
+  const ungrouped = arr.filter(s=>!s.groupId || !groupIds.has(s.groupId));
+  if(ungrouped.length){
+    html += `<div class="grp ungrouped">
+      <div class="grp-head"><div class="grp-title"><b>بدون مجموعة</b> <span class="gcount">(${ungrouped.length})</span></div></div>
+      <div class="grp-members">${ungrouped.map((s,idx)=>memberRowHtml(s,idx,null)).join('')}</div>
     </div>`;
-  }).join('');
+  }
+  box.innerHTML = html;
 }
 function renderBulkBar(arr){
   const bar=document.getElementById('bulkBar'); if(!bar)return;
@@ -1033,6 +1167,11 @@ function renderBulkBar(arr){
     <input class="bpts" id="bulkPts" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
     <button class="bapply" onclick="applyBulk()" ${n?'':'disabled'}>إضافة للمحددين</button>
     ${n?`<button class="bclear" onclick="clearSel()">مسح التحديد</button>`:''}
+    ${(n && groupsArr(activeSection).length) ? `<select class="bgrp" onchange="assignSelectedToGroup(this.value); this.value='';">
+        <option value="">↪ نقل المحددين إلى مجموعة…</option>
+        ${groupsArr(activeSection).map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('')}
+        <option value="__none">بدون مجموعة</option>
+      </select>` : ''}
     ${n?bulkItemsHtml():''}
   `;
   const now=document.getElementById('bulkPts');
