@@ -624,8 +624,10 @@
     background:rgba(15,15,40,.82); backdrop-filter:blur(6px); cursor:zoom-out;}
   .photo-view.show{display:flex; animation:fadeUp .25s ease;}
   .pv-card{display:flex; flex-direction:column; align-items:center; gap:14px; max-width:min(420px,100%);}
-  .pv-card img{width:min(82vw,380px); height:min(82vw,380px); object-fit:cover; border-radius:28px; border:4px solid #fff;
-    box-shadow:0 24px 60px rgba(0,0,0,.45); background:#fff;}
+  .pv-card img{width:min(86vw,440px); height:min(86vw,440px); object-fit:cover; border-radius:28px; border:4px solid #fff;
+    box-shadow:0 24px 60px rgba(0,0,0,.45); background:#fff; transition:filter .3s, width .25s, height .25s;}
+  .pv-card img.lo{width:min(64vw,260px); height:min(64vw,260px);}   /* صورة قديمة صغيرة: ما نكبّرها زيادة عشان ما تتكسّر */
+  .pv-card img.loading{filter:blur(2px) brightness(.9);}
   .pv-name{color:#fff; font-size:19px; font-weight:800; text-align:center;}
   .pv-x{position:absolute; top:16px; left:16px; width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.16);
     color:#fff; font-size:18px; cursor:pointer;}
@@ -1113,22 +1115,25 @@ function initFirebase(){
   try{
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
-    // listen to whole tree (small dataset)
-    db.ref('/').on('value', snap=>{
-      const val = snap.val() || {};
-      state.students = val.students || {};
-      state.items    = val.items || {};
-      state.log      = val.log || {};
-      state.groups   = val.groups || {};
-      state.meta     = val.meta || {pin:DEFAULT_PIN};
-      if(!state.meta.pin) state.meta.pin = DEFAULT_PIN;
-      setLive(true);
-      cacheLocal();
-      renderAll();
-    }, err=>{
-      console.warn('DB read error', err);
-      setLive(false);
-      loadLocal();
+    // نستمع لكل قسم لحاله (الصور عالية الدقة في avatarsHi ما تُحمَّل إلا عند فتح الصورة)
+    const PARTS=['students','items','log','groups','meta'], got={};
+    let rt=0;
+    PARTS.forEach(k=>{
+      db.ref(k).on('value', snap=>{
+        const v = snap.val();
+        if(k==='meta'){ state.meta = v || {pin:DEFAULT_PIN}; if(!state.meta.pin) state.meta.pin = DEFAULT_PIN; }
+        else state[k] = v || {};
+        got[k]=true;
+        if(!PARTS.every(x=>got[x])) return;          // ننتظر وصول كل الأقسام أول مرة
+        setLive(true);
+        cacheLocal();
+        cancelAnimationFrame(rt); rt=requestAnimationFrame(renderAll);
+      }, err=>{
+        console.warn('DB read error', k, err);
+        setLive(false);
+        loadLocal();
+        renderAll();
+      });
     });
     // connection status
     db.ref('.info/connected').on('value', s=> setLive(!!s.val()));
@@ -1724,40 +1729,65 @@ function onAvatarPicked(input){
   if(!file || !selectedId) return;
   if(!/^image\//.test(file.type)){ toast('اختر ملف صورة',true); return; }
   toast('جارٍ رفع الصورة…');
-  processAvatarImage(file, dataUrl=>{
-    if(!dataUrl){ toast('تعذّر قراءة الصورة',true); return; }
+  processAvatarImage(file, out=>{
+    if(!out){ toast('تعذّر قراءة الصورة',true); return; }
     if(!state.students[selectedId]) return;
-    state.students[selectedId].avatar = dataUrl;
-    dbSet('students/'+selectedId+'/avatar', dataUrl);
+    state.students[selectedId].avatar = out.small;
+    avatarHiCache[selectedId] = out.hi;
+    dbSet('avatarsHi/'+selectedId, out.hi);          // نسخة عالية الدقة للتكبير
+    dbSet('students/'+selectedId+'/avatar', out.small);
     renderJourney(); renderRoster();
     toast('تم تحديث الصورة ✅');
   });
 }
-// تصغير الصورة إلى مربع 150px وضغطها JPEG عشان تكون خفيفة
 // عرض صورة الطالب مكبّرة
+const avatarHiCache={};
 function viewAvatar(ev, id){
   if(ev){ ev.stopPropagation(); ev.preventDefault(); }
   const s=state.students[id]; if(!s) return;
   if(!s.avatar){ toast('لا توجد صورة لـ '+s.name); return; }
-  document.getElementById('pvImg').src = s.avatar;
+  const img=document.getElementById('pvImg');
+  const show=(src, hi)=>{ img.src=src; img.classList.toggle('lo', !hi); };
+  show(avatarHiCache[id] || s.avatar, !!avatarHiCache[id]);
   setText('pvName', s.name);
   document.getElementById('photoView').classList.add('show');
+  if(!avatarHiCache[id] && db && online){
+    img.classList.add('loading');
+    db.ref('avatarsHi/'+id).once('value').then(snap=>{
+      const hi=snap.val();
+      img.classList.remove('loading');
+      if(typeof hi==='string' && hi.startsWith('data:image')){ avatarHiCache[id]=hi; if(document.getElementById('photoView').classList.contains('show')) show(hi, true); }
+    }).catch(()=>img.classList.remove('loading'));
+  }
 }
 function closePhoto(){ const v=document.getElementById('photoView'); if(v) v.classList.remove('show'); }
+// قصّ الصورة مربعًا وتصغيرها بجودة عالية (على مراحل عشان ما تتكسّر)
+function squareJpeg(img, size, q){
+  const min=Math.min(img.naturalWidth||img.width, img.naturalHeight||img.height);
+  const W=img.naturalWidth||img.width, H=img.naturalHeight||img.height;
+  const sx=(W-min)/2, sy=(H-min)/2;
+  size=Math.min(size, min);
+  let side=Math.min(min, size*2);
+  let c=document.createElement('canvas'); c.width=c.height=side;
+  let x=c.getContext('2d'); x.imageSmoothingEnabled=true; x.imageSmoothingQuality='high';
+  x.drawImage(img, sx,sy,min,min, 0,0,side,side);
+  while(side>size){
+    const ns=Math.max(size, Math.round(side/2));
+    const n=document.createElement('canvas'); n.width=n.height=ns;
+    const nx=n.getContext('2d'); nx.imageSmoothingEnabled=true; nx.imageSmoothingQuality='high';
+    nx.drawImage(c, 0,0,side,side, 0,0,ns,ns);
+    c=n; side=ns;
+  }
+  return c.toDataURL('image/jpeg', q);
+}
 function processAvatarImage(file, cb){
   const reader=new FileReader();
   reader.onload=e=>{
     const img=new Image();
     img.onload=()=>{
       try{
-        const size=150;
-        const canvas=document.createElement('canvas');
-        canvas.width=size; canvas.height=size;
-        const ctx=canvas.getContext('2d');
-        const min=Math.min(img.width,img.height);
-        const sx=(img.width-min)/2, sy=(img.height-min)/2;
-        ctx.drawImage(img, sx,sy,min,min, 0,0,size,size);
-        cb(canvas.toDataURL('image/jpeg',0.72));
+        cb({ small: squareJpeg(img, 256, 0.86),        // للقوائم والبطاقات (خفيفة)
+             hi:    squareJpeg(img, 900, 0.88) });     // للتكبير (واضحة)
       }catch(err){ cb(null); }
     };
     img.onerror=()=>cb(null);
