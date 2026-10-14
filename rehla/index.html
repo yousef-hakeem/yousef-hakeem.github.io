@@ -154,7 +154,7 @@
   .avatar .cam{position:absolute; bottom:-3px; left:-3px; width:24px; height:24px; border-radius:50%; background:var(--teal);
     color:#fff; font-size:11px; display:grid; place-items:center; border:2px solid #fff;}
   .avatar-hint{font-size:10.5px; font-weight:800; color:#fff; cursor:pointer; text-align:center; line-height:1.25; max-width:100%;
-    background:rgba(255,255,255,.14); border:1px dashed rgba(255,255,255,.55); border-radius:10px; padding:2px 6px;}
+    background:var(--teal); border:0; border-radius:999px; padding:3px 9px; box-shadow:0 4px 10px rgba(55,168,169,.35);}
 
   /* progress track — RTL: البداية يمين */
   .track-wrap{position:relative; margin:46px 12px 66px;}
@@ -401,39 +401,35 @@
   .s-hero .who .name{font-size:22px;}
   .sh-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;}
   .sh-tags .sec-badge{margin-top:0;}
-  .sh-main{display:flex; align-items:center; gap:16px; margin-top:16px;}
-  .sh-ring{position:relative; width:128px; height:128px; flex:none;}
-  .sh-ring svg{width:100%; height:100%; transform:rotate(-90deg);}
-  .ring-bg{fill:none; stroke:rgba(255,255,255,.13); stroke-width:13;}
-  .ring-fg{fill:none; stroke:url(#ringGrad); stroke-width:13; stroke-linecap:round; stroke-dasharray:377; stroke-dashoffset:377;
-    transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1); filter:drop-shadow(0 0 6px rgba(245,141,9,.5));}
-  .ring-c{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
-  .ring-pts{font-size:36px; font-weight:800; line-height:1; font-variant-numeric:tabular-nums;}
-  .ring-l{font-size:12.5px; font-weight:800; color:rgba(255,255,255,.72); margin-top:3px;}
-  .sh-info{flex:1; min-width:0;}
-  .sh-k{font-size:12px; font-weight:800; color:rgba(255,255,255,.65);}
-  .sh-st{display:flex; align-items:center; gap:8px; margin-top:4px;}
-  .sh-st-ic{width:38px; height:38px; border-radius:12px; flex:none; display:grid; place-items:center; font-size:21px;
-    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);}
-  .sh-st b{font-size:20px; font-weight:800; line-height:1.2;}
-  .sh-chips{display:flex; flex-direction:column; align-items:flex-start; gap:6px; margin-top:10px;}
-  .sh-chip{display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:999px; font-size:12.5px; font-weight:800;
+  .sh-stats{display:grid; grid-template-columns:1fr 1.3fr; gap:10px; margin-top:16px;}
+  .sh-score{display:flex; flex-direction:column; justify-content:center; padding:12px 15px; border-radius:18px;
+    background:linear-gradient(155deg,#FFBA4F,var(--orange) 55%,#E5660A); box-shadow:0 10px 22px rgba(245,141,9,.35);}
+  .ss-k{font-size:12.5px; font-weight:800; color:rgba(255,255,255,.82);}
+  .ss-v{font-size:40px; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums;}
+  .sh-stn{display:flex; flex-direction:column; justify-content:center; padding:12px 14px; border-radius:18px;
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);}
-  .sh-chip b{color:#FFC266;}
-  .sh-goal{margin-top:16px; padding:12px 13px; border-radius:16px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);}
-  .shg-top{display:flex; align-items:center; gap:10px;}
-  .shg-ic{width:42px; height:42px; border-radius:13px; flex:none; display:grid; place-items:center; font-size:23px;
-    background:linear-gradient(160deg,#FFC266,var(--orange)); box-shadow:0 5px 14px rgba(245,141,9,.35);}
-  .shg-txt{flex:1; min-width:0;}
-  .shg-k{font-size:12px; font-weight:800; color:#FFC266;}
-  .shg-t{font-size:15.5px; font-weight:800; line-height:1.35;}
+  .stn-row{display:flex; align-items:center; gap:8px; margin-top:6px; min-width:0;}
+  .sh-st-ic{width:40px; height:40px; border-radius:12px; flex:none; display:grid; place-items:center; font-size:22px;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2);}
+  .stn-row b{font-size:19px; font-weight:800; line-height:1.2; overflow-wrap:anywhere;}
+  .sh-goal{margin-top:10px; padding:13px 14px; border-radius:18px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);}
+  .shg-t{font-size:15px; font-weight:800; line-height:1.45;}
   .shg-t b{color:#FFC266; font-size:18px;}
-  .shg-bar{position:relative; height:10px; margin-top:11px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.14);}
+  .shg-track{display:flex; align-items:center; gap:8px; margin-top:10px;}
+  .shg-end{width:36px; height:36px; border-radius:50%; flex:none; display:grid; place-items:center; font-size:18px;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2);}
+  .shg-end.next{background:linear-gradient(160deg,#FFC266,var(--orange)); border-color:#FFD99A; box-shadow:0 0 0 4px rgba(245,141,9,.22);}
+  .shg-bar{flex:1; position:relative; height:12px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.15);}
   .shg-bar i{position:absolute; top:0; right:0; height:100%; border-radius:999px; background:linear-gradient(270deg,#FFC266,var(--orange) 55%,var(--coral));
     transition:width .9s cubic-bezier(.2,.8,.2,1); box-shadow:0 0 10px rgba(245,141,9,.55);}
-  .shg-tip{margin-top:10px; font-size:13px; font-weight:700; color:rgba(255,255,255,.88); line-height:1.7;}
+  .shg-tip{margin-top:10px; padding-top:10px; border-top:1px dashed rgba(255,255,255,.16); font-size:13px; font-weight:700; color:rgba(255,255,255,.88); line-height:1.7;}
   .shg-tip:empty{display:none;}
   .shg-tip b{color:#9DE6E5;}
+  .sh-chips{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:12px;}
+  .sh-chip{display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:999px; font-size:12.5px; font-weight:800;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);}
+  .sh-chip b{color:#FFC266;}
+  bdi.sn{unicode-bidi:isolate; direction:ltr;}
   .s-hero .motiv{text-align:center; margin-top:12px; min-height:22px; font-size:15px;}
   .motiv.fade{animation:fadeUp .45s ease;}
 
@@ -459,10 +455,10 @@
 
   /* game-style journey map */
   body.student-mode .wrap, body.student-mode .topbar-in{max-width:680px;}
-  .map-card{padding-bottom:12px;}
-  .mapvp-wrap{position:relative; margin:0 -4px;}
-  .mapvp{position:relative; height:min(66vh,540px); overflow-y:auto; overflow-x:hidden; border-radius:20px; scrollbar-width:none;
-    -webkit-overflow-scrolling:touch; box-shadow:inset 0 0 0 1px rgba(29,28,68,.06);}
+  .map-card{padding-bottom:0 !important; overflow:hidden;}
+  .map-card .card-head{margin-bottom:12px;}
+  .mapvp-wrap{position:relative; margin:0 -18px;}
+  .mapvp{position:relative; height:min(66vh,540px); overflow-y:auto; overflow-x:hidden; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
   .mapvp::-webkit-scrollbar{display:none;}
   .lmap{position:relative; width:100%;
     background:linear-gradient(180deg,#1D1C44 0%,#2E387E 9%,#5B67B8 18%,#A9B4EA 28%,#DCE4FA 38%,#EEF3FF 50%,#EAF7F0 68%,#D6F0DF 84%,#C3E9CF 100%);}
@@ -515,7 +511,8 @@
   .lm-lbl.summit b{color:#B07A00;}
   .map-hint,.map-loc{position:absolute; left:50%; z-index:5; transform:translate(-50%,8px); opacity:0; pointer-events:none;
     transition:opacity .25s ease, transform .25s ease; font-family:inherit; font-weight:800; white-space:nowrap; border-radius:999px;}
-  .map-hint{top:10px; font-size:12.5px; color:#fff; background:rgba(29,28,68,.72); padding:5px 13px; backdrop-filter:blur(4px);}
+  .map-hint{top:10px; left:12px; transform:translateY(-6px); font-size:12px; color:#fff; background:rgba(29,28,68,.78); padding:5px 12px; backdrop-filter:blur(4px);}
+  .map-hint.show{transform:translateY(0) !important;}
   .map-loc{bottom:12px; font-size:13.5px; color:#fff; background:var(--orange); border:0; padding:9px 16px; box-shadow:0 8px 18px rgba(245,141,9,.4); cursor:pointer;}
   .map-hint.show,.map-loc.show{opacity:1; transform:translate(-50%,0); pointer-events:auto;}
   .map-more{display:block; width:100%; margin-top:10px; min-height:42px; border-radius:12px; border:1px dashed #C9D1E5; background:rgba(255,255,255,.75);
@@ -675,6 +672,8 @@
     .field-row .pts{flex-basis:84px;}
     .items-list{grid-template-columns:repeat(auto-fill, minmax(140px,1fr));}
     .s-hero .who .name{font-size:20px;}
+    .mapvp-wrap{margin:0 -13px;}
+    .ss-v{font-size:36px;}
     .live #liveTxt{display:none;}
     .live{padding:7px;}
     .gedit .gl{display:none;}
@@ -767,32 +766,26 @@
         </div>
       </div>
       <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="onAvatarPicked(this)">
-      <div class="sh-main">
-        <div class="sh-ring">
-          <svg viewBox="0 0 140 140" aria-hidden="true">
-            <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC266"/><stop offset=".55" stop-color="#F58D09"/><stop offset="1" stop-color="#F7583E"/></linearGradient></defs>
-            <circle class="ring-bg" cx="70" cy="70" r="60"/>
-            <circle class="ring-fg" id="jRing" cx="70" cy="70" r="60"/>
-          </svg>
-          <div class="ring-c">
-            <div class="ring-pts" id="jScore">0</div>
-            <div class="ring-l">نقطة</div>
-          </div>
+      <div class="sh-stats">
+        <div class="sh-score">
+          <span class="ss-k">نقاطك</span>
+          <span class="ss-v" id="jScore">0</span>
         </div>
-        <div class="sh-info">
-          <div class="sh-k">محطتك الحالية</div>
-          <div class="sh-st"><span class="sh-st-ic" id="jStIc">🚩</span><b id="jStation"></b></div>
-          <div class="sh-chips" id="jChips"></div>
+        <div class="sh-stn">
+          <span class="ss-k">محطتك الحالية</span>
+          <span class="stn-row"><span class="sh-st-ic" id="jStIc">🚩</span><b id="jStation"></b></span>
         </div>
       </div>
       <div class="sh-goal" id="goalBox">
-        <div class="shg-top">
-          <span class="shg-ic" id="goalIc">🎯</span>
-          <div class="shg-txt"><div class="shg-k">🎯 هدفك القادم</div><div class="shg-t" id="goalT"></div></div>
+        <div class="shg-t" id="goalT"></div>
+        <div class="shg-track">
+          <span class="shg-end" id="goalFromIc">🚩</span>
+          <div class="shg-bar"><i id="goalFill"></i></div>
+          <span class="shg-end next" id="goalIc">🎯</span>
         </div>
-        <div class="shg-bar"><i id="goalFill"></i></div>
         <div class="shg-tip" id="goalTip"></div>
       </div>
+      <div class="sh-chips" id="jChips"></div>
       <div class="motiv" id="jMotiv"></div>
     </section>
 
@@ -815,9 +808,9 @@
         <span class="who-chip" id="ctrlWho">لم يُحدَّد طالب</span>
       </div>
       <div class="pts-ctrl">
-        <button class="step minus" onclick="stepPoints(-10)">−10</button>
+        <button class="step minus" onclick="stepPoints(-10)"><bdi dir="ltr">−10</bdi></button>
         <input id="ptsInput" class="input" type="text" inputmode="numeric" aria-label="نقاط الطالب">
-        <button class="step plus" onclick="stepPoints(10)">+10</button>
+        <button class="step plus" onclick="stepPoints(10)"><bdi dir="ltr">+10</bdi></button>
       </div>
       <div class="item-btns" id="quickItems"></div>
       <div class="hint" id="ctrlHint">اضغط اسم الطالب من القائمة بالأسفل، ثم اختر بندًا أو عدّل نقاطه مباشرة.</div>
@@ -931,9 +924,9 @@
       <div class="ss-t">اضغط بندًا لإضافته</div>
       <div class="item-btns ss-items" id="ssItems"></div>
       <div class="ss-custom">
-        <button class="step minus" onclick="stepPoints(-10)">−10</button>
+        <button class="step minus" onclick="stepPoints(-10)"><bdi dir="ltr">−10</bdi></button>
         <input id="ssInput" class="input" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')ssApplyCustom()">
-        <button class="step plus" onclick="stepPoints(10)">+10</button>
+        <button class="step plus" onclick="stepPoints(10)"><bdi dir="ltr">+10</bdi></button>
         <button class="btn btn-primary" onclick="ssApplyCustom()">إضافة</button>
       </div>
       <div class="ss-t">سجل النقاط</div>
@@ -1355,7 +1348,7 @@ function applyItemBulk(id){
   if(!targets.length){ toast('حدّد طلابًا أولاً',true); return; }
   const n=awardPoints(targets, it.points, it.name);
   renderAll();
-  toast('✅ '+it.name+' ('+(it.points>=0?'+':'')+it.points+') لـ '+n+' طالب', false, true);
+  toast('✅ '+it.name+' ('+snT(it.points)+') لـ '+n+' طالب', false, true);
 }
 
 /* =================== المجموعات =================== */
@@ -1599,7 +1592,7 @@ function applyItem(id){
   const n=awardPoints([selectedId], it.points, it.name);
   renderJourney(); renderRoster();
   if(!n){ toast(it.points>0?'وصل للحد الأعلى (2000)':'الرصيد صفر بالفعل', true); return; }
-  toast('✅ '+it.name+' ('+(it.points>=0?'+':'')+it.points+') — '+state.students[selectedId].name, false, true);
+  toast('✅ '+it.name+' ('+snT(it.points)+') — '+state.students[selectedId].name, false, true);
 }
 
 /* =================== log =================== */
@@ -1725,6 +1718,8 @@ function processAvatarImage(file, cb){
 /* =================== RENDER =================== */
 function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
+function sn(n){ n=Number(n)||0; return `<bdi class="sn" dir="ltr">${n>=0?'+':'−'}${Math.abs(n)}</bdi>`; }
+function snT(n){ n=Number(n)||0; return '\u2066'+(n>=0?'+':'−')+Math.abs(n)+'\u2069'; }
 function setText(id,t){ const el=document.getElementById(id); if(el) el.textContent=t; }
 // مجموع ما كسبه الطالب خلال آخر 7 أيام (الإضافات فقط)
 function weekGain(id){
@@ -1736,8 +1731,8 @@ function goalTip(s, rem){
   const pos=itemsArr(s.section||'fursan').filter(it=>it.points>0).sort((a,b)=>b.points-a.points);
   if(!pos.length) return '';
   const one=pos.slice().reverse().find(it=>it.points>=rem);
-  if(one) return `💡 بند واحد يكفي! مثل <b>${escapeHtml(one.name)} (+${one.points})</b>`;
-  return '💡 أسرع الطرق: '+pos.slice(0,3).map(it=>`<b>${escapeHtml(it.name)} (+${it.points})</b>`).join(' · ');
+  if(one) return `💡 بند واحد يكفي! مثل <b>${escapeHtml(one.name)} (${sn(one.points)})</b>`;
+  return '💡 أسرع الطرق: '+pos.slice(0,3).map(it=>`<b>${escapeHtml(it.name)} (${sn(it.points)})</b>`).join(' · ');
 }
 // عدّاد يتحرك من الرقم السابق للجديد
 function countUp(el, to){
@@ -1749,7 +1744,7 @@ function countUp(el, to){
   requestAnimationFrame(step);
 }
 // خريطة الرحلة بأسلوب الألعاب: طريق متعرّج يصعد للقمة
-let mapScrollKey='';
+let mapScrollKey='', mapHintT;
 function scrollMapToMe(smooth){
   const vp=document.getElementById('mapVp'), me=vp && vp.querySelector('.lm-node.cur');
   if(!vp || !me) return;
@@ -1758,7 +1753,7 @@ function scrollMapToMe(smooth){
 function onMapScroll(){
   const vp=document.getElementById('mapVp'); if(!vp) return;
   const me=vp.querySelector('.lm-node.cur'), hint=document.getElementById('mapHint'), loc=document.getElementById('mapLoc');
-  if(hint) hint.classList.toggle('show', vp.scrollTop > 160);
+  if(hint && vp.scrollTop < 60) hint.classList.remove('show');
   if(loc && me){ const y=parseFloat(me.style.top)-vp.scrollTop; loc.classList.toggle('show', y<40 || y>vp.clientHeight-40); }
 }
 // زخارف عالم الخريطة (ثابتة لكل عرض)
@@ -1838,7 +1833,14 @@ function renderLevelMap(s, pts, cur){
       <g class="lm-dash">${road}</g>
     </svg>${nodes}`;
   const key=selectedId+'|'+cur.p+'|'+Math.round(W);
-  if(key!==mapScrollKey){ mapScrollKey=key; requestAnimationFrame(()=>{ scrollMapToMe(false); onMapScroll(); }); }
+  if(key!==mapScrollKey){
+    mapScrollKey=key;
+    requestAnimationFrame(()=>{
+      scrollMapToMe(false); onMapScroll();
+      const hint=document.getElementById('mapHint');
+      if(hint && vp && vp.scrollTop>160){ hint.classList.add('show'); clearTimeout(mapHintT); mapHintT=setTimeout(()=>hint.classList.remove('show'), 4000); }
+    });
+  }
   else onMapScroll();
 }
 let mapRT;
@@ -1873,18 +1875,20 @@ function renderJourney(){
   updateMotiv();
   const wk=weekGain(selectedId);
   document.getElementById('jChips').innerHTML =
-    `<span class="sh-chip">${wk>0 ? `📈 <b>+${wk}</b> هذا الأسبوع` : '💪 ابدأ أسبوعك بقوة'}</span>`+
+    `<span class="sh-chip">${wk>0 ? `📈 <b>${sn(wk)}</b> هذا الأسبوع` : '💪 ابدأ أسبوعك بقوة'}</span>`+
     `<span class="sh-chip">🏔️ <b>${pct}%</b> من الرحلة</span>`;
 
   // هدفك القادم
   if(next){
     setText('goalIc', next.icon);
-    document.getElementById('goalT').innerHTML = `باقي <b>${rem}</b> نقطة وتوصل «${escapeHtml(next.name)}»`;
+    document.getElementById('goalT').innerHTML = `🎯 باقي <b>${rem}</b> نقطة وتوصل «${escapeHtml(next.name)}»`;
+    setText('goalFromIc', cur.icon);
     document.getElementById('goalFill').style.width = (seg*100)+'%';
     document.getElementById('goalTip').innerHTML = goalTip(s, rem);
   } else {
     setText('goalIc', '🏆');
-    document.getElementById('goalT').innerHTML = 'أكملت الرحلة ووصلت <b>القمة</b>!';
+    document.getElementById('goalT').innerHTML = '🏆 أكملت الرحلة ووصلت <b>القمة</b>!';
+    setText('goalFromIc', '🏁');
     document.getElementById('goalFill').style.width = '100%';
     document.getElementById('goalTip').innerHTML = '🌟 أنت بطل حقيقي — استمر قدوة لزملائك';
   }
@@ -1997,13 +2001,13 @@ function renderStudentSheet(){
     + (next ? ` ← ${next.icon} ${escapeHtml(next.name)} <em>(باقي ${rem} نقطة)</em>` : ' — <em>اكتملت الرحلة 🎉</em>');
   const items=itemsArr(s.section||'fursan');
   document.getElementById('ssItems').innerHTML = items.length
-    ? items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')
+    ? items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${sn(it.points)}</button>`).join('')
     : '<div class="empty">لا توجد بنود لهذا القسم بعد.</div>';
   const lg=logFor(selectedId);
   document.getElementById('ssLog').innerHTML = lg.length
     ? lg.map((e,i)=>`<div class="lrow ${i===0?'latest':''}"><span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
         <div class="linfo"><b>${escapeHtml(e.itemName)}</b>${i===0?'<span class="new-tag">آخر إضافة</span>':''}<div class="ld">${fmtDate(e.ts)}</div></div>
-        <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+        <div class="lv ${e.delta>=0?'pos':'neg'}">${sn(e.delta)}</div>
         <button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button></div>`).join('')
     : '<div class="empty">لا توجد حركات بعد.</div>';
 }
@@ -2127,7 +2131,7 @@ function renderDock(n){
       <input class="input bpts" id="bulkPts" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
       <button class="btn btn-primary bapply" onclick="applyBulk()">＋ إضافة للمحددين</button>
     </div>
-    ${items.length?`<div class="dk-items">${items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItemBulk('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')}</div>`:''}
+    ${items.length?`<div class="dk-items">${items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItemBulk('${it.id}')">${escapeHtml(it.name)} ${sn(it.points)}</button>`).join('')}</div>`:''}
     ${groups.length?`<select class="input bgrp" onchange="assignSelectedToGroup(this.value); this.value='';">
         <option value="">↪ نقل المحددين إلى مجموعة…</option>
         ${groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('')}
@@ -2141,7 +2145,7 @@ function bulkItemsHtml(){
   if(!arr.length) return `<div class="bulk-items"><span class="bhint">أضف بنودًا في «بنود النقاط» لتطبيقها على المحددين.</span></div>`;
   return `<div class="bulk-items">
     <span class="bhint">أو طبّق بندًا جاهزًا على المحددين:</span>
-    ${arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItemBulk('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')}
+    ${arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItemBulk('${it.id}')">${escapeHtml(it.name)} ${sn(it.points)}</button>`).join('')}
   </div>`;
 }
 
@@ -2153,7 +2157,7 @@ function renderItems(){
   if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود في هذا القسم — أضف بندًا (مثل «حضور +10»).</div>'; return; }
   box.innerHTML=arr.map(it=>`<div class="irow">
     <div class="in">${escapeHtml(it.name)}</div>
-    <div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div>
+    <div class="ip ${it.points>=0?'pos':'neg'}">${sn(it.points)}</div>
     <button class="idel" onclick="deleteItem('${it.id}')">✕</button>
   </div>`).join('');
 }
@@ -2162,7 +2166,7 @@ function renderQuickItems(){
   const box=document.getElementById('quickItems'); if(!box)return;
   const secOfSel = selectedId ? (state.students[selectedId]?.section||'fursan') : activeSection;
   const arr=itemsArr(secOfSel);
-  box.innerHTML=arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('');
+  box.innerHTML=arr.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${sn(it.points)}</button>`).join('');
 }
 
 function renderStudentItems(){
@@ -2172,7 +2176,7 @@ function renderStudentItems(){
   const who=document.getElementById('studentItemsWho'); if(who) who.textContent='قسم '+SECTION_LABELS[sec];
   const arr=itemsArr(sec);
   if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود بعد.</div>'; return; }
-  const row=it=>`<div class="irow"><div class="in">${escapeHtml(it.name)}</div><div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div></div>`;
+  const row=it=>`<div class="irow"><div class="in">${escapeHtml(it.name)}</div><div class="ip ${it.points>=0?'pos':'neg'}">${sn(it.points)}</div></div>`;
   const pos=arr.filter(it=>it.points>=0).sort((a,b)=>b.points-a.points), neg=arr.filter(it=>it.points<0).sort((a,b)=>a.points-b.points);
   box.innerHTML =
     (pos.length ? `<div class="si-h">✨ تزيد نقاطك</div><div class="items-list">${pos.map(row).join('')}</div>` : '') +
@@ -2192,7 +2196,7 @@ function renderLog(){
       return `<div class="lrow">
         <span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
         <div class="linfo"><b>${escapeHtml(st?st.name:'')}</b><div class="ld">${escapeHtml(e.itemName)} · ${fmtDate(e.ts)}</div></div>
-        <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+        <div class="lv ${e.delta>=0?'pos':'neg'}">${sn(e.delta)}</div>
         <button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button>
       </div>`;
     }).join('');
@@ -2206,7 +2210,7 @@ function renderLog(){
   box.innerHTML=shown.map(e=>`<div class="lrow">
     <span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
     <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
-    <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+    <div class="lv ${e.delta>=0?'pos':'neg'}">${sn(e.delta)}</div>
     ${role==='admin'?`<button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button>`:''}
   </div>`).join('')
     + (role==='student' && arr.length>LIM ? `<button class="map-more" onclick="logFull=!logFull;renderLog()">${logFull?'عرض أقل ▴':`عرض كل السجل (${arr.length}) ▾`}</button>` : '');
