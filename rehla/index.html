@@ -1712,7 +1712,7 @@ function renderStudentSheet(){
     : '<div class="empty">لا توجد بنود لهذا القسم بعد.</div>';
   const lg=logFor(selectedId);
   document.getElementById('ssLog').innerHTML = lg.length
-    ? lg.slice(0,60).map(e=>`<div class="lrow"><span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
+    ? lg.map(e=>`<div class="lrow"><span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
         <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
         <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
         <button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button></div>`).join('')
@@ -1895,9 +1895,9 @@ function renderLog(){
     // المشرف: آخر الحركات لكل طلاب القسم المفتوح
     const ids=new Set(sectionArr(activeSection).map(s=>s.id));
     const all=Object.entries(state.log).map(([k,e])=>({k,...e})).filter(e=>ids.has(e.studentId)).sort((a,b)=>b.ts-a.ts);
-    const w=document.getElementById('logWho'); if(w) w.textContent='آخر الحركات · قسم '+SECTION_LABELS[activeSection];
+    const w=document.getElementById('logWho'); if(w) w.textContent='قسم '+SECTION_LABELS[activeSection]+' · '+all.length+' حركة';
     if(!all.length){ box.innerHTML='<div class="empty">لا توجد حركات في هذا القسم بعد.</div>'; return; }
-    box.innerHTML=all.slice(0,60).map(e=>{
+    box.innerHTML=all.map(e=>{
       const st=state.students[e.studentId];
       return `<div class="lrow">
         <span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
@@ -1912,7 +1912,7 @@ function renderLog(){
   const arr = id ? logFor(id) : [];
   if(!id){ box.innerHTML='<div class="empty">اختر طالبًا لعرض سجله.</div>'; return; }
   if(!arr.length){ box.innerHTML='<div class="empty">لا توجد حركات بعد.</div>'; return; }
-  box.innerHTML=arr.slice(0,100).map(e=>`<div class="lrow">
+  box.innerHTML=arr.map(e=>`<div class="lrow">
     <span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
     <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
     <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
