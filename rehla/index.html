@@ -459,48 +459,65 @@
 
   /* game-style journey map */
   body.student-mode .wrap, body.student-mode .topbar-in{max-width:680px;}
-  .map-card{overflow:hidden; background:
-    radial-gradient(rgba(46,56,126,.07) 1.2px, transparent 1.6px) 0 0/18px 18px,
-    linear-gradient(180deg,#EEF4FF 0%,#F6F8FF 50%,#FFF8EE 100%);}
-  .lmap{position:relative; width:100%; margin-top:2px;}
+  .map-card{padding-bottom:12px;}
+  .mapvp-wrap{position:relative; margin:0 -4px;}
+  .mapvp{position:relative; height:min(66vh,540px); overflow-y:auto; overflow-x:hidden; border-radius:20px; scrollbar-width:none;
+    -webkit-overflow-scrolling:touch; box-shadow:inset 0 0 0 1px rgba(29,28,68,.06);}
+  .mapvp::-webkit-scrollbar{display:none;}
+  .lmap{position:relative; width:100%;
+    background:linear-gradient(180deg,#1D1C44 0%,#2E387E 9%,#5B67B8 18%,#A9B4EA 28%,#DCE4FA 38%,#EEF3FF 50%,#EAF7F0 68%,#D6F0DF 84%,#C3E9CF 100%);}
   .lm-svg{position:absolute; inset:0; overflow:visible;}
-  .lm-svg path{fill:none; stroke-linecap:round;}
-  .lm-edge path{stroke:#D5DCEC; stroke-width:26;}
-  .lm-road path{stroke:#fff; stroke-width:19;}
-  .lm-pedge path{stroke:#D86F06; stroke-width:26;}
-  .lm-prog path{stroke:#FFA526; stroke-width:19;}
-  .lm-dash path{stroke:rgba(29,28,68,.16); stroke-width:2.5; stroke-dasharray:3 12;}
-  .lm-svg .lm-far{stroke:#C9D1E5; stroke-width:5; stroke-dasharray:1 13;}
-  .lm-node{position:absolute; transform:translate(-50%,-50%); width:56px; height:56px; border-radius:50%; display:grid; place-items:center;
-    background:#fff; border:3px solid #E3E7F2; box-shadow:0 5px 0 #D2D9EA, 0 10px 18px rgba(29,28,68,.10); z-index:1;}
-  .lm-node .lm-ic{font-size:25px; line-height:1;}
-  .lm-node.locked .lm-ic{filter:grayscale(1); opacity:.4;}
+  .lm-shadow path,.lm-edge path,.lm-road path,.lm-pedge path,.lm-prog path,.lm-dash path{fill:none; stroke-linecap:round;}
+  .lm-shadow path{stroke:rgba(29,28,68,.10); stroke-width:36; transform:translateY(5px);}
+  .lm-edge path{stroke:#E2C590; stroke-width:32;}
+  .lm-road path{stroke:#FBEBC8; stroke-width:25;}
+  .lm-pedge path{stroke:#D4690A; stroke-width:32;}
+  .lm-prog path{stroke:url(#progGrad); stroke-width:25;}
+  .lm-dash path{stroke:rgba(255,255,255,.95); stroke-width:3; stroke-dasharray:9 13;}
+  .lm-node{position:absolute; transform:translate(-50%,-50%); width:58px; height:58px; border-radius:50%; display:grid; place-items:center;
+    background:#fff; border:3px solid #E3E7F2; box-shadow:0 5px 0 #CCD3E6, 0 12px 20px rgba(29,28,68,.14); z-index:2;}
+  .lm-node .lm-ic{font-size:26px; line-height:1;}
+  .lm-node.locked .lm-ic{filter:grayscale(1); opacity:.42;}
   .lm-lock{position:absolute; bottom:-6px; right:-6px; width:22px; height:22px; border-radius:50%; background:#fff; display:grid; place-items:center;
-    font-size:11px; box-shadow:0 2px 6px rgba(29,28,68,.15);}
-  .lm-node.far{opacity:.9;}
-  .lm-node.far .lm-ic{filter:none; opacity:.85;}
-  .lm-node.done{background:linear-gradient(160deg,#FFC266,var(--orange) 62%,#EE6F12); border-color:#FFE2B3; box-shadow:0 5px 0 #C9650A, 0 10px 18px rgba(245,141,9,.28);}
-  .lm-node.cur{width:72px; height:72px; background:#fff; border:5px solid var(--orange); box-shadow:0 6px 0 #C9650A, 0 12px 24px rgba(245,141,9,.32); z-index:2;}
-  .lm-node.cur::before{content:""; position:absolute; inset:-12px; border-radius:50%; border:3px solid rgba(245,141,9,.35); animation:ringOut 1.8s ease-out infinite;}
-  @keyframes ringOut{0%{transform:scale(.85); opacity:1;} 100%{transform:scale(1.25); opacity:0;}}
-  .lm-node.cur .lm-ic{font-size:31px; animation:bob 2.4s ease-in-out infinite;}
-  @keyframes bob{0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);}}
-  .lm-me{position:absolute; top:-13px; left:-15px; width:34px; height:34px; border-radius:50%; overflow:hidden; display:grid; place-items:center;
-    background:var(--teal); border:3px solid #fff; box-shadow:0 3px 8px rgba(29,28,68,.25);}
-  .lm-me img{width:100%; height:100%; object-fit:cover;}
-  .lm-me .ph{font-size:14px; font-weight:800; color:#fff;}
-  .lm-lbl{position:absolute; transform:translateY(-50%); line-height:1.25; z-index:1; padding:6px 11px; border-radius:13px;
-    background:rgba(255,255,255,.92); border:1px solid #E6EAF4; box-shadow:0 4px 12px rgba(29,28,68,.07);}
+    font-size:11px; box-shadow:0 2px 6px rgba(29,28,68,.18);}
+  .lm-node.done{background:linear-gradient(160deg,#FFC266,var(--orange) 62%,#EE6F12); border-color:#FFE2B3; box-shadow:0 5px 0 #C9650A, 0 12px 20px rgba(245,141,9,.3);}
+  .lm-node.cur{width:74px; height:74px; background:#fff; border:5px solid var(--orange); box-shadow:0 6px 0 #C9650A, 0 14px 26px rgba(245,141,9,.35); z-index:3;}
+  .lm-node.cur::before{content:""; position:absolute; inset:-13px; border-radius:50%; border:3px solid rgba(245,141,9,.45); animation:ringOut 1.8s ease-out infinite;}
+  @keyframes ringOut{0%{transform:scale(.85); opacity:1;} 100%{transform:scale(1.28); opacity:0;}}
+  .lm-node.cur .lm-ic{font-size:32px;}
+  .lm-node.summit{width:70px; height:70px; border-color:#FFE7A6; box-shadow:0 6px 0 #D9A21E, 0 0 26px rgba(255,214,102,.7);}
+  .lm-node.summit .lm-ic{font-size:33px; filter:none; opacity:1;}
+  .lm-node.summit.done{background:linear-gradient(160deg,#FFE58A,#FFC233 60%,#F0A400);}
+  .lm-rays{position:absolute; width:150px; height:150px; transform:translate(-50%,-50%); border-radius:50%; z-index:1; pointer-events:none;
+    background:repeating-conic-gradient(rgba(255,214,102,.30) 0 12deg, transparent 12deg 30deg);
+    -webkit-mask:radial-gradient(circle, #000 25%, transparent 70%); mask:radial-gradient(circle, #000 25%, transparent 70%);
+    animation:spin 22s linear infinite;}
+  @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+  .lm-pin{position:absolute; transform:translate(-50%,-100%); z-index:4; pointer-events:none;}
+  .pin-in{position:relative; display:grid; place-items:center; width:46px; height:46px; border-radius:50%; overflow:visible;
+    background:var(--teal); border:3px solid #fff; box-shadow:0 6px 14px rgba(29,28,68,.3); animation:bob 2.2s ease-in-out infinite;}
+  .pin-in::after{content:""; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); border:7px solid transparent; border-top:9px solid #fff; border-bottom:0;}
+  .pin-in img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
+  .pin-in .ph{font-size:18px; font-weight:800; color:#fff;}
+  @keyframes bob{0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);}}
+  .lm-lbl{position:absolute; transform:translateY(-50%); line-height:1.25; z-index:2; padding:6px 11px; border-radius:13px;
+    background:rgba(255,255,255,.94); border:1px solid rgba(29,28,68,.06); box-shadow:0 6px 16px rgba(29,28,68,.10);}
   .lm-lbl.to-l{text-align:left;} .lm-lbl.to-r{text-align:right;}
-  .lm-lbl b{display:block; font-size:14.5px; font-weight:800; color:var(--navy);}
-  .lm-lbl small{display:block; font-size:11.5px; font-weight:800; color:var(--muted); margin-top:1px;}
+  .lm-lbl b{display:block; font-size:14.5px; font-weight:800; color:var(--navy); white-space:nowrap;}
+  .lm-lbl small{display:block; font-size:11.5px; font-weight:800; color:var(--muted); margin-top:1px; white-space:nowrap;}
   .lm-lbl.done{border-color:#F7DDB4;}
   .lm-lbl.done small{color:var(--teal-d);}
-  .lm-lbl.cur{background:#fff; border:2px solid var(--orange); box-shadow:0 6px 16px rgba(245,141,9,.22);}
+  .lm-lbl.cur{background:#fff; border:2px solid var(--orange); box-shadow:0 8px 20px rgba(245,141,9,.25); z-index:4;}
   .lm-lbl.cur b{color:var(--orange-d); font-size:16px;}
   .lm-lbl.cur small{color:#fff; background:var(--orange); border-radius:999px; padding:1px 9px; display:inline-block; margin-top:3px;}
-  .lm-lbl.locked{background:rgba(255,255,255,.7); box-shadow:none;}
-  .lm-lbl.locked b{color:#8E93AE;}
+  .lm-lbl.locked b{color:#6F7492;}
+  .lm-lbl.summit{background:linear-gradient(160deg,#FFF6D6,#fff); border-color:#FFD875;}
+  .lm-lbl.summit b{color:#B07A00;}
+  .map-hint,.map-loc{position:absolute; left:50%; z-index:5; transform:translate(-50%,8px); opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease; font-family:inherit; font-weight:800; white-space:nowrap; border-radius:999px;}
+  .map-hint{top:10px; font-size:12.5px; color:#fff; background:rgba(29,28,68,.72); padding:5px 13px; backdrop-filter:blur(4px);}
+  .map-loc{bottom:12px; font-size:13.5px; color:#fff; background:var(--orange); border:0; padding:9px 16px; box-shadow:0 8px 18px rgba(245,141,9,.4); cursor:pointer;}
+  .map-hint.show,.map-loc.show{opacity:1; transform:translate(-50%,0); pointer-events:auto;}
   .map-more{display:block; width:100%; margin-top:10px; min-height:42px; border-radius:12px; border:1px dashed #C9D1E5; background:rgba(255,255,255,.75);
     color:var(--indigo); font-family:inherit; font-size:13.5px; font-weight:800; cursor:pointer;}
   .map-more:active{transform:scale(.98);}
@@ -782,8 +799,13 @@
     <!-- ===== STUDENT: journey map ===== -->
     <section class="card map-card" id="pathCard" style="display:none">
       <div class="card-head"><h2><span class="h-ic indigo">🗺️</span>رحلتي نحو القمة</h2><span class="sub" id="pathSub"></span></div>
-      <div class="lmap" id="jPath"></div>
-      <button class="map-more" id="mapMore" onclick="toggleMapFull()"></button>
+      <div class="mapvp-wrap">
+        <div class="mapvp" id="mapVp" onscroll="onMapScroll()">
+          <div class="lmap" id="jPath"></div>
+        </div>
+        <div class="map-hint" id="mapHint">🏆 القمة فوق — اسحب لفوق</div>
+        <button class="map-loc" id="mapLoc" onclick="scrollMapToMe(true)">📍 موقعي</button>
+      </div>
     </section>
 
     <!-- admin: add points to the selected student -->
@@ -1209,7 +1231,7 @@ function enterApp(){
 }
 function logout(){
   if(motivTimer){ clearInterval(motivTimer); motivTimer=null; }
-  role=null; selectedId=null; pendingDeleteId=null; selSet.clear(); updateSelFab(0);
+  role=null; selectedId=null; pendingDeleteId=null; selSet.clear(); updateSelFab(0); mapScrollKey='';
   document.body.classList.remove('student-mode');
   document.getElementById('app').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
@@ -1727,31 +1749,60 @@ function countUp(el, to){
   requestAnimationFrame(step);
 }
 // خريطة الرحلة بأسلوب الألعاب: طريق متعرّج يصعد للقمة
-let mapFull=false;
-function toggleMapFull(){
-  mapFull=!mapFull; renderJourney();
-  if(!mapFull){ const c=document.getElementById('pathCard'); if(c) c.scrollIntoView({block:'start', behavior:'smooth'}); }
+let mapScrollKey='';
+function scrollMapToMe(smooth){
+  const vp=document.getElementById('mapVp'), me=vp && vp.querySelector('.lm-node.cur');
+  if(!vp || !me) return;
+  vp.scrollTo({ top: Math.max(0, parseFloat(me.style.top) - vp.clientHeight*0.58), behavior: smooth?'smooth':'auto' });
+}
+function onMapScroll(){
+  const vp=document.getElementById('mapVp'); if(!vp) return;
+  const me=vp.querySelector('.lm-node.cur'), hint=document.getElementById('mapHint'), loc=document.getElementById('mapLoc');
+  if(hint) hint.classList.toggle('show', vp.scrollTop > 160);
+  if(loc && me){ const y=parseFloat(me.style.top)-vp.scrollTop; loc.classList.toggle('show', y<40 || y>vp.clientHeight-40); }
+}
+// زخارف عالم الخريطة (ثابتة لكل عرض)
+function mapDecor(W, H){
+  let r=7; const rnd=()=> (r=(r*9301+49297)%233280)/233280;
+  let out='';
+  // نجوم في السماء (أعلى الخريطة)
+  for(let i=0;i<26;i++){
+    const x=rnd()*W, y=10+rnd()*H*0.2, rr=0.8+rnd()*1.6;
+    out+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="#fff" opacity="${(0.35+rnd()*0.55).toFixed(2)}"/>`;
+  }
+  // جبال بعيدة
+  const my=H*0.42, mh=H*0.1;
+  let m=`M0,${my+mh}`; const n=6;
+  for(let i=0;i<=n;i++){ const x=W*i/n, top=my+(i%2? mh*0.15 : mh*0.75)*(0.7+rnd()*0.5); m+=` L${(x - W/n/2).toFixed(1)},${top.toFixed(1)} L${x.toFixed(1)},${(my+mh*0.9).toFixed(1)}`; }
+  out+=`<path d="${m} L${W},${my+mh*1.6} L0,${my+mh*1.6} Z" fill="url(#mtnGrad)"/>`;
+  // غيوم
+  [[0.08,0.3],[0.86,0.36],[0.12,0.55],[0.9,0.62]].forEach(([fx,fy])=>{
+    const x=fx*W, y=fy*H, k=0.8+rnd()*0.5;
+    out+=`<g opacity=".85" transform="translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${k.toFixed(2)})"><ellipse cx="0" cy="0" rx="26" ry="11" fill="#fff"/><ellipse cx="-11" cy="-7" rx="13" ry="10" fill="#fff"/><ellipse cx="9" cy="-9" rx="15" ry="12" fill="#fff"/></g>`;
+  });
+  // تلال خضراء أسفل الخريطة
+  const h1=H*0.86, h2=H*0.92;
+  out+=`<path d="M0,${h1} C${W*0.25},${h1-40} ${W*0.55},${h1+30} ${W},${h1-26} L${W},${H} L0,${H} Z" fill="#BFE7CB"/>`;
+  out+=`<path d="M0,${h2} C${W*0.3},${h2+24} ${W*0.62},${h2-34} ${W},${h2} L${W},${H} L0,${H} Z" fill="#A6DDB8"/>`;
+  // أشجار على الأطراف
+  [[0.06,0.78],[0.94,0.74],[0.09,0.9],[0.92,0.88],[0.05,0.66],[0.95,0.6]].forEach(([fx,fy])=>{
+    const x=fx*W, y=fy*H, k=0.8+rnd()*0.45;
+    out+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${k.toFixed(2)})"><rect x="-2.5" y="8" width="5" height="9" rx="1.5" fill="#9B6B43"/><path d="M0,-22 L13,2 L-13,2 Z" fill="#4FB27A"/><path d="M0,-12 L15,11 L-15,11 Z" fill="#3E9F69"/></g>`;
+  });
+  return out;
 }
 function renderLevelMap(s, pts, cur){
-  const box=document.getElementById('jPath'); if(!box) return;
-  const N=STATIONS.length, idx=Math.max(0, STATIONS.findIndex(st=>st.p===cur.p));
-  // الوضع المختصر: محطتك وما قبلها ومحطتين بعدها + القمة من بعيد
-  let list;
-  if(mapFull || N<=5) list=STATIONS.map((st,i)=>({st,i}));
-  else {
-    const hi=Math.min(N-1, Math.max(idx+2, 3)), lo=Math.max(0, hi-3);
-    list=[]; for(let i=lo;i<=hi;i++) list.push({st:STATIONS[i], i});
-    if(hi<N-1) list.push({st:STATIONS[N-1], i:N-1, far: hi<N-2});
-  }
-  const W = box.clientWidth || 340, GAP = 86, TOP = 50;
-  const amp = Math.min(78, W*0.2), cx = W/2;
-  const P = list.slice().reverse().map((o,k)=>({ ...o, x: cx + Math.sin((N-1-o.i)*1.2+0.5)*amp, y: TOP + k*GAP }));
-  const H = TOP*2 + (P.length-1)*GAP - 6;
+  const box=document.getElementById('jPath'), vp=document.getElementById('mapVp'); if(!box) return;
+  const N=STATIONS.length;
+  const W = (vp && vp.clientWidth) || box.clientWidth || 340, GAP = 108, TOP = 96, BOT = 78;
+  const amp = Math.min(92, W*0.22), cx = W/2;
+  const P = STATIONS.slice().reverse().map((st,k)=>({ st, i:N-1-k, x: cx + Math.sin(k*1.2+0.5)*amp, y: TOP + k*GAP }));
+  const H = TOP + BOT + (N-1)*GAP;
   const segD = (a,b)=>`M${b.x.toFixed(1)},${b.y} C${b.x.toFixed(1)},${b.y-GAP/2} ${a.x.toFixed(1)},${a.y+GAP/2} ${a.x.toFixed(1)},${a.y}`;
-  let road='', prog='', far='';
-  for(let k=0;k<P.length-1;k++){
-    const a=P[k], b=P[k+1], d=segD(a,b);              // a فوق (أعلى نقاط) ، b تحت
-    if(a.far){ far+=`<path class="lm-far" d="${d}"/>`; continue; }
+  const last=P[N-1], tail=`M${(last.x-30).toFixed(1)},${H+10} C${(last.x-30).toFixed(1)},${H-30} ${last.x.toFixed(1)},${last.y+40} ${last.x.toFixed(1)},${last.y}`;
+  let road=`<path d="${tail}"/>`, prog=`<path d="${tail}"/>`;
+  for(let k=0;k<N-1;k++){
+    const a=P[k], b=P[k+1], d=segD(a,b);             // a فوق ، b تحت
     road+=`<path d="${d}"/>`;
     if(pts>=a.st.p) prog+=`<path d="${d}"/>`;
     else if(pts>=b.st.p){
@@ -1760,34 +1811,35 @@ function renderLevelMap(s, pts, cur){
     }
   }
   const nodes = P.map(p=>{
-    const done = pts>=p.st.p, isCur = p.st.p===cur.p;
+    const done = pts>=p.st.p, isCur = p.st.p===cur.p, summit = p.i===N-1;
     const cls = isCur ? 'cur' : (done ? 'done' : 'locked');
     const right = p.x > cx;                       // العقدة يمين المنتصف → الاسم على يسارها
-    const off = isCur ? 50 : 42;
-    const room = right ? (p.x - off - 6) : (W - p.x - off - 6);
+    const off = isCur || summit ? 52 : 44;
+    const room = right ? (p.x - off - 8) : (W - p.x - off - 8);
     const pos = right ? `right:${(W - p.x + off).toFixed(1)}px` : `left:${(p.x + off).toFixed(1)}px`;
     const sub = isCur ? '📍 أنت هنا' : (done ? '✓ '+p.st.p+' نقطة' : p.st.p+' نقطة');
-    return `<div class="lm-node ${cls}${p.far?' far':''}" style="left:${p.x.toFixed(1)}px;top:${p.y}px">
+    return (summit ? `<div class="lm-rays" style="left:${p.x.toFixed(1)}px;top:${p.y}px"></div>` : '')
+      + `<div class="lm-node ${cls}${summit?' summit':''}" style="left:${p.x.toFixed(1)}px;top:${p.y}px">
         <span class="lm-ic">${p.st.icon}</span>
-        ${isCur ? `<span class="lm-me">${avatarMarkup(s)}</span>` : ''}
         ${cls==='locked' ? '<span class="lm-lock">🔒</span>' : ''}
-      </div>
-      <div class="lm-lbl ${cls} ${right?'to-l':'to-r'}" style="${pos};top:${p.y}px;max-width:${Math.max(84,room).toFixed(0)}px">
+      </div>`
+      + (isCur ? `<div class="lm-pin" style="left:${p.x.toFixed(1)}px;top:${(p.y-40).toFixed(1)}px"><span class="pin-in">${avatarMarkup(s)}</span></div>` : '')
+      + `<div class="lm-lbl ${cls}${summit?' summit':''} ${right?'to-l':'to-r'}" style="${pos};top:${p.y}px;max-width:${Math.max(84,room).toFixed(0)}px">
         <b>${escapeHtml(p.st.name)}</b><small>${sub}</small>
       </div>`;
   }).join('');
   box.style.height = H+'px';
   box.innerHTML = `<svg class="lm-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">
-      ${far}
-      <g class="lm-edge">${road}</g><g class="lm-road">${road}</g>
+      <defs><linearGradient id="progGrad" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFC266"/><stop offset=".6" stop-color="#F58D09"/><stop offset="1" stop-color="#F7583E"/></linearGradient>
+        <linearGradient id="mtnGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E9BD6" stop-opacity=".42"/><stop offset=".55" stop-color="#8E9BD6" stop-opacity=".18"/><stop offset="1" stop-color="#8E9BD6" stop-opacity="0"/></linearGradient></defs>
+      ${mapDecor(W,H)}
+      <g class="lm-shadow">${road}</g><g class="lm-edge">${road}</g><g class="lm-road">${road}</g>
       <g class="lm-pedge">${prog}</g><g class="lm-prog">${prog}</g>
       <g class="lm-dash">${road}</g>
     </svg>${nodes}`;
-  const more=document.getElementById('mapMore');
-  if(more){
-    more.style.display = N<=5 ? 'none' : '';
-    more.innerHTML = mapFull ? 'إخفاء الخريطة الكاملة ▴' : `🗺️ شوف الرحلة كاملة (${N} محطات) ▾`;
-  }
+  const key=selectedId+'|'+cur.p+'|'+Math.round(W);
+  if(key!==mapScrollKey){ mapScrollKey=key; requestAnimationFrame(()=>{ scrollMapToMe(false); onMapScroll(); }); }
+  else onMapScroll();
 }
 let mapRT;
 window.addEventListener('resize', ()=>{ clearTimeout(mapRT); mapRT=setTimeout(()=>{ if(role==='student') renderJourney(); }, 200); });
