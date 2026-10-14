@@ -620,6 +620,16 @@
   /* fun: score bump + celebration */
   .score-badge.bump{animation:bump .6s cubic-bezier(.3,1.6,.5,1);}
   @keyframes bump{0%{transform:scale(1);} 35%{transform:scale(1.18); box-shadow:0 0 0 10px rgba(245,141,9,.25);} 100%{transform:scale(1);}}
+  .photo-view{position:fixed; inset:0; z-index:95; display:none; align-items:center; justify-content:center; padding:24px;
+    background:rgba(15,15,40,.82); backdrop-filter:blur(6px); cursor:zoom-out;}
+  .photo-view.show{display:flex; animation:fadeUp .25s ease;}
+  .pv-card{display:flex; flex-direction:column; align-items:center; gap:14px; max-width:min(420px,100%);}
+  .pv-card img{width:min(82vw,380px); height:min(82vw,380px); object-fit:cover; border-radius:28px; border:4px solid #fff;
+    box-shadow:0 24px 60px rgba(0,0,0,.45); background:#fff;}
+  .pv-name{color:#fff; font-size:19px; font-weight:800; text-align:center;}
+  .pv-x{position:absolute; top:16px; left:16px; width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.16);
+    color:#fff; font-size:18px; cursor:pointer;}
+  .ravatar.zoom, .ss-av.zoom{cursor:zoom-in;}
   .celebrate{position:fixed; inset:0; z-index:90; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(29,28,68,.35);}
   .celebrate.show{display:flex; animation:fadeIn .2s ease;}
   .confetti{position:absolute; inset:0; overflow:hidden; pointer-events:none;}
@@ -941,7 +951,7 @@
 <div class="modal sheet" id="stuSheet">
   <div class="modal-card ss-card">
     <div class="ss-head">
-      <div class="ss-av" id="ssAv" onclick="onAvatarClick()" title="تغيير الصورة"></div>
+      <div class="ss-av" id="ssAv" onclick="onAvatarClick()" title="تكبير الصورة"></div>
       <div class="ss-who"><b id="ssName"></b><small id="ssMeta"></small></div>
       <div class="ss-pts" id="ssPtsBox"><b id="ssPts">0</b><small>نقطة</small></div>
       <button class="gm-x" onclick="closeModal('stuSheet')" aria-label="إغلاق">✕</button>
@@ -966,6 +976,10 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- celebration -->
+<div class="photo-view" id="photoView" onclick="closePhoto()">
+  <div class="pv-card"><img id="pvImg" alt=""><div class="pv-name" id="pvName"></div></div>
+  <button class="pv-x" type="button" aria-label="إغلاق">✕</button>
+</div>
 <div class="celebrate" id="celebrate" onclick="this.classList.remove('show')">
   <div class="confetti" id="confetti"></div>
   <div class="cel-card">
@@ -1684,7 +1698,7 @@ function avatarMarkup(s){
 function renderAvatarEl(s){
   const el=document.getElementById('jAvatar'); if(!el) return;
   const hint=document.getElementById('avatarHint');
-  const canEdit = !!selectedId;      // الطالب لنفسه، والمشرف للطالب المحدد
+  const canEdit = role==='student' && !!selectedId;   // تعديل الصورة للطالب نفسه فقط
   const has = !!(s && s.avatar);
   const initial = (s && s.name) ? escapeHtml(s.name.trim().charAt(0)) : '📷';
   if(has){
@@ -1700,7 +1714,8 @@ function renderAvatarEl(s){
   }
 }
 function onAvatarClick(){
-  if(!selectedId){ if(role==='admin') toast('اختر طالبًا أولاً',true); return; }
+  if(!selectedId) return;
+  if(role!=='student'){ viewAvatar(null, selectedId); return; }   // المشرف يكبّر الصورة فقط ولا يعدّلها
   const f=document.getElementById('avatarFile');
   if(f){ f.value=''; f.click(); }
 }
@@ -1719,6 +1734,16 @@ function onAvatarPicked(input){
   });
 }
 // تصغير الصورة إلى مربع 150px وضغطها JPEG عشان تكون خفيفة
+// عرض صورة الطالب مكبّرة
+function viewAvatar(ev, id){
+  if(ev){ ev.stopPropagation(); ev.preventDefault(); }
+  const s=state.students[id]; if(!s) return;
+  if(!s.avatar){ toast('لا توجد صورة لـ '+s.name); return; }
+  document.getElementById('pvImg').src = s.avatar;
+  setText('pvName', s.name);
+  document.getElementById('photoView').classList.add('show');
+}
+function closePhoto(){ const v=document.getElementById('photoView'); if(v) v.classList.remove('show'); }
 function processAvatarImage(file, cb){
   const reader=new FileReader();
   reader.onload=e=>{
@@ -1981,7 +2006,7 @@ function memberRowHtml(s, idx, gid){
   return `<div class="rrow ${sel} ${chk?'checked':''}" data-id="${s.id}" onclick="rowClick(event,'${s.id}')">
     <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
     <div class="${rankCls}">${rankIc}</div>
-    <div class="ravatar">${avatarMarkup(s)}</div>
+    <div class="ravatar ${s.avatar?'zoom':''}" ${s.avatar?`onclick="viewAvatar(event,'${s.id}')" title="تكبير الصورة"`:''}>${avatarMarkup(s)}</div>
     <div class="rname"><span class="nm">${escapeHtml(s.name)}</span><span class="code">#${s.code}</span></div>
     <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
     <div class="rpts"><span class="pv">${clampPts(s.points)}</span><span class="pm">/${MAX_POINTS}</span></div>
@@ -2031,7 +2056,9 @@ function renderStudentSheet(){
   const s = selectedId ? state.students[selectedId] : null;
   if(!s){ m.classList.remove('show'); return; }
   const pts=clampPts(s.points), {cur,next,rem}=stationInfo(pts);
-  document.getElementById('ssAv').innerHTML = avatarMarkup(s)+'<span class="cam">📷</span>';
+  const ssAv=document.getElementById('ssAv');
+  ssAv.innerHTML = avatarMarkup(s) + (s.avatar ? '<span class="cam">🔍</span>' : '');
+  ssAv.classList.toggle('zoom', !!s.avatar);
   document.getElementById('ssName').textContent = s.name;
   const g = (s.groupId && state.groups[s.groupId]) ? ' · '+state.groups[s.groupId].name : '';
   document.getElementById('ssMeta').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan']+g+' · #'+s.code;
@@ -2362,7 +2389,9 @@ function fmtDate(ts){
 }
 
 // إغلاق النوافذ بزر Esc أو بالضغط خارجها
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.show').forEach(m=>closeModal(m.id)); });
+document.addEventListener('keydown', e=>{ if(e.key!=='Escape') return;
+  const pv=document.getElementById('photoView'); if(pv && pv.classList.contains('show')){ closePhoto(); return; }
+  document.querySelectorAll('.modal.show').forEach(m=>closeModal(m.id)); });
 document.addEventListener('click', e=>{ if(e.target.classList && e.target.classList.contains('modal')) closeModal(e.target.id); });
 
 /* points input listener */
