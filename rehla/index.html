@@ -393,40 +393,6 @@
   .ssj-s.hl b{color:var(--orange-d); font-size:16px;}
 
   /* admin: tabs + section journey */
-  .ad-today{display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; margin-top:12px; padding:10px 12px; border-radius:14px;
-    background:rgba(55,168,169,.16); border:1px solid rgba(157,230,229,.28);}
-  .adt-k{font-size:13px; font-weight:800; color:#9DE6E5;}
-  .adt-v{font-size:16px; font-weight:800; color:#fff;}
-  .adt-v small{font-size:11.5px; font-weight:700; color:rgba(255,255,255,.7);}
-  .adt-last{flex-basis:100%; font-size:12.5px; font-weight:700; color:rgba(255,255,255,.82); line-height:1.6;}
-  .hi-card .card-head{margin-bottom:10px;}
-  .hi-tabs{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px;}
-  @media(max-width:560px){ .hi-tabs{grid-template-columns:repeat(2,1fr);} }
-  .hi-tab{min-width:0; display:flex; align-items:center; justify-content:center; gap:3px; padding:9px 6px; border-radius:12px; font-family:inherit; font-size:13.5px; font-weight:800; color:var(--indigo);
-    background:var(--soft); border:1px solid var(--line); cursor:pointer; white-space:nowrap; letter-spacing:-.1px;}
-  @media(max-width:400px){ .hi-tab{font-size:12.5px;} }
-  .hi-tab i{font-style:normal; display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 5px; border-radius:999px; font-size:11.5px;
-    background:var(--indigo-50); color:var(--indigo); margin-inline-start:3px;}
-  .hi-tab.on{background:var(--navy); color:#fff; border-color:var(--navy);}
-  .hi-tab.on i{background:var(--orange); color:#fff;}
-  .hi-list{display:flex; flex-direction:column; gap:6px;}
-  .hi-row,.hi-grp{display:flex; align-items:center; gap:10px; width:100%; padding:8px 10px; border-radius:13px; text-align:right; font-family:inherit;
-    background:var(--soft); border:1px solid var(--line); color:var(--navy);}
-  .hi-row{cursor:pointer;}
-  .hi-row:active{transform:scale(.99);}
-  .hi-row.r1,.hi-grp.first{background:linear-gradient(90deg,#FFF4D9,#FFFBF1); border-color:#F5D58C;}
-  .hi-row.r2{background:linear-gradient(90deg,#EEF1F6,#F8F9FC);} .hi-row.r3{background:linear-gradient(90deg,#FBEBDF,#FEF7F2);}
-  .hi-l{width:28px; flex:none; text-align:center; font-size:20px; line-height:1;}
-  .hi-l em{font-style:normal; font-size:14px; font-weight:800; color:var(--indigo);}
-  .hi-n{flex:1; min-width:0; line-height:1.3;}
-  .hi-n b{display:block; font-size:14.5px; font-weight:800; overflow-wrap:anywhere;}
-  .hi-n small{display:block; font-size:12px; font-weight:700; color:var(--muted);}
-  .hi-n small b{display:inline; font-size:12.5px; color:var(--orange-d);}
-  .hi-p{flex:none; min-width:46px; text-align:center; font-size:15px; font-weight:800; color:var(--indigo); background:#fff; border:1px solid var(--line);
-    border-radius:10px; padding:3px 7px; font-variant-numeric:tabular-nums;}
-  .hi-bar{display:block; height:7px; margin-top:5px; border-radius:999px; background:var(--indigo-50); overflow:hidden;}
-  .hi-bar i{display:block; height:100%; border-radius:999px; background:linear-gradient(270deg,var(--teal),#2E387E);}
-  .hi-more{text-align:center; font-size:12.5px; font-weight:700; color:var(--muted); padding:4px;}
   .seg-top{background:#fff; border:1px solid var(--line); box-shadow:var(--sh-1); margin-bottom:12px;}
   .seg-top .sec-tab:not(.active){color:var(--muted);}
   .adm-hero{padding:16px 16px 18px;}
@@ -960,13 +926,6 @@
 
       <!-- رحلة القسم: أرقام سريعة + وين وصل كل طالب -->
       <section class="hero adm-hero" id="admDash"></section>
-
-      <!-- أهم الأشياء للمشرف -->
-      <section class="card hi-card">
-        <div class="card-head"><h2><span class="h-ic orange">⭐</span>أهم الأشياء</h2><span class="sub">اضغط أي اسم لفتح بطاقته</span></div>
-        <div class="hi-tabs" id="hiTabs"></div>
-        <div class="hi-list" id="hiList"></div>
-      </section>
 
       <section class="card">
         <div class="card-head">
@@ -2282,55 +2241,6 @@ function clearRosterQuery(){
   setRosterQuery('');
 }
 let dashOpenSt=null;   // المحطة المفتوحة في «رحلة القسم»
-let hiTab='top';
-function setHiTab(t){ hiTab=t; renderHighlights(); }
-function timeAgo(ts){
-  const m=Math.floor((Date.now()-ts)/60000);
-  if(m<1) return 'الآن'; if(m<60) return 'قبل '+m+' د';
-  const h=Math.floor(m/60); if(h<24) return 'قبل '+h+' س';
-  const d=Math.floor(h/24); return d===1 ? 'أمس' : 'قبل '+d+' أيام';
-}
-function lastActivity(id){ const l=logFor(id); return l.length ? l[0].ts : 0; }
-function renderHighlights(){
-  const tabsEl=document.getElementById('hiTabs'), list=document.getElementById('hiList');
-  if(!tabsEl || !list || role!=='admin') return;
-  const sec=activeSection, arr=sectionArr(sec);
-  // قريبين من المحطة القادمة (باقي 60 نقطة أو أقل)
-  const near = arr.map(s=>({s, ...stationInfo(s.points)})).filter(o=>o.next && o.rem<=60).sort((a,b)=>a.rem-b.rem);
-  // ما زادت نقاطهم آخر 7 أيام
-  const cheer = arr.filter(s=>weekGain(s.id)===0).map(s=>({s, last:lastActivity(s.id)})).sort((a,b)=>(a.last-b.last) || (clampPts(a.s.points)-clampPts(b.s.points)));
-  const grps = groupsArr(sec).map(g=>{ const m=arr.filter(s=>s.groupId===g.id); return {g, n:m.length, total:m.reduce((t,s)=>t+clampPts(s.points),0)}; }).sort((a,b)=>b.total-a.total);
-  const tabs=[['top','🏆 المتصدرون',''],['groups','🧩 المجموعات',grps.length||''],['near','🔥 قريبين من محطة',near.length||''],['cheer','💤 يحتاجون تشجيع',cheer.length||'']];
-  tabsEl.innerHTML = tabs.map(([k,l,c])=>`<button type="button" class="hi-tab ${hiTab===k?'on':''}" onclick="setHiTab('${k}')">${l}${c!==''?` <i>${c}</i>`:''}</button>`).join('');
-  const row=(s, right, sub, cls='')=>`<button type="button" class="hi-row ${cls}" onclick="selectStudent('${s.id}')">
-      <span class="hi-l">${right}</span><span class="ravatar">${avatarMarkup(s)}</span>
-      <span class="hi-n"><b>${escapeHtml(s.name)}</b>${sub?`<small>${sub}</small>`:''}</span>
-      <span class="hi-p">${clampPts(s.points)}</span></button>`;
-  let html='';
-  if(hiTab==='top'){
-    const r=rankedList(sec).slice(0,5);
-    html = r.length ? r.map(({s,rank})=>{ const st=stationInfo(s.points).cur;
-        return row(s, rank<=3?['🥇','🥈','🥉'][rank-1]:`<em>${rank}</em>`, st.icon+' '+escapeHtml(st.name), rank<=3?'r'+rank:''); }).join('')
-      : '<div class="empty">لا يوجد طلاب في هذا القسم بعد.</div>';
-  } else if(hiTab==='groups'){
-    const max=Math.max(1,...grps.map(o=>o.total));
-    html = grps.length ? grps.map((o,i)=>{ const L=leaderOf(o.g.id), ls=L&&state.students[L];
-        return `<div class="hi-grp ${i===0?'first':''}">
-          <span class="hi-l">${i<3?['🥇','🥈','🥉'][i]:`<em>${i+1}</em>`}</span>
-          <span class="hi-n"><b>${escapeHtml(o.g.name)}</b><small>${o.n} أعضاء${ls?' · 👑 '+escapeHtml(ls.name):''}</small>
-            <span class="hi-bar"><i style="width:${Math.round(o.total/max*100)}%"></i></span></span>
-          <span class="hi-p">${o.total}</span></div>`; }).join('')
-      : '<div class="empty">ما فيه مجموعات في هذا القسم بعد.</div>';
-  } else if(hiTab==='near'){
-    html = near.length ? near.slice(0,8).map(o=>row(o.s, o.next.icon, `باقي <b>${o.rem}</b> نقطة على «${escapeHtml(o.next.name)}»`)).join('')
-      : '<div class="empty">لا يوجد أحد قريب من محطة جديدة الآن.</div>';
-  } else {
-    html = cheer.length ? cheer.slice(0,8).map(o=>row(o.s, '💤', o.last ? 'آخر نقاط '+timeAgo(o.last) : 'ما أخذ نقاط هذا الأسبوع')).join('')
-        + (cheer.length>8 ? `<div class="hi-more">و ${cheer.length-8} آخرين</div>` : '')
-      : '<div class="empty">ممتاز! كل الطلاب أخذوا نقاط هذا الأسبوع 👏</div>';
-  }
-  list.innerHTML = html;
-}
 function toggleDashStation(i){ dashOpenSt = (dashOpenSt===i ? null : i); renderAdminDash(); }
 function renderAdminDash(){
   const box=document.getElementById('admDash'); if(!box || role!=='admin') return;
@@ -2343,18 +2253,6 @@ function renderAdminDash(){
   arr.forEach(s=>groups[stationIdx(s.points)].push(s));
   groups.forEach(g=>g.sort((a,b)=>clampPts(b.points)-clampPts(a.points)));
   const secIc = activeSection==='fityan' ? '🧒' : '🐎';
-  // اليوم
-  const ids=new Set(arr.map(s=>s.id)), d0=new Date(); d0.setHours(0,0,0,0);
-  const secLog=Object.values(state.log).filter(e=>ids.has(e.studentId)).sort((a,b)=>b.ts-a.ts);
-  const today=secLog.filter(e=>e.ts>=d0.getTime());
-  const todayPts=today.reduce((t,e)=>t+(e.delta>0?e.delta:0),0);
-  const last=secLog[0], ls=last && state.students[last.studentId];
-  const todayStrip = `<div class="ad-today">
-      <span class="adt-k">📅 اليوم</span>
-      <span class="adt-v">${sn(todayPts)} <small>نقطة</small></span>
-      <span class="adt-v">${today.length} <small>حركة</small></span>
-      ${last && ls ? `<span class="adt-last">آخر إضافة: ${escapeHtml(last.itemName)} ${sn(last.delta)} لـ ${escapeHtml(ls.name)} · ${timeAgo(last.ts)}</span>` : '<span class="adt-last">لا توجد حركات بعد</span>'}
-    </div>`;
   const tiles = STATIONS.map((st,i)=>{
     const g=groups[i], cnt=g.length;
     return `<button type="button" class="ad-st ${cnt?'has':''} ${dashOpenSt===i?'open':''}" onclick="toggleDashStation(${i})">
@@ -2382,13 +2280,12 @@ function renderAdminDash(){
       <div class="ad-s"><span>📊</span><b>${avg}</b><small>المتوسط</small></div>
       <div class="ad-s gold"><span>🥇</span><b>${top ? escapeHtml(top.s.name) : '—'}</b><small>${top ? 'الأعلى · '+clampPts(top.s.points) : 'الأعلى'}</small></div>
     </div>
-    ${todayStrip}
     <div class="ad-jh">🗺️ الرحلة — وين وصل كل طالب <small>اضغط المحطة لعرض أسمائهم</small></div>
     <div class="ad-grid">${tiles}</div>
     ${list}`;
 }
 function renderRoster(){
-  renderAdminDash(); renderHighlights();
+  renderAdminDash();
   if(role!=='admin')return;
   const box=document.getElementById('roster'); if(!box)return;
   const arr=sectionArr(activeSection)
