@@ -401,27 +401,43 @@
   .s-hero .who .name{font-size:22px;}
   .sh-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;}
   .sh-tags .sec-badge{margin-top:0;}
-  .sh-stats{display:grid; grid-template-columns:1fr 1.3fr; gap:10px; margin-top:16px;}
-  .sh-score{display:flex; flex-direction:column; justify-content:center; padding:12px 15px; border-radius:18px;
-    background:linear-gradient(155deg,#FFBA4F,var(--orange) 55%,#E5660A); box-shadow:0 10px 22px rgba(245,141,9,.35);}
-  .ss-k{font-size:12.5px; font-weight:800; color:rgba(255,255,255,.82);}
-  .ss-v{font-size:40px; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums;}
-  .sh-stn{display:flex; flex-direction:column; justify-content:center; padding:12px 14px; border-radius:18px;
-    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);}
-  .stn-row{display:flex; align-items:center; gap:8px; margin-top:6px; min-width:0;}
-  .sh-st-ic{width:40px; height:40px; border-radius:12px; flex:none; display:grid; place-items:center; font-size:22px;
-    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2);}
-  .stn-row b{font-size:19px; font-weight:800; line-height:1.2; overflow-wrap:anywhere;}
-  .sh-goal{margin-top:10px; padding:13px 14px; border-radius:18px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);}
-  .shg-t{font-size:15px; font-weight:800; line-height:1.45;}
-  .shg-t b{color:#FFC266; font-size:18px;}
-  .shg-track{display:flex; align-items:center; gap:8px; margin-top:10px;}
-  .shg-end{width:36px; height:36px; border-radius:50%; flex:none; display:grid; place-items:center; font-size:18px;
-    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2);}
-  .shg-end.next{background:linear-gradient(160deg,#FFC266,var(--orange)); border-color:#FFD99A; box-shadow:0 0 0 4px rgba(245,141,9,.22);}
-  .shg-bar{flex:1; position:relative; height:12px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.15);}
-  .shg-bar i{position:absolute; top:0; right:0; height:100%; border-radius:999px; background:linear-gradient(270deg,#FFC266,var(--orange) 55%,var(--coral));
-    transition:width .9s cubic-bezier(.2,.8,.2,1); box-shadow:0 0 10px rgba(245,141,9,.55);}
+  .s-hero{background:radial-gradient(120% 70% at 50% 0%, #3B47A3 0%, transparent 60%), linear-gradient(160deg,#323C8A 0%,#262A6A 45%,#1A1A40 100%);
+    box-shadow:0 22px 48px rgba(29,28,68,.32), inset 0 1px 0 rgba(255,255,255,.14);}
+  .s-hero .sh-stars{position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.35;
+    background:radial-gradient(rgba(255,255,255,.55) 1px, transparent 1.5px) 0 0/34px 34px, radial-gradient(rgba(255,255,255,.35) 1px, transparent 1.5px) 17px 19px/46px 46px;
+    -webkit-mask:linear-gradient(180deg,#000,transparent 70%); mask:linear-gradient(180deg,#000,transparent 70%);}
+  .sh-center{display:flex; flex-direction:column; align-items:center; margin-top:14px;}
+  .sh-ring{position:relative; width:220px; height:220px;}
+  .sh-ring::before{content:""; position:absolute; inset:18px; border-radius:50%; box-shadow:0 0 50px rgba(245,141,9,.28); pointer-events:none;}
+  .sh-ring svg{width:100%; height:100%; overflow:visible;}
+  .r-ticks{fill:none; stroke:rgba(255,255,255,.22); stroke-width:3; stroke-dasharray:1.4 9.49; stroke-linecap:round;}
+  .r-bg{fill:none; stroke:rgba(255,255,255,.1); stroke-width:15;}
+  .r-fg{fill:none; stroke:url(#ringGrad); stroke-width:15; stroke-linecap:round; stroke-dasharray:553; stroke-dashoffset:553;
+    filter:drop-shadow(0 0 8px rgba(245,141,9,.6));}
+  .r-disc{fill:url(#discGrad); stroke:rgba(255,255,255,.08); stroke-width:1;}
+  .knob{fill:#fff;}
+  .knob-halo{fill:rgba(255,210,122,.45); animation:knobPulse 1.8s ease-in-out infinite; transform-box:fill-box; transform-origin:center;}
+  @keyframes knobPulse{0%,100%{transform:scale(.8); opacity:.9;} 50%{transform:scale(1.25); opacity:.35;}}
+  #jKnob{transition:opacity .3s;}
+  .ring-c{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+  .ring-ic{font-size:28px; line-height:1; filter:drop-shadow(0 3px 6px rgba(0,0,0,.25));}
+  .ring-pts{font-size:54px; font-weight:800; line-height:1.05; margin-top:2px; font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,#fff 35%,#FFD9A0); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .ring-l{font-size:13px; font-weight:800; color:rgba(255,255,255,.7); letter-spacing:.5px;}
+  .sh-stline{display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap; justify-content:center;}
+  .stp{display:inline-flex; align-items:center; gap:5px; padding:5px 13px; border-radius:999px; font-size:14px; font-weight:800;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18);}
+  .stp.nxt{background:linear-gradient(160deg,rgba(255,194,102,.25),rgba(245,141,9,.18)); border-color:rgba(255,194,102,.45); color:#FFE1B0;}
+  .stp-arr{font-weight:800; color:rgba(255,255,255,.5);}
+  .sh-goal{margin-top:16px; padding:13px 14px; border-radius:18px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.13);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
+  .shg-top{display:flex; align-items:center; gap:11px;}
+  .shg-ic{width:46px; height:46px; border-radius:14px; flex:none; display:grid; place-items:center; font-size:24px;
+    background:linear-gradient(160deg,#FFC266,var(--orange) 60%,#E5660A); box-shadow:0 6px 16px rgba(245,141,9,.4);}
+  .shg-txt{flex:1; min-width:0;}
+  .shg-k{font-size:12px; font-weight:800; color:#FFC266;}
+  .shg-t{font-size:15.5px; font-weight:800; line-height:1.4;}
+  .shg-t b{color:#FFC266; font-size:19px;}
   .shg-tip{margin-top:10px; padding-top:10px; border-top:1px dashed rgba(255,255,255,.16); font-size:13px; font-weight:700; color:rgba(255,255,255,.88); line-height:1.7;}
   .shg-tip:empty{display:none;}
   .shg-tip b{color:#9DE6E5;}
@@ -673,7 +689,8 @@
     .items-list{grid-template-columns:repeat(auto-fill, minmax(140px,1fr));}
     .s-hero .who .name{font-size:20px;}
     .mapvp-wrap{margin:0 -13px;}
-    .ss-v{font-size:36px;}
+    .sh-ring{width:206px; height:206px;}
+    .ring-pts{font-size:50px;}
     .live #liveTxt{display:none;}
     .live{padding:7px;}
     .gedit .gl{display:none;}
@@ -754,6 +771,7 @@
 
     <!-- ===== STUDENT: hero ===== -->
     <section class="hero s-hero" id="journey">
+      <div class="sh-stars" aria-hidden="true"></div>
       <div class="who">
         <div class="avatar-wrap">
           <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
@@ -766,22 +784,31 @@
         </div>
       </div>
       <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="onAvatarPicked(this)">
-      <div class="sh-stats">
-        <div class="sh-score">
-          <span class="ss-k">نقاطك</span>
-          <span class="ss-v" id="jScore">0</span>
+      <div class="sh-center">
+        <div class="sh-ring">
+          <svg viewBox="0 0 220 220" aria-hidden="true">
+            <defs>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD27A"/><stop offset=".5" stop-color="#F58D09"/><stop offset="1" stop-color="#F7583E"/></linearGradient>
+              <radialGradient id="discGrad" cx=".5" cy=".38" r=".7"><stop offset="0" stop-color="#3E4AA0"/><stop offset="1" stop-color="#1F2152"/></radialGradient>
+            </defs>
+            <circle class="r-ticks" cx="110" cy="110" r="104"/>
+            <circle class="r-bg" cx="110" cy="110" r="88"/>
+            <circle class="r-fg" id="jRing" cx="110" cy="110" r="88" transform="rotate(-90 110 110)"/>
+            <circle class="r-disc" cx="110" cy="110" r="74"/>
+            <g id="jKnob" transform="translate(110 22)"><circle class="knob-halo" r="12"/><circle class="knob" r="6.5"/></g>
+          </svg>
+          <div class="ring-c">
+            <div class="ring-ic" id="jStIc">🚩</div>
+            <div class="ring-pts" id="jScore">0</div>
+            <div class="ring-l">نقطة</div>
+          </div>
         </div>
-        <div class="sh-stn">
-          <span class="ss-k">محطتك الحالية</span>
-          <span class="stn-row"><span class="sh-st-ic" id="jStIc">🚩</span><b id="jStation"></b></span>
-        </div>
+        <div class="sh-stline" id="jStation"></div>
       </div>
       <div class="sh-goal" id="goalBox">
-        <div class="shg-t" id="goalT"></div>
-        <div class="shg-track">
-          <span class="shg-end" id="goalFromIc">🚩</span>
-          <div class="shg-bar"><i id="goalFill"></i></div>
-          <span class="shg-end next" id="goalIc">🎯</span>
+        <div class="shg-top">
+          <span class="shg-ic" id="goalIc">🎯</span>
+          <div class="shg-txt"><div class="shg-k">🎯 هدفك القادم</div><div class="shg-t" id="goalT"></div></div>
         </div>
         <div class="shg-tip" id="goalTip"></div>
       </div>
@@ -1720,6 +1747,21 @@ function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuic
 
 function sn(n){ n=Number(n)||0; return `<bdi class="sn" dir="ltr">${n>=0?'+':'−'}${Math.abs(n)}</bdi>`; }
 function snT(n){ n=Number(n)||0; return '\u2066'+(n>=0?'+':'−')+Math.abs(n)+'\u2069'; }
+// حلقة النقاط: تمتلئ بحركة ناعمة ومعها نقطة مضيئة عند طرفها
+let ringVal=0, ringRAF=0;
+function animRing(to){
+  const ring=document.getElementById('jRing'), knob=document.getElementById('jKnob'); if(!ring) return;
+  const C=2*Math.PI*88, from=ringVal, t0=performance.now(), dur=1100;
+  ring.style.strokeDasharray=C.toFixed(1);
+  cancelAnimationFrame(ringRAF);
+  const step=now=>{
+    const k=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-k,3), v=from+(to-from)*e;
+    ring.style.strokeDashoffset=(C*(1-v)).toFixed(1);
+    if(knob){ const a=(-90+v*360)*Math.PI/180; knob.setAttribute('transform',`translate(${(110+88*Math.cos(a)).toFixed(1)} ${(110+88*Math.sin(a)).toFixed(1)})`); knob.style.opacity = v>0.01?1:0; }
+    if(k<1) ringRAF=requestAnimationFrame(step); else ringVal=to;
+  };
+  ringRAF=requestAnimationFrame(step);
+}
 function setText(id,t){ const el=document.getElementById(id); if(el) el.textContent=t; }
 // مجموع ما كسبه الطالب خلال آخر 7 أيام (الإضافات فقط)
 function weekGain(id){
@@ -1868,28 +1910,26 @@ function renderJourney(){
 
   // الحلقة: التقدّم نحو المحطة القادمة
   const seg = next ? Math.max(0,Math.min(1,(pts-cur.p)/(next.p-cur.p))) : 1;
-  const ring=document.getElementById('jRing'); if(ring) ring.style.strokeDashoffset = String(377*(1-seg));
+  animRing(seg);
   setText('jStIc', cur.icon);
   countUp(document.getElementById('jScore'), pts);
-  setText('jStation', cur.name);
+  document.getElementById('jStation').innerHTML = next
+    ? `<span class="stp">${cur.icon} ${escapeHtml(cur.name)}</span><span class="stp-arr">←</span><span class="stp nxt">${next.icon} ${escapeHtml(next.name)}</span>`
+    : `<span class="stp nxt">🏆 وصلت القمة</span>`;
   updateMotiv();
   const wk=weekGain(selectedId);
   document.getElementById('jChips').innerHTML =
     `<span class="sh-chip">${wk>0 ? `📈 <b>${sn(wk)}</b> هذا الأسبوع` : '💪 ابدأ أسبوعك بقوة'}</span>`+
-    `<span class="sh-chip">🏔️ <b>${pct}%</b> من الرحلة</span>`;
+    `<span class="sh-chip">🏁 المحطة <b>${stationIdx(pts)+1}</b> من ${STATIONS.length}</span>`;
 
   // هدفك القادم
   if(next){
     setText('goalIc', next.icon);
-    document.getElementById('goalT').innerHTML = `🎯 باقي <b>${rem}</b> نقطة وتوصل «${escapeHtml(next.name)}»`;
-    setText('goalFromIc', cur.icon);
-    document.getElementById('goalFill').style.width = (seg*100)+'%';
+    document.getElementById('goalT').innerHTML = `باقي <b>${rem}</b> نقطة وتوصل «${escapeHtml(next.name)}»`;
     document.getElementById('goalTip').innerHTML = goalTip(s, rem);
   } else {
     setText('goalIc', '🏆');
-    document.getElementById('goalT').innerHTML = '🏆 أكملت الرحلة ووصلت <b>القمة</b>!';
-    setText('goalFromIc', '🏁');
-    document.getElementById('goalFill').style.width = '100%';
+    document.getElementById('goalT').innerHTML = 'أكملت الرحلة ووصلت <b>القمة</b>!';
     document.getElementById('goalTip').innerHTML = '🌟 أنت بطل حقيقي — استمر قدوة لزملائك';
   }
 
