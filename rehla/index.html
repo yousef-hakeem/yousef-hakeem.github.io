@@ -338,6 +338,24 @@
   .toast.show{opacity:1; transform:translate(-50%,0);}
   .toast.err{background:var(--coral);}
 
+  /* ranking */
+  .seg-sm{margin-bottom:12px;}
+  .seg-sm .sec-tab{min-height:40px; font-size:14px;}
+  .ranklist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px;}
+  .rk{display:flex; align-items:center; gap:12px; padding:8px 12px; min-height:50px; border-radius:13px; background:var(--soft); border:1px solid var(--line);}
+  .rk-n{width:34px; height:34px; border-radius:10px; flex:none; display:grid; place-items:center; background:#fff; border:1px solid var(--line);
+    font-size:14px; font-weight:800; color:var(--indigo); font-variant-numeric:tabular-nums;}
+  .rk-name{flex:1; min-width:0; font-size:15px; font-weight:800; color:var(--navy); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .rk.r1,.rk.r2,.rk.r3{min-height:56px;}
+  .rk.r1 .rk-n,.rk.r2 .rk-n,.rk.r3 .rk-n{background:none; border:none; font-size:24px;}
+  .rk.r1{background:linear-gradient(90deg,#FFF4D9,#FFFBF1); border-color:#F5D58C;}
+  .rk.r2{background:linear-gradient(90deg,#EEF1F6,#F8F9FC); border-color:#D3D9E5;}
+  .rk.r3{background:linear-gradient(90deg,#FBEBDF,#FEF7F2); border-color:#EDC6A6;}
+  .rk.r1 .rk-name{font-size:16px;}
+  .rk.me{border-color:var(--teal); background:var(--teal-50); box-shadow:0 0 0 3px rgba(55,168,169,.15);}
+  .rk-me{flex:none; font-size:11.5px; font-weight:800; color:#fff; background:var(--teal); border-radius:999px; padding:1px 10px;}
+  .ranklist .empty{list-style:none;}
+
   /* new-group button + search */
   .btn-newgrp{display:flex; align-items:center; gap:12px; width:100%; text-align:right; padding:11px 14px; margin:2px 0 12px;
     border-radius:16px; background:linear-gradient(135deg,#F3F0FD,#ECEEF8); border:1.5px dashed #9C92DA; transition:border-color .2s, box-shadow .2s, transform .12s;}
@@ -634,6 +652,19 @@
         <div class="items-list" id="itemsList"></div>
       </section>
     </div>
+
+    <!-- ===== RANKING (both views) ===== -->
+    <section class="card" id="rankCard">
+      <div class="card-head">
+        <h2><span class="h-ic orange">🏆</span>الترتيب</h2>
+        <span class="sub" id="rankWho"></span>
+      </div>
+      <div class="seg seg-sm">
+        <button id="rankTabFursan" class="sec-tab" onclick="setRankSection('fursan')">🐎 الفرسان</button>
+        <button id="rankTabFityan" class="sec-tab" onclick="setRankSection('fityan')">🧒 الفتيان</button>
+      </div>
+      <ol class="ranklist" id="rankList"></ol>
+    </section>
 
     <!-- ===== STUDENT: items (read-only) ===== -->
     <section class="card" id="studentItemsCard" style="display:none">
@@ -949,7 +980,7 @@ function enterApp(){
 }
 function logout(){
   if(motivTimer){ clearInterval(motivTimer); motivTimer=null; }
-  role=null; selectedId=null; pendingDeleteId=null; selSet.clear(); updateSelFab(0);
+  role=null; selectedId=null; pendingDeleteId=null; selSet.clear(); updateSelFab(0); rankSection=null;
   document.getElementById('app').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
   showGate('choose');
@@ -1424,6 +1455,7 @@ function processAvatarImage(file, cb){
 function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
 function renderJourney(){
+  renderRanking();
   const s = selectedId ? state.students[selectedId] : null;
   const nameEl=document.getElementById('jName');
   renderAvatarEl(s);
@@ -1550,6 +1582,37 @@ function groupBlockHtml(g, i){
     <div class="grp-members">${rows}</div>
   </div>`;
 }
+/* =================== الترتيب (المراكز والأسماء فقط) =================== */
+let rankSection=null;   // null = يتبع القسم الحالي (أو قسم الطالب)
+function setRankSection(sec){ rankSection=sec; renderRanking(); }
+// ترتيب تنازلي بالنقاط؛ المتساوون يأخذون نفس المركز (1، 2، 2، 4)
+function rankedList(sec){
+  const arr=sectionArr(sec).slice().sort((a,b)=>(clampPts(b.points)-clampPts(a.points)) || (a.name||'').localeCompare(b.name||'','ar'));
+  let prev=null, rank=0;
+  return arr.map((s,i)=>{ const p=clampPts(s.points); if(p!==prev){ rank=i+1; prev=p; } return {s, rank}; });
+}
+function renderRanking(){
+  const box=document.getElementById('rankList'); if(!box) return;
+  const me = (role==='student' && selectedId) ? state.students[selectedId] : null;
+  const sec = rankSection || (me ? (me.section||'fursan') : activeSection);
+  const tf=document.getElementById('rankTabFursan'), ty=document.getElementById('rankTabFityan');
+  if(tf) tf.classList.toggle('active', sec==='fursan');
+  if(ty) ty.classList.toggle('active', sec==='fityan');
+  const list=rankedList(sec);
+  const who=document.getElementById('rankWho');
+  if(who) who.textContent = list.length ? (list.length+' طالب') : '';
+  if(!list.length){ box.innerHTML='<li class="empty">لا يوجد طلاب في هذا القسم بعد.</li>'; return; }
+  const medal={1:'🥇',2:'🥈',3:'🥉'};
+  box.innerHTML=list.map(({s,rank})=>{
+    const isMe = !!me && s.id===selectedId;
+    return `<li class="rk ${rank<=3?'r'+rank:''} ${isMe?'me':''}">
+      <span class="rk-n">${medal[rank]||rank}</span>
+      <span class="rk-name">${escapeHtml(s.name)}</span>
+      ${isMe?'<span class="rk-me">أنت</span>':''}
+    </li>`;
+  }).join('');
+}
+
 // البحث في قائمة الطلاب (بالاسم أو الكود)
 let rosterQuery='';
 function matchesQuery(s){
