@@ -380,6 +380,68 @@
   .ss-pts small{font-size:11px; font-weight:800;}
   .ss-pts.bump{animation:bump .6s cubic-bezier(.3,1.6,.5,1);}
   .ss-prog{margin-bottom:10px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+  .ssj{display:flex; justify-content:space-between; gap:2px; margin-bottom:8px;}
+  .ssj-d{width:30px; height:30px; border-radius:50%; display:grid; place-items:center; font-size:15px; background:var(--soft); border:1.5px solid var(--line);
+    filter:grayscale(1); opacity:.55;}
+  .ssj-d.done{filter:none; opacity:1; background:#FFF4E2; border-color:#F7C77E;}
+  .ssj-d.cur{filter:none; opacity:1; background:#fff; border:2.5px solid var(--orange); box-shadow:0 0 0 3px rgba(245,141,9,.18); transform:scale(1.12);}
+  .ssj-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px;}
+  .ssj-s{background:var(--soft); border:1px solid var(--line); border-radius:12px; padding:7px 4px; text-align:center; min-width:0;}
+  .ssj-s b{display:block; font-size:13px; font-weight:800; color:var(--navy); line-height:1.3; overflow-wrap:anywhere;}
+  .ssj-s small{display:block; font-size:10.5px; font-weight:700; color:var(--muted); margin-top:2px;}
+  .ssj-s.hl{background:var(--orange-50); border-color:#F7D6A4;}
+  .ssj-s.hl b{color:var(--orange-d); font-size:16px;}
+
+  /* admin: tabs + section journey */
+  .seg-top{background:#fff; border:1px solid var(--line); box-shadow:var(--sh-1); margin-bottom:12px;}
+  .seg-top .sec-tab:not(.active){color:var(--muted);}
+  .adm-hero{padding:16px 16px 18px;}
+  .ad-head{display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .ad-k{font-size:12.5px; font-weight:800; color:#9DE6E5;}
+  .ad-t{font-size:21px; font-weight:800; line-height:1.3;}
+  .ad-prog{text-align:center; padding:6px 12px; border-radius:14px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);}
+  .ad-prog b{display:block; font-size:20px; font-weight:800; color:#FFC266; line-height:1.1;}
+  .ad-prog small{font-size:11px; font-weight:700; color:rgba(255,255,255,.75);}
+  .ad-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px;}
+  .ad-s{display:flex; flex-direction:column; align-items:center; text-align:center; padding:9px 4px; border-radius:14px; min-width:0;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);}
+  .ad-s span{font-size:16px; line-height:1;}
+  .ad-s b{font-size:17px; font-weight:800; margin-top:4px; line-height:1.2; font-variant-numeric:tabular-nums; overflow-wrap:anywhere;}
+  .ad-s small{font-size:10.5px; font-weight:700; color:rgba(255,255,255,.72); margin-top:2px;}
+  .ad-s.gold{background:linear-gradient(160deg,rgba(255,194,102,.22),rgba(245,141,9,.14)); border-color:rgba(255,194,102,.4);}
+  .ad-s.gold b{font-size:13px; color:#FFE1B0;}
+  .ad-jh{margin:16px 2px 8px; font-size:14px; font-weight:800;}
+  .ad-jh small{display:block; font-size:11.5px; font-weight:700; color:rgba(255,255,255,.6); margin-top:1px;}
+  .ad-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:7px;}
+  .ad-st{display:flex; align-items:center; gap:6px; padding:7px 8px; border-radius:14px; text-align:right; color:#fff; font-family:inherit; cursor:pointer;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); min-width:0; transition:background .2s, border-color .2s;}
+  .ad-st.has{background:rgba(255,255,255,.11); border-color:rgba(255,255,255,.2);}
+  .ad-st.open{background:rgba(245,141,9,.22); border-color:rgba(255,194,102,.6);}
+  .ad-ic{width:30px; height:30px; border-radius:11px; flex:none; display:grid; place-items:center; font-size:18px; background:rgba(255,255,255,.1);}
+  .ad-st:not(.has) .ad-ic{filter:grayscale(1); opacity:.5;}
+  .ad-sn{flex:1; min-width:0; line-height:1.2;}
+  .ad-sn b{display:block; font-size:13px; font-weight:800; white-space:nowrap;}
+  .ad-sn small{font-size:10.5px; font-weight:700; color:rgba(255,255,255,.6);}
+  .ad-st:not(.has) .ad-sn{opacity:.55;}
+  .ad-cnt{display:flex; align-items:center; gap:4px; flex:none;}
+  .ad-cnt b{min-width:24px; height:24px; padding:0 6px; border-radius:999px; display:grid; place-items:center; font-size:12.5px; font-weight:800;
+    background:var(--orange); color:#fff;}
+  .ad-cnt em{font-style:normal; font-size:12.5px; color:rgba(255,255,255,.3); font-weight:800; min-width:24px; text-align:center;}
+  .ad-avs{display:flex;}
+  .ad-avs .ad-av{margin-inline-start:-8px;}
+  .ad-avs .ad-av:first-child{margin-inline-start:0;}
+  .ad-av{width:24px; height:24px; border-radius:50%; overflow:hidden; display:grid; place-items:center; flex:none; background:var(--teal); border:2px solid #2B3170;}
+  .ad-av img{width:100%; height:100%; object-fit:cover;}
+  .ad-av .ph{font-size:10.5px; font-weight:800; color:#fff;}
+  .ad-list{margin-top:10px; padding:10px; border-radius:16px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); animation:fadeUp .25s ease;}
+  .ad-list-h{font-size:13.5px; font-weight:800; margin:0 2px 8px; color:#FFE1B0;}
+  .ad-li{display:flex; align-items:center; gap:9px; width:100%; padding:7px 8px; border-radius:11px; color:#fff; font-family:inherit; text-align:right; cursor:pointer;}
+  .ad-li:hover,.ad-li:active{background:rgba(255,255,255,.08);}
+  .ad-li .ad-av{width:30px; height:30px; border-color:rgba(255,255,255,.6);}
+  .ad-li b{flex:1; font-size:14px; font-weight:800;}
+  .ad-lp{font-size:13px; font-weight:800; color:#FFC266; font-variant-numeric:tabular-nums;}
+  .ad-empty{font-size:13px; color:rgba(255,255,255,.65); text-align:center; padding:8px;}
+  @media(min-width:700px){ .ad-grid{grid-template-columns:repeat(5,1fr);} .ad-st{flex-direction:column; text-align:center; gap:5px;} .ad-sn b{white-space:normal;} }
   .ss-bar{position:relative; height:8px; border-radius:999px; background:var(--indigo-50); overflow:hidden;}
   .ss-bar i{position:absolute; top:0; right:0; height:100%; border-radius:999px; background:linear-gradient(270deg,#FFB547,var(--orange) 45%,var(--coral)); transition:width .5s;}
   .ss-st{font-size:12.5px; font-weight:700; color:var(--navy); margin-top:7px;}
@@ -857,11 +919,15 @@
 
     <!-- ===== ADMIN ONLY ===== -->
     <div id="adminOnly">
+      <div class="seg seg-top" role="tablist">
+        <button id="tabFursan" class="sec-tab active" onclick="setSection('fursan')">🐎 الفرسان</button>
+        <button id="tabFityan" class="sec-tab" onclick="setSection('fityan')">🧒 الفتيان</button>
+      </div>
+
+      <!-- رحلة القسم: أرقام سريعة + وين وصل كل طالب -->
+      <section class="hero adm-hero" id="admDash"></section>
+
       <section class="card">
-        <div class="seg" role="tablist">
-          <button id="tabFursan" class="sec-tab active" onclick="setSection('fursan')">🐎 الفرسان</button>
-          <button id="tabFityan" class="sec-tab" onclick="setSection('fityan')">🧒 الفتيان</button>
-        </div>
         <div class="card-head">
           <h2><span class="h-ic indigo">👥</span>الطلاب <span class="count" id="rosterCount"></span></h2>
         </div>
@@ -958,7 +1024,11 @@
       <div class="ss-pts" id="ssPtsBox"><b id="ssPts">0</b><small>نقطة</small></div>
       <button class="gm-x" onclick="closeModal('stuSheet')" aria-label="إغلاق">✕</button>
     </div>
-    <div class="ss-prog"><div class="ss-bar"><i id="ssFill"></i></div><div class="ss-st" id="ssSt"></div></div>
+    <div class="ss-prog">
+      <div class="ssj" id="ssDots"></div>
+      <div class="ss-bar"><i id="ssFill"></i></div>
+      <div class="ssj-stats" id="ssStats"></div>
+    </div>
     <div class="ss-body">
       <div class="ss-t">اضغط بندًا لإضافته</div>
       <div class="item-btns ss-items" id="ssItems"></div>
@@ -1305,7 +1375,7 @@ function rowClick(ev, id){
   selectStudent(id);
 }
 function setSection(sec){
-  activeSection=sec; pendingDeleteId=null; selSet.clear();
+  activeSection=sec; pendingDeleteId=null; selSet.clear(); dashOpenSt=null;
   const rs=document.getElementById('rosterSearch'); if(rs) rs.value='';
   rosterQuery='';
   const rx=document.getElementById('rosterSearchX'); if(rx) rx.style.display='none';
@@ -2094,8 +2164,16 @@ function renderStudentSheet(){
   document.getElementById('ssMeta').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan']+g+' · #'+s.code;
   document.getElementById('ssPts').textContent = pts;
   document.getElementById('ssFill').style.width = fillPct(pts)+'%';
-  document.getElementById('ssSt').innerHTML = cur.icon+' '+escapeHtml(cur.name)
-    + (next ? ` ← ${next.icon} ${escapeHtml(next.name)} <em>(باقي ${rem} نقطة)</em>` : ' — <em>اكتملت الرحلة 🎉</em>');
+  document.getElementById('ssDots').innerHTML = STATIONS.map(st=>{
+    const c = st.p===cur.p ? 'cur' : (pts>=st.p ? 'done' : '');
+    return `<span class="ssj-d ${c}" title="${escapeHtml(st.name)} · ${st.p}">${st.icon}</span>`;
+  }).join('');
+  const pctAll = Math.round(pts/MAX_POINTS*100);
+  document.getElementById('ssStats').innerHTML =
+    `<div class="ssj-s"><b>${pctAll}%</b><small>التقدّم</small></div>`+
+    `<div class="ssj-s"><b>${cur.icon} ${escapeHtml(cur.name)}</b><small>محطته</small></div>`+
+    `<div class="ssj-s"><b>${next ? next.icon+' '+escapeHtml(next.name) : '🏆'}</b><small>القادمة</small></div>`+
+    `<div class="ssj-s hl"><b>${next ? rem : 0}</b><small>${next ? 'نقطة باقية' : 'اكتملت 🎉'}</small></div>`;
   const items=itemsArr(s.section||'fursan');
   document.getElementById('ssItems').innerHTML = items.length
     ? items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${sn(it.points)}</button>`).join('')
@@ -2162,7 +2240,52 @@ function clearRosterQuery(){
   const inp=document.getElementById('rosterSearch'); if(inp) inp.value='';
   setRosterQuery('');
 }
+let dashOpenSt=null;   // المحطة المفتوحة في «رحلة القسم»
+function toggleDashStation(i){ dashOpenSt = (dashOpenSt===i ? null : i); renderAdminDash(); }
+function renderAdminDash(){
+  const box=document.getElementById('admDash'); if(!box || role!=='admin') return;
+  const arr=sectionArr(activeSection);
+  const n=arr.length, total=arr.reduce((t,s)=>t+clampPts(s.points),0);
+  const avg=n?Math.round(total/n):0;
+  const top=rankedList(activeSection)[0];
+  const prog=n?Math.round(total/(n*MAX_POINTS)*100):0;
+  const groups=STATIONS.map(()=>[]);
+  arr.forEach(s=>groups[stationIdx(s.points)].push(s));
+  groups.forEach(g=>g.sort((a,b)=>clampPts(b.points)-clampPts(a.points)));
+  const secIc = activeSection==='fityan' ? '🧒' : '🐎';
+  const tiles = STATIONS.map((st,i)=>{
+    const g=groups[i], cnt=g.length;
+    return `<button type="button" class="ad-st ${cnt?'has':''} ${dashOpenSt===i?'open':''}" onclick="toggleDashStation(${i})">
+      <span class="ad-ic">${st.icon}</span>
+      <span class="ad-sn"><b>${escapeHtml(st.name)}</b><small>${st.p} نقطة</small></span>
+      <span class="ad-cnt">${cnt ? `<b>${cnt}</b>` : '<em>0</em>'}</span>
+    </button>`;
+  }).join('');
+  let list='';
+  if(dashOpenSt!==null){
+    const g=groups[dashOpenSt], st=STATIONS[dashOpenSt];
+    list = `<div class="ad-list"><div class="ad-list-h">${st.icon} في محطة «${escapeHtml(st.name)}» (${g.length})</div>`
+      + (g.length ? g.map(s=>`<button type="button" class="ad-li" onclick="selectStudent('${s.id}')"><span class="ad-av">${avatarMarkup(s)}</span><b>${escapeHtml(s.name)}</b><span class="ad-lp">${clampPts(s.points)}</span></button>`).join('')
+                  : '<div class="ad-empty">لا يوجد أحد في هذه المحطة الآن</div>')
+      + `</div>`;
+  }
+  box.innerHTML = `
+    <div class="ad-head">
+      <div><div class="ad-k">رحلة القسم</div><div class="ad-t">${secIc} ${SECTION_LABELS[activeSection]}</div></div>
+      <div class="ad-prog"><b>${prog}%</b><small>تقدّم القسم</small></div>
+    </div>
+    <div class="ad-stats">
+      <div class="ad-s"><span>👥</span><b>${n}</b><small>طالب</small></div>
+      <div class="ad-s"><span>⭐</span><b>${total}</b><small>مجموع النقاط</small></div>
+      <div class="ad-s"><span>📊</span><b>${avg}</b><small>المتوسط</small></div>
+      <div class="ad-s gold"><span>🥇</span><b>${top ? escapeHtml(top.s.name) : '—'}</b><small>${top ? 'الأعلى · '+clampPts(top.s.points) : 'الأعلى'}</small></div>
+    </div>
+    <div class="ad-jh">🗺️ الرحلة — وين وصل كل طالب <small>اضغط المحطة لعرض أسمائهم</small></div>
+    <div class="ad-grid">${tiles}</div>
+    ${list}`;
+}
 function renderRoster(){
+  renderAdminDash();
   if(role!=='admin')return;
   const box=document.getElementById('roster'); if(!box)return;
   const arr=sectionArr(activeSection)
