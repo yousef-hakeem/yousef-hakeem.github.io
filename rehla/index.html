@@ -395,6 +395,96 @@
   .lrow.latest{border-color:#F7C77E; background:#FFF8EC;}
   .new-tag{display:inline-block; margin-inline-start:6px; font-size:10.5px; font-weight:800; color:#fff; background:var(--orange); border-radius:999px; padding:0 8px; vertical-align:middle;}
 
+  /* ===== student view ===== */
+  .s-hero{padding:18px 16px 20px;}
+  .sh-greet{font-size:13.5px; font-weight:800; color:#9DE6E5;}
+  .s-hero .who .name{font-size:22px;}
+  .sh-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;}
+  .sh-tags .sec-badge{margin-top:0;}
+  .sh-ring{position:relative; width:186px; height:186px; margin:18px auto 8px;}
+  .sh-ring svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .ring-bg{fill:none; stroke:rgba(255,255,255,.13); stroke-width:12;}
+  .ring-fg{fill:none; stroke:url(#ringGrad); stroke-width:12; stroke-linecap:round; stroke-dasharray:377; stroke-dashoffset:377;
+    transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1); filter:drop-shadow(0 0 6px rgba(245,141,9,.5));}
+  .ring-c{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+  .ring-ic{font-size:30px; line-height:1;}
+  .ring-pts{font-size:44px; font-weight:800; line-height:1.05; margin-top:4px; font-variant-numeric:tabular-nums;}
+  .ring-l{font-size:13px; font-weight:800; color:rgba(255,255,255,.75);}
+  .sh-station{text-align:center; font-size:16px; font-weight:800;}
+  .sh-station small{display:block; font-size:13px; font-weight:700; color:rgba(255,255,255,.72); margin-top:3px;}
+  .s-hero .motiv{text-align:center; margin-top:12px; min-height:22px; font-size:15px;}
+  .motiv.fade{animation:fadeUp .45s ease;}
+  .sh-chips{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:12px;}
+  .sh-chip{display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:999px; font-size:12.5px; font-weight:800;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);}
+  .sh-chip b{color:#FFC266;}
+
+  .goal-card{border-color:#F7D6A4; background:linear-gradient(180deg,#FFF8EC,#fff 75%);}
+  .goal-head{display:flex; align-items:center; gap:12px;}
+  .goal-ic{width:52px; height:52px; border-radius:16px; flex:none; display:grid; place-items:center; font-size:27px; background:#fff; border:1px solid #F7D6A4; box-shadow:0 4px 12px rgba(245,141,9,.15);}
+  .goal-k{font-size:12.5px; font-weight:800; color:var(--orange-d);}
+  .goal-t{font-size:17px; font-weight:800; color:var(--navy); line-height:1.4;}
+  .goal-t b{color:var(--orange-d); font-size:19px;}
+  .goal-bar{position:relative; height:12px; margin-top:14px; border-radius:999px; overflow:hidden; background:var(--orange-50); border:1px solid #F7D6A4;}
+  .goal-bar i{position:absolute; top:0; right:0; height:100%; border-radius:999px; background:linear-gradient(270deg,#FFB547,var(--orange) 50%,var(--coral));
+    transition:width .9s cubic-bezier(.2,.8,.2,1);}
+  .goal-ends{display:flex; justify-content:space-between; margin-top:6px; font-size:12px; font-weight:800; color:var(--muted);}
+  .goal-tip{margin-top:12px; padding:10px 12px; border-radius:12px; background:#fff; border:1px dashed #F2C27E; font-size:13.5px; font-weight:700; color:var(--navy); line-height:1.7;}
+  .goal-tip:empty{display:none;}
+  .goal-tip b{color:var(--teal-d);}
+
+  .path{list-style:none; margin:0; padding:0;}
+  .pst{position:relative; display:flex; align-items:center; gap:12px; min-height:60px; padding:7px 0;}
+  .pst:not(:last-child)::after{content:""; position:absolute; right:21px; top:calc(50% + 23px); height:calc(100% - 46px); width:4px; border-radius:4px; background:var(--line);}
+  .pst.done:not(:last-child)::after{background:linear-gradient(180deg,var(--orange),#FFC266);}
+  .pnode{position:relative; z-index:1; width:46px; height:46px; border-radius:50%; flex:none; display:grid; place-items:center; font-size:21px;
+    background:#F1F2F7; border:2px solid var(--line); filter:grayscale(1); opacity:.7;}
+  .pst.done .pnode{background:#FFF4E2; border-color:#F7C77E; filter:none; opacity:1;}
+  .pst.cur .pnode{background:#fff; border:3px solid var(--orange); animation:curPulse 2s ease-in-out infinite;}
+  @keyframes curPulse{0%,100%{box-shadow:0 0 0 4px rgba(245,141,9,.2);} 50%{box-shadow:0 0 0 10px rgba(245,141,9,.05);}}
+  .pinfo{flex:1; min-width:0;}
+  .pinfo b{display:block; font-size:15px; font-weight:800; color:var(--navy);}
+  .pinfo small{display:block; font-size:12px; font-weight:700; color:var(--muted);}
+  .pst.done .pinfo small{color:var(--teal-d);}
+  .pst.cur{background:linear-gradient(270deg,#FFF6E8,transparent 85%); border-radius:14px;}
+  .pst.cur .pinfo b{color:var(--orange-d); font-size:16px;}
+  .pst.cur .pinfo small{color:var(--orange-d);}
+  .pst.locked .pinfo b{color:#9EA2B9;}
+  .ppts{flex:none; font-size:12.5px; font-weight:800; color:var(--muted); background:var(--soft); border:1px solid var(--line); border-radius:999px; padding:2px 10px; font-variant-numeric:tabular-nums;}
+  .pst.done .ppts{color:var(--orange-d); background:var(--orange-50); border-color:#F7D6A4;}
+
+  /* game-style journey map */
+  #pathCard{background:linear-gradient(180deg,#EAF3FF 0%,#F6F9FF 45%,#fff 100%); overflow:hidden;}
+  .lmap{position:relative; width:100%; margin-top:4px;}
+  .lm-svg{position:absolute; inset:0; overflow:visible;}
+  .lm-road{fill:none; stroke:#DFE4F0; stroke-width:16; stroke-linecap:round;}
+  .lm-dash{fill:none; stroke:#fff; stroke-width:2.5; stroke-dasharray:2 11; stroke-linecap:round; opacity:.9;}
+  .lm-prog{fill:none; stroke:var(--orange); stroke-width:16; stroke-linecap:round; opacity:.92;}
+  .lm-part{opacity:.75;}
+  body.student-mode .wrap, body.student-mode .topbar-in{max-width:680px;}
+  .lm-node{position:absolute; transform:translate(-50%,-50%); width:58px; height:58px; border-radius:50%; display:grid; place-items:center;
+    background:#EEF0F6; border:4px solid #fff; box-shadow:0 4px 12px rgba(29,28,68,.12); z-index:1;}
+  .lm-node .lm-ic{font-size:25px; line-height:1;}
+  .lm-node.locked .lm-ic{filter:grayscale(1); opacity:.45;}
+  .lm-node.done{background:linear-gradient(160deg,#FFC266,var(--orange) 60%,#EE6F12); box-shadow:0 6px 16px rgba(245,141,9,.35);}
+  .lm-node.cur{width:70px; height:70px; background:#fff; border:5px solid var(--orange); animation:curPulse 2s ease-in-out infinite; z-index:2;}
+  .lm-node.cur .lm-ic{font-size:30px;}
+  .lm-me{position:absolute; top:-12px; left:-14px; width:34px; height:34px; border-radius:50%; overflow:hidden; display:grid; place-items:center;
+    background:var(--teal); border:3px solid #fff; box-shadow:0 3px 8px rgba(29,28,68,.25);}
+  .lm-me img{width:100%; height:100%; object-fit:cover;}
+  .lm-me .ph{font-size:14px; font-weight:800; color:#fff;}
+  .lm-lbl{position:absolute; transform:translateY(-50%); line-height:1.25; z-index:1;}
+  .lm-lbl.to-l{text-align:left;} .lm-lbl.to-r{text-align:right;}
+  .lm-lbl b{display:block; font-size:15px; font-weight:800; color:var(--navy);}
+  .lm-lbl small{display:block; font-size:12px; font-weight:800; color:var(--muted);}
+  .lm-lbl.done small{color:var(--teal-d);}
+  .lm-lbl.cur b{color:var(--orange-d); font-size:16.5px;}
+  .lm-lbl.cur small{color:#fff; background:var(--orange); border-radius:999px; padding:1px 9px; display:inline-block; margin-top:2px;}
+  .lm-lbl.locked b{color:#A5A9BF;}
+
+  .si-h{font-size:13.5px; font-weight:800; color:var(--teal-d); margin:2px 2px 8px;}
+  .si-h.neg{color:var(--coral-d); margin-top:16px;}
+
   /* ranking */
   .seg-sm{margin-bottom:12px;}
   .seg-sm .sec-tab{min-height:40px; font-size:14px;}
@@ -544,6 +634,7 @@
     .grp-members{padding:10px;}
     .field-row .pts{flex-basis:84px;}
     .items-list{grid-template-columns:repeat(auto-fill, minmax(140px,1fr));}
+    .s-hero .who .name{font-size:20px;}
     .live #liveTxt{display:none;}
     .live{padding:7px;}
     .gedit .gl{display:none;}
@@ -622,34 +713,52 @@
   <main class="wrap">
     <div id="dataBanner"></div>
 
-    <!-- Journey (shared by admin's selected student & student view) -->
-    <section class="hero" id="journey">
+    <!-- ===== STUDENT: hero ===== -->
+    <section class="hero s-hero" id="journey">
       <div class="who">
         <div class="avatar-wrap">
           <div class="avatar" id="jAvatar" onclick="onAvatarClick()"><span class="ph">📷</span></div>
           <div class="avatar-hint" id="avatarHint" onclick="onAvatarClick()" style="display:none">أضف صورتك</div>
         </div>
         <div class="who-main">
+          <div class="sh-greet" id="jGreet">أهلًا 👋</div>
           <div class="name" id="jName">—</div>
-          <span class="sec-badge" id="jSection"></span>
+          <div class="sh-tags"><span class="sec-badge" id="jSection"></span><span class="sec-badge" id="jGroup"></span></div>
         </div>
-        <div class="score-badge"><span class="sv" id="jScore">0</span><span class="sl">نقطة</span></div>
       </div>
       <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="onAvatarPicked(this)">
+      <div class="sh-ring">
+        <svg viewBox="0 0 140 140" aria-hidden="true">
+          <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC266"/><stop offset=".55" stop-color="#F58D09"/><stop offset="1" stop-color="#F7583E"/></linearGradient></defs>
+          <circle class="ring-bg" cx="70" cy="70" r="60"/>
+          <circle class="ring-fg" id="jRing" cx="70" cy="70" r="60"/>
+        </svg>
+        <div class="ring-c">
+          <div class="ring-ic" id="jStIc">🚩</div>
+          <div class="ring-pts" id="jScore">0</div>
+          <div class="ring-l">نقطة</div>
+        </div>
+      </div>
+      <div class="sh-station" id="jStation"></div>
       <div class="motiv" id="jMotiv"></div>
+      <div class="sh-chips" id="jChips"></div>
+    </section>
 
-      <div class="track-wrap">
-        <div class="track"><div class="fill" id="jFill" style="width:0%"></div></div>
-        <div id="jMarkers"></div>
+    <!-- ===== STUDENT: next goal ===== -->
+    <section class="card goal-card" id="goalCard" style="display:none">
+      <div class="goal-head">
+        <span class="goal-ic" id="goalIc">🎯</span>
+        <div class="goal-txt"><div class="goal-k">🎯 هدفك القادم</div><div class="goal-t" id="goalT"></div></div>
       </div>
+      <div class="goal-bar"><i id="goalFill"></i></div>
+      <div class="goal-ends"><span id="goalFrom"></span><span id="goalTo"></span></div>
+      <div class="goal-tip" id="goalTip"></div>
+    </section>
 
-      <div class="stats">
-        <div class="stat"><div class="v gold" id="sPct">0%</div><div class="k">نسبة التقدم</div></div>
-        <div class="stat"><div class="v" id="sCur">—</div><div class="k">محطتك الحالية</div></div>
-        <div class="stat"><div class="v" id="sNext">—</div><div class="k">المحطة القادمة</div></div>
-        <div class="stat"><div class="v" id="sRem">—</div><div class="k">باقي لك</div></div>
-      </div>
-      <div class="next-msg" id="jNextMsg"></div>
+    <!-- ===== STUDENT: journey map ===== -->
+    <section class="card" id="pathCard" style="display:none">
+      <div class="card-head"><h2><span class="h-ic indigo">🗺️</span>رحلتي نحو القمة</h2><span class="sub" id="pathSub"></span></div>
+      <div class="lmap" id="jPath"></div>
     </section>
 
     <!-- admin: add points to the selected student -->
@@ -717,7 +826,7 @@
         <h2><span class="h-ic teal">🏷️</span>كيف أجمع النقاط؟</h2>
         <span class="sub" id="studentItemsWho"></span>
       </div>
-      <div class="items-list" id="studentItems"></div>
+      <div id="studentItems"></div>
     </section>
 
     <!-- ===== RANKING (admin only, follows the active section) ===== -->
@@ -1056,8 +1165,11 @@ function enterApp(){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   const admin = role==='admin';
+  document.body.classList.toggle('student-mode', !admin);
   // المشرف: الصفحة تبدأ بالأقسام والطلاب مباشرة، وبطاقة الطالب تفتح كنافذة من الأسفل
   document.getElementById('journey').style.display = admin?'none':'';
+  document.getElementById('goalCard').style.display = admin?'none':'';
+  document.getElementById('pathCard').style.display = admin?'none':'';
   document.getElementById('logCard').style.display = '';
   document.getElementById('toolsCard').style.display = admin?'':'none';
   document.getElementById('adminControls').style.display = 'none';
@@ -1074,6 +1186,7 @@ function enterApp(){
 function logout(){
   if(motivTimer){ clearInterval(motivTimer); motivTimer=null; }
   role=null; selectedId=null; pendingDeleteId=null; selSet.clear(); updateSelFab(0);
+  document.body.classList.remove('student-mode');
   document.getElementById('app').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
   showGate('choose');
@@ -1487,7 +1600,8 @@ function updateMotiv(){
   const s=selectedId?state.students[selectedId]:null;
   if(!s){ el.textContent=''; return; }
   const {pct}=stationInfo(clampPts(s.points));
-  el.textContent = pct>=100 ? 'وصلت القمة! بطل حقيقي 🏆' : MOTIVS[motivIdx % MOTIVS.length];
+  const t = pct>=100 ? 'وصلت القمة! بطل حقيقي 🏆' : MOTIVS[motivIdx % MOTIVS.length];
+  if(el.textContent!==t){ el.textContent=t; el.classList.remove('fade'); void el.offsetWidth; el.classList.add('fade'); }
 }
 function startMotiv(){
   if(motivTimer) clearInterval(motivTimer);
@@ -1565,49 +1679,127 @@ function processAvatarImage(file, cb){
 /* =================== RENDER =================== */
 function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
+function setText(id,t){ const el=document.getElementById(id); if(el) el.textContent=t; }
+// مجموع ما كسبه الطالب خلال آخر 7 أيام (الإضافات فقط)
+function weekGain(id){
+  const since=Date.now()-7*24*3600*1000;
+  return logFor(id).filter(e=>e.ts>=since && e.delta>0).reduce((t,e)=>t+e.delta,0);
+}
+// اقتراح بسيط للوصول للمحطة القادمة من بنود القسم
+function goalTip(s, rem){
+  const pos=itemsArr(s.section||'fursan').filter(it=>it.points>0).sort((a,b)=>b.points-a.points);
+  if(!pos.length) return '';
+  const one=pos.slice().reverse().find(it=>it.points>=rem);
+  if(one) return `💡 بند واحد يكفي! مثل <b>${escapeHtml(one.name)} (+${one.points})</b>`;
+  return '💡 أسرع الطرق: '+pos.slice(0,3).map(it=>`<b>${escapeHtml(it.name)} (+${it.points})</b>`).join(' · ');
+}
+// عدّاد يتحرك من الرقم السابق للجديد
+function countUp(el, to){
+  if(!el) return;
+  const from = parseInt(el.dataset.v||'0',10)||0; el.dataset.v=String(to);
+  if(from===to || matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent=to; return; }
+  const t0=performance.now(), dur=900;
+  const step=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=Math.round(from+(to-from)*e); if(k<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+// خريطة الرحلة بأسلوب الألعاب: طريق متعرّج يصعد للقمة
+function renderLevelMap(s, pts, cur){
+  const box=document.getElementById('jPath'); if(!box) return;
+  const W = box.clientWidth || 340, N = STATIONS.length, GAP = 92, TOP = 52;
+  const amp = Math.min(92, W*0.24), cx = W/2;
+  const P = STATIONS.slice().reverse().map((st,i)=>({ st, x: cx + Math.sin(i*1.2+0.5)*amp, y: TOP + i*GAP }));
+  const H = TOP*2 + (N-1)*GAP;
+  const curve = arr => arr.map((p,i)=> i===0 ? `M${p.x.toFixed(1)},${p.y}` :
+      `C${arr[i-1].x.toFixed(1)},${arr[i-1].y+GAP/2} ${p.x.toFixed(1)},${p.y-GAP/2} ${p.x.toFixed(1)},${p.y}`).join(' ');
+  const ci = P.findIndex(p=>p.st.p===cur.p);
+  // جزء من الطريق نحو المحطة التالية حسب التقدم
+  let part='';
+  if(ci>0){
+    const a=P[ci], b=P[ci-1], seg=Math.max(0,Math.min(1,(pts-a.st.p)/(b.st.p-a.st.p)));
+    if(seg>0) part=`<path class="lm-prog lm-part" pathLength="100" stroke-dasharray="${(seg*100).toFixed(1)} 200"
+      d="M${a.x.toFixed(1)},${a.y} C${a.x.toFixed(1)},${a.y-GAP/2} ${b.x.toFixed(1)},${b.y+GAP/2} ${b.x.toFixed(1)},${b.y}"/>`;
+  }
+  const nodes = P.map(p=>{
+    const done = pts>=p.st.p, isCur = p.st.p===cur.p;
+    const cls = isCur ? 'cur' : (done ? 'done' : 'locked');
+    const right = p.x > cx;                       // العقدة يمين المنتصف → الاسم على يسارها
+    const room = right ? (p.x - 44) : (W - p.x - 44);
+    const pos = right ? `right:${(W - p.x + 40).toFixed(1)}px` : `left:${(p.x + 40).toFixed(1)}px`;
+    const sub = isCur ? '📍 أنت هنا' : (done ? '✓ '+p.st.p+' نقطة' : '🔒 '+p.st.p+' نقطة');
+    return `<div class="lm-node ${cls}" style="left:${p.x.toFixed(1)}px;top:${p.y}px">
+        <span class="lm-ic">${p.st.icon}</span>
+        ${isCur ? `<span class="lm-me">${avatarMarkup(s)}</span>` : ''}
+      </div>
+      <div class="lm-lbl ${cls} ${right?'to-l':'to-r'}" style="${pos};top:${p.y}px;max-width:${Math.max(70,room).toFixed(0)}px">
+        <b>${escapeHtml(p.st.name)}</b><small>${sub}</small>
+      </div>`;
+  }).join('');
+  box.style.height = H+'px';
+  box.innerHTML = `<svg class="lm-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">
+      <path class="lm-road" d="${curve(P)}"/>
+      <path class="lm-dash" d="${curve(P)}"/>
+      <path class="lm-prog" d="${curve(P.slice(ci))}"/>
+      ${part}
+    </svg>${nodes}`;
+}
+let mapRT;
+window.addEventListener('resize', ()=>{ clearTimeout(mapRT); mapRT=setTimeout(()=>{ if(role==='student') renderJourney(); }, 200); });
 function renderJourney(){
   renderRanking();
   renderStudentSheet();
   const s = selectedId ? state.students[selectedId] : null;
-  const nameEl=document.getElementById('jName');
   renderAvatarEl(s);
   const ctrl=document.getElementById('adminControls'), who=document.getElementById('ctrlWho'), hint=document.getElementById('ctrlHint');
   if(ctrl) ctrl.classList.toggle('disabled', !s);
   if(who) who.textContent = s ? s.name : 'لم يُحدَّد طالب';
   if(hint) hint.textContent = s ? 'اضغط بندًا لإضافته للسجل، أو عدّل الرقم مباشرة.' : '👇 اضغط اسم الطالب من القائمة بالأسفل لبدء إضافة النقاط';
-  if(!s){
-    nameEl.textContent = role==='admin' ? 'اختر طالبًا من القائمة' : '—';
-    document.getElementById('jScore').textContent='0';
-    document.getElementById('jFill').style.width='0%';
-    document.getElementById('jMarkers').innerHTML=buildMarkers(0);
-    document.getElementById('sPct').textContent='0%';
-    document.getElementById('sCur').textContent='—';
-    document.getElementById('sNext').textContent='—';
-    document.getElementById('sRem').textContent='—';
-    document.getElementById('jMotiv').textContent='';
-    document.getElementById('jNextMsg').textContent='';
-    document.getElementById('jSection').textContent='';
-    return;
-  }
+  if(role!=='student' || !s) return;   // واجهة المثابر فقط
+
   const pts=clampPts(s.points);
   const {cur,next,pct,rem}=stationInfo(pts);
   checkStudentMilestone(s);
-  nameEl.textContent = (role==='admin'?'رحلة ':'') + s.name;
-  document.getElementById('jScore').textContent=pts;
-  document.getElementById('jFill').style.width=fillPct(pts)+'%';
-  document.getElementById('jMarkers').innerHTML=buildMarkers(pts);
-  document.getElementById('sPct').textContent=pct+'%';
-  document.getElementById('sCur').textContent=cur.name;
-  document.getElementById('sNext').textContent= next? next.name : 'اكتملت الرحلة';
-  document.getElementById('sRem').textContent= next? rem+' نقطة' : '🎉';
+  const hr=new Date().getHours();
+  setText('jGreet', hr<12 ? 'صباح الخير يا بطل ☀️' : 'مساء الخير يا بطل 🌙');
+  setText('jName', s.name);
+  setText('jSection', 'قسم '+SECTION_LABELS[s.section||'fursan']);
+  const g = (s.groupId && state.groups[s.groupId]) ? state.groups[s.groupId] : null;
+  setText('jGroup', g ? ('🏳️ '+g.name+(leaderOf(s.groupId)===selectedId?' · 👑 القائد':'')) : '');
+
+  // الحلقة: التقدّم نحو المحطة القادمة
+  const seg = next ? Math.max(0,Math.min(1,(pts-cur.p)/(next.p-cur.p))) : 1;
+  const ring=document.getElementById('jRing'); if(ring) ring.style.strokeDashoffset = String(377*(1-seg));
+  setText('jStIc', cur.icon);
+  countUp(document.getElementById('jScore'), pts);
+  document.getElementById('jStation').innerHTML = 'محطتك: '+cur.icon+' '+escapeHtml(cur.name)
+    + (next ? `<small>باقي ${rem} نقطة على ${next.icon} ${escapeHtml(next.name)}</small>` : '<small>وصلت القمة! 🏆</small>');
   updateMotiv();
-  document.getElementById('jNextMsg').textContent = next
-      ? '🎯 مهمتك القادمة: اجمع '+rem+' نقطة لتصل إلى «'+next.name+'»!'
-      : '🎉 مبروك! أكملت رحلتك ووصلت «البطل».';
-  document.getElementById('jSection').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan'];
-  const inp=document.getElementById('ptsInput');
-  if(inp && document.activeElement!==inp) inp.value=pts;
-  if(role!=='admin') document.getElementById('logWho').textContent = s.name;
+  const wk=weekGain(selectedId);
+  document.getElementById('jChips').innerHTML =
+    `<span class="sh-chip">${wk>0 ? `📈 <b>+${wk}</b> هذا الأسبوع` : '💪 ابدأ أسبوعك بقوة'}</span>`+
+    `<span class="sh-chip">🏔️ <b>${pct}%</b> من الرحلة</span>`;
+
+  // هدفك القادم
+  if(next){
+    setText('goalIc', next.icon);
+    document.getElementById('goalT').innerHTML = `باقي <b>${rem}</b> نقطة وتوصل محطة «${escapeHtml(next.name)}»`;
+    document.getElementById('goalFill').style.width = (seg*100)+'%';
+    setText('goalFrom', cur.icon+' '+cur.name);
+    setText('goalTo', next.icon+' '+next.name);
+    document.getElementById('goalTip').innerHTML = goalTip(s, rem);
+  } else {
+    setText('goalIc', '🏆');
+    document.getElementById('goalT').innerHTML = 'أكملت الرحلة ووصلت <b>القمة</b>!';
+    document.getElementById('goalFill').style.width = '100%';
+    setText('goalFrom', ''); setText('goalTo', '');
+    document.getElementById('goalTip').innerHTML = '🌟 أنت بطل حقيقي — استمر قدوة لزملائك';
+  }
+
+  // خريطة الرحلة (القمة فوق)
+  const reached = STATIONS.filter(st=>pts>=st.p).length;
+  setText('pathSub', reached+' من '+STATIONS.length+' محطات');
+  renderLevelMap(s, pts, cur);
+
+  setText('logWho', s.name);
 }
 function buildMarkers(pts){
   // RTL: markers evenly spaced by index (0 => right edge, last => left edge)
@@ -1885,10 +2077,11 @@ function renderStudentItems(){
   const who=document.getElementById('studentItemsWho'); if(who) who.textContent='قسم '+SECTION_LABELS[sec];
   const arr=itemsArr(sec);
   if(!arr.length){ box.innerHTML='<div class="empty">لا توجد بنود بعد.</div>'; return; }
-  box.innerHTML=arr.map(it=>`<div class="irow">
-    <div class="in">${escapeHtml(it.name)}</div>
-    <div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div>
-  </div>`).join('');
+  const row=it=>`<div class="irow"><div class="in">${escapeHtml(it.name)}</div><div class="ip ${it.points>=0?'pos':'neg'}">${it.points>=0?'+':''}${it.points}</div></div>`;
+  const pos=arr.filter(it=>it.points>=0).sort((a,b)=>b.points-a.points), neg=arr.filter(it=>it.points<0).sort((a,b)=>a.points-b.points);
+  box.innerHTML =
+    (pos.length ? `<div class="si-h">✨ تزيد نقاطك</div><div class="items-list">${pos.map(row).join('')}</div>` : '') +
+    (neg.length ? `<div class="si-h neg">⚠️ انتبه — تنقص نقاطك</div><div class="items-list">${neg.map(row).join('')}</div>` : '');
 }
 
 function renderLog(){
