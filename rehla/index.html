@@ -355,6 +355,10 @@
   .rk.me{border-color:var(--teal); background:var(--teal-50); box-shadow:0 0 0 3px rgba(55,168,169,.15);}
   .rk-me{flex:none; font-size:11.5px; font-weight:800; color:#fff; background:var(--teal); border-radius:999px; padding:1px 10px;}
   .ranklist .empty{list-style:none;}
+  .rk-pts{flex:none; display:flex; align-items:baseline; justify-content:center; gap:4px; min-width:92px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:4px 10px; line-height:1.1;}
+  .rk-pts b{font-size:16px; font-weight:800; color:var(--orange-d); font-variant-numeric:tabular-nums;}
+  .rk-pts small{font-size:11px; font-weight:800; color:var(--muted);}
+  .rk.r1 .rk-pts,.rk.r2 .rk-pts,.rk.r3 .rk-pts{background:rgba(255,255,255,.8);}
 
   /* new-group button + search */
   .btn-newgrp{display:flex; align-items:center; gap:12px; width:100%; text-align:right; padding:11px 14px; margin:2px 0 12px;
@@ -1611,6 +1615,7 @@ function renderRanking(){
       <span class="rk-n">${medal[rank]||rank}</span>
       <span class="rk-name">${escapeHtml(s.name)}</span>
       ${isMe?'<span class="rk-me">أنت</span>':''}
+      <span class="rk-pts"><b>${clampPts(s.points)}</b><small>نقطة</small></span>
     </li>`;
   }).join('');
 }
