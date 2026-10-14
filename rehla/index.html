@@ -654,7 +654,7 @@
     </div>
 
     <!-- ===== RANKING (both views) ===== -->
-    <section class="card" id="rankCard">
+    <section class="card" id="rankCard" style="display:none">
       <div class="card-head">
         <h2><span class="h-ic orange">🏆</span>الترتيب</h2>
         <span class="sub" id="rankWho"></span>
@@ -971,6 +971,7 @@ function enterApp(){
   document.getElementById('adminControls').style.display = admin?'block':'none';
   document.getElementById('adminOnly').style.display = admin?'block':'none';
   document.getElementById('studentItemsCard').style.display = admin?'none':'block';
+  document.getElementById('rankCard').style.display = admin?'block':'none';   // الترتيب للمشرفين فقط
   document.getElementById('roleChip').textContent = 'خروج';
   document.getElementById('appTitle').textContent = admin ? 'رحلة مثابر' : 'رحلتي';
   document.getElementById('appSub').textContent = admin ? 'لوحة المشرف' : 'برنامج نافس';
@@ -1593,6 +1594,7 @@ function rankedList(sec){
 }
 function renderRanking(){
   const box=document.getElementById('rankList'); if(!box) return;
+  if(role!=='admin'){ box.innerHTML=''; return; }   // الطالب لا يرى المراكز
   const me = (role==='student' && selectedId) ? state.students[selectedId] : null;
   const sec = rankSection || (me ? (me.section||'fursan') : activeSection);
   const tf=document.getElementById('rankTabFursan'), ty=document.getElementById('rankTabFityan');
