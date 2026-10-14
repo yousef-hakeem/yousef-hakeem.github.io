@@ -467,7 +467,8 @@
   .gm-del{background:var(--coral-50); color:var(--coral-d);}
 
   /* toast undo */
-  .toast.has-undo{pointer-events:auto; display:flex; align-items:center; gap:12px;}
+  .toast.has-undo{pointer-events:none; display:flex; align-items:center; gap:12px;}
+  .toast.has-undo .tundo{pointer-events:auto;}
   .tundo{flex:none; background:rgba(255,255,255,.18); color:#fff; padding:6px 12px; border-radius:10px; font-size:13.5px; font-weight:800;}
   .tundo:hover{background:rgba(255,255,255,.28);}
 
@@ -726,6 +727,15 @@
       <ol class="ranklist" id="rankList"></ol>
     </section>
 
+    <!-- ===== LOG ===== -->
+    <section class="card" id="logCard">
+      <div class="card-head">
+        <h2><span class="h-ic coral">🧾</span>سجل النقاط</h2>
+        <span class="sub" id="logWho"></span>
+      </div>
+      <div class="log" id="log"></div>
+    </section>
+
     <!-- ===== TOOLS (admin) ===== -->
     <section class="card" id="toolsCard" style="display:none">
       <div class="card-head" style="margin-bottom:10px"><h2><span class="h-ic indigo">⚙️</span>أدوات</h2></div>
@@ -734,15 +744,6 @@
         <button class="tool" onclick="openImport()">📥 استيراد</button>
         <button class="tool" onclick="openSettings()">🔑 رمز المشرف</button>
       </div>
-    </section>
-
-    <!-- ===== LOG ===== -->
-    <section class="card" id="logCard">
-      <div class="card-head">
-        <h2><span class="h-ic coral">🧾</span>سجل النقاط</h2>
-        <span class="sub" id="logWho"></span>
-      </div>
-      <div class="log" id="log"></div>
     </section>
 
     <footer class="app-foot">
@@ -1055,7 +1056,7 @@ function enterApp(){
   const admin = role==='admin';
   // المشرف: الصفحة تبدأ بالأقسام والطلاب مباشرة، وبطاقة الطالب تفتح كنافذة من الأسفل
   document.getElementById('journey').style.display = admin?'none':'';
-  document.getElementById('logCard').style.display = admin?'none':'';
+  document.getElementById('logCard').style.display = '';
   document.getElementById('toolsCard').style.display = admin?'':'none';
   document.getElementById('adminControls').style.display = 'none';
   document.getElementById('adminOnly').style.display = admin?'block':'none';
@@ -1604,7 +1605,7 @@ function renderJourney(){
   document.getElementById('jSection').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan'];
   const inp=document.getElementById('ptsInput');
   if(inp && document.activeElement!==inp) inp.value=pts;
-  document.getElementById('logWho').textContent = s.name;
+  if(role!=='admin') document.getElementById('logWho').textContent = s.name;
 }
 function buildMarkers(pts){
   // RTL: markers evenly spaced by index (0 => right edge, last => left edge)
@@ -1709,7 +1710,7 @@ function renderStudentSheet(){
   document.getElementById('ssItems').innerHTML = items.length
     ? items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')
     : '<div class="empty">لا توجد بنود لهذا القسم بعد.</div>';
-  const lg=logFor(s.id);
+  const lg=logFor(selectedId);
   document.getElementById('ssLog').innerHTML = lg.length
     ? lg.slice(0,60).map(e=>`<div class="lrow"><span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
         <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
@@ -1890,6 +1891,23 @@ function renderStudentItems(){
 
 function renderLog(){
   const box=document.getElementById('log'); if(!box)return;
+  if(role==='admin'){
+    // المشرف: آخر الحركات لكل طلاب القسم المفتوح
+    const ids=new Set(sectionArr(activeSection).map(s=>s.id));
+    const all=Object.entries(state.log).map(([k,e])=>({k,...e})).filter(e=>ids.has(e.studentId)).sort((a,b)=>b.ts-a.ts);
+    const w=document.getElementById('logWho'); if(w) w.textContent='آخر الحركات · قسم '+SECTION_LABELS[activeSection];
+    if(!all.length){ box.innerHTML='<div class="empty">لا توجد حركات في هذا القسم بعد.</div>'; return; }
+    box.innerHTML=all.slice(0,60).map(e=>{
+      const st=state.students[e.studentId];
+      return `<div class="lrow">
+        <span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
+        <div class="linfo"><b>${escapeHtml(st?st.name:'')}</b><div class="ld">${escapeHtml(e.itemName)} · ${fmtDate(e.ts)}</div></div>
+        <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+        <button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button>
+      </div>`;
+    }).join('');
+    return;
+  }
   const id = selectedId;
   const arr = id ? logFor(id) : [];
   if(!id){ box.innerHTML='<div class="empty">اختر طالبًا لعرض سجله.</div>'; return; }
