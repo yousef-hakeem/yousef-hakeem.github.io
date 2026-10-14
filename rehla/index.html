@@ -338,6 +338,61 @@
   .toast.show{opacity:1; transform:translate(-50%,0);}
   .toast.err{background:var(--coral);}
 
+  .rrow{cursor:pointer;}
+  .rrow:active{background:#FAFAFE;}
+
+  /* bottom dock for bulk selection — fixed, so the list never moves */
+  .bulk-dock{position:fixed; left:0; right:0; bottom:0; z-index:45; background:#fff; border-top:1px solid var(--line);
+    border-radius:22px 22px 0 0; box-shadow:0 -12px 32px rgba(29,28,68,.16);
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    transform:translateY(110%); visibility:hidden; transition:transform .25s ease, visibility .25s;}
+  .bulk-dock.show{transform:none; visibility:visible;}
+  .bulk-dock > *{max-width:1000px; margin-left:auto; margin-right:auto;}
+  .dk-top{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .dk-n{min-width:28px; padding:1px 9px; border-radius:999px; background:var(--indigo); color:#fff; text-align:center; font-weight:800;}
+  .dk-top b{font-size:14.5px; font-weight:800; color:var(--navy);}
+  .dk-clear{margin-inline-start:auto; font-size:13px; font-weight:800; color:var(--muted); padding:6px 8px; border-radius:8px;}
+  .dk-clear:hover{color:var(--coral);}
+  .dk-row{display:flex; gap:8px;}
+  .dk-row .bpts{flex:0 0 100px; text-align:center; font-size:18px; font-weight:800;}
+  .dk-row .bapply{flex:1;}
+  .dk-items{display:flex; gap:6px; overflow-x:auto; padding:10px 2px 2px; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+  .dk-items::-webkit-scrollbar{display:none;}
+  .dk-items .item-btn{flex:none; padding:7px 11px; font-size:13px;}
+  .bulk-dock .bgrp{margin-top:10px; min-height:42px; font-weight:800; color:var(--indigo); background:#fff;}
+  body.has-dock .wrap{padding-bottom:290px;}
+
+  /* student sheet (admin) */
+  .ss-card{display:flex; flex-direction:column; max-width:520px; max-height:min(80vh,760px); padding:16px;}
+  .ss-head{display:flex; align-items:center; gap:12px; margin-bottom:12px;}
+  .ss-av{position:relative; width:54px; height:54px; border-radius:50%; flex:none; display:grid; place-items:center; cursor:pointer;
+    background:var(--indigo-50); box-shadow:0 0 0 2px #fff, 0 0 0 3px var(--line-2);}
+  .ss-av img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
+  .ss-av .ph{font-size:21px; font-weight:800; color:var(--indigo);}
+  .ss-av .cam{position:absolute; bottom:-3px; left:-3px; width:22px; height:22px; border-radius:50%; background:var(--teal); color:#fff;
+    font-size:10px; display:grid; place-items:center; border:2px solid #fff;}
+  .ss-who{flex:1; min-width:0;}
+  .ss-who b{display:block; font-size:17px; font-weight:800; color:var(--navy); line-height:1.3;}
+  .ss-who small{display:block; font-size:12px; font-weight:700; color:var(--muted); margin-top:1px;}
+  .ss-pts{flex:none; text-align:center; color:#fff; border-radius:14px; padding:6px 12px; line-height:1.05;
+    background:linear-gradient(160deg,#FFAE3A,var(--orange) 55%,#E5730A); box-shadow:0 6px 14px rgba(245,141,9,.3);}
+  .ss-pts b{display:block; font-size:22px; font-weight:800; font-variant-numeric:tabular-nums;}
+  .ss-pts small{font-size:11px; font-weight:800;}
+  .ss-pts.bump{animation:bump .6s cubic-bezier(.3,1.6,.5,1);}
+  .ss-prog{margin-bottom:10px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+  .ss-bar{position:relative; height:8px; border-radius:999px; background:var(--indigo-50); overflow:hidden;}
+  .ss-bar i{position:absolute; top:0; right:0; height:100%; border-radius:999px; background:linear-gradient(270deg,#FFB547,var(--orange) 45%,var(--coral)); transition:width .5s;}
+  .ss-st{font-size:12.5px; font-weight:700; color:var(--navy); margin-top:7px;}
+  .ss-st em{font-style:normal; color:var(--muted);}
+  .ss-body{flex:1; min-height:0; overflow:auto; margin:0 -4px; padding:0 4px 4px;}
+  .ss-t{font-size:13px; font-weight:800; color:var(--muted); margin:8px 2px 8px;}
+  .ss-items{justify-content:flex-start; margin-top:0;}
+  .ss-custom{display:flex; gap:8px; margin:12px 0 6px;}
+  .ss-custom .step{min-width:50px; height:46px; border-radius:12px; font-size:15px;}
+  .ss-custom .input{flex:1; min-width:0; text-align:center; font-weight:800;}
+  .ss-custom .btn{flex:none;}
+  .ss-log{max-height:none;}
+
   /* ranking */
   .seg-sm{margin-bottom:12px;}
   .seg-sm .sec-tab{min-height:40px; font-size:14px;}
@@ -492,7 +547,7 @@
     .gedit{min-width:34px; justify-content:center; padding:6px 8px; font-size:15px;}
     .gtotal{padding:3px 8px;}
     .modal.sheet{align-items:flex-end; padding:0;}
-    .modal.sheet .modal-card{max-width:none; border-radius:24px 24px 0 0; max-height:90vh; padding:16px 14px calc(14px + env(safe-area-inset-bottom,0px)); animation:sheetUp .25s ease;}
+    .modal.sheet .modal-card{max-width:none; border-radius:24px 24px 0 0; max-height:78vh; padding:16px 14px calc(14px + env(safe-area-inset-bottom,0px)); animation:sheetUp .25s ease;}
   }
   @keyframes sheetUp{from{transform:translateY(40px); opacity:.4;} to{transform:none; opacity:1;}}
 </style>
@@ -619,11 +674,6 @@
         <div class="card-head">
           <h2><span class="h-ic indigo">👥</span>الطلاب <span class="count" id="rosterCount"></span></h2>
         </div>
-        <div class="toolbar">
-          <button class="tool" onclick="exportData()">📋 نسخة احتياطية</button>
-          <button class="tool" onclick="openImport()">📥 استيراد</button>
-          <button class="tool" onclick="openSettings()">⚙️ الإعدادات</button>
-        </div>
         <div class="field-row">
           <input id="newStudent" class="input" placeholder="اسم الطالب الجديد" onkeydown="if(event.key==='Enter')addStudent()">
           <button class="btn btn-primary" onclick="addStudent()">＋ طالب</button>
@@ -676,8 +726,18 @@
       <ol class="ranklist" id="rankList"></ol>
     </section>
 
+    <!-- ===== TOOLS (admin) ===== -->
+    <section class="card" id="toolsCard" style="display:none">
+      <div class="card-head" style="margin-bottom:10px"><h2><span class="h-ic indigo">⚙️</span>أدوات</h2></div>
+      <div class="toolbar" style="margin:0">
+        <button class="tool" onclick="exportData()">📋 نسخة احتياطية</button>
+        <button class="tool" onclick="openImport()">📥 استيراد</button>
+        <button class="tool" onclick="openSettings()">🔑 رمز المشرف</button>
+      </div>
+    </section>
+
     <!-- ===== LOG ===== -->
-    <section class="card">
+    <section class="card" id="logCard">
       <div class="card-head">
         <h2><span class="h-ic coral">🧾</span>سجل النقاط</h2>
         <span class="sub" id="logWho"></span>
@@ -695,9 +755,33 @@
 </div>
 
 <!-- floating selection pill -->
-<button class="sel-fab" id="selFab" onclick="document.getElementById('bulkBar').scrollIntoView({behavior:'smooth',block:'start'})">
-  <span class="n" id="selFabN">0</span><span>محدد · إضافة نقاط ↑</span>
-</button>
+<!-- bulk actions dock (appears at the bottom when students are ticked) -->
+<div class="bulk-dock" id="bulkDock"></div>
+
+<!-- student sheet (admin taps a student) -->
+<div class="modal sheet" id="stuSheet">
+  <div class="modal-card ss-card">
+    <div class="ss-head">
+      <div class="ss-av" id="ssAv" onclick="onAvatarClick()" title="تغيير الصورة"></div>
+      <div class="ss-who"><b id="ssName"></b><small id="ssMeta"></small></div>
+      <div class="ss-pts" id="ssPtsBox"><b id="ssPts">0</b><small>نقطة</small></div>
+      <button class="gm-x" onclick="closeModal('stuSheet')" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="ss-prog"><div class="ss-bar"><i id="ssFill"></i></div><div class="ss-st" id="ssSt"></div></div>
+    <div class="ss-body">
+      <div class="ss-t">اضغط بندًا لإضافته</div>
+      <div class="item-btns ss-items" id="ssItems"></div>
+      <div class="ss-custom">
+        <button class="step minus" onclick="stepPoints(-10)">−10</button>
+        <input id="ssInput" class="input" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')ssApplyCustom()">
+        <button class="step plus" onclick="stepPoints(10)">+10</button>
+        <button class="btn btn-primary" onclick="ssApplyCustom()">إضافة</button>
+      </div>
+      <div class="ss-t">سجل النقاط</div>
+      <div class="log ss-log" id="ssLog"></div>
+    </div>
+  </div>
+</div>
 
 <!-- toast -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -969,7 +1053,11 @@ function enterApp(){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   const admin = role==='admin';
-  document.getElementById('adminControls').style.display = admin?'block':'none';
+  // المشرف: الصفحة تبدأ بالأقسام والطلاب مباشرة، وبطاقة الطالب تفتح كنافذة من الأسفل
+  document.getElementById('journey').style.display = admin?'none':'';
+  document.getElementById('logCard').style.display = admin?'none':'';
+  document.getElementById('toolsCard').style.display = admin?'':'none';
+  document.getElementById('adminControls').style.display = 'none';
   document.getElementById('adminOnly').style.display = admin?'block':'none';
   document.getElementById('studentItemsCard').style.display = admin?'none':'block';
   document.getElementById('rankCard').style.display = admin?'block':'none';   // الترتيب للمشرفين فقط
@@ -1005,9 +1093,15 @@ function addStudent(){
 }
 function selectStudent(id){
   if(role!=='admin')return;
-  selectedId=id; pendingDeleteId=null; renderAll();
-  const j=document.getElementById('journey');
-  if(j) j.scrollIntoView({behavior:'smooth', block:'start'});
+  selectedId=id; pendingDeleteId=null;
+  const inp=document.getElementById('ssInput'); if(inp) inp.value='';
+  openModal('stuSheet');
+  renderAll();
+}
+// الضغط على أي مكان في صف الطالب يفتح بطاقته (عدا مربع التحديد والأزرار)
+function rowClick(ev, id){
+  if(ev.target.closest('input,button,label')) return;
+  selectStudent(id);
 }
 function setSection(sec){
   activeSection=sec; pendingDeleteId=null; selSet.clear();
@@ -1024,15 +1118,26 @@ function setSection(sec){
 /* =================== تحديد جماعي =================== */
 function toggleSel(id, on){
   if(on) selSet.add(id); else selSet.delete(id);
-  renderRoster();
+  refreshSelectionUI();
 }
 function toggleAll(on){
   const ids=sectionArr(activeSection).map(s=>s.id);
   if(on) ids.forEach(id=>selSet.add(id));
   else ids.forEach(id=>selSet.delete(id));
-  renderRoster();
+  refreshSelectionUI();
 }
-function clearSel(){ selSet.clear(); renderRoster(); }
+function clearSel(){ selSet.clear(); refreshSelectionUI(); }
+// تحديث حالة التحديد في مكانها بدون إعادة رسم القائمة (عشان الصفحة ما تتحرك)
+function refreshSelectionUI(){
+  document.querySelectorAll('#roster .rrow[data-id]').forEach(r=>{
+    const on=selSet.has(r.dataset.id); r.classList.toggle('checked',on);
+    const c=r.querySelector('.rchk'); if(c) c.checked=on;
+  });
+  document.querySelectorAll('#roster .gchk input[data-gid]').forEach(c=>{
+    const mem=membersOf(c.dataset.gid); c.checked = mem.length>0 && mem.every(s=>selSet.has(s.id));
+  });
+  renderBulkBar(sectionArr(activeSection));
+}
 // منح/خصم نقاط لمجموعة من المعرّفات مع تسجيلها — يرجع عدد من تغيّرت نقاطهم
 // كل تغيير نقاط يمرّ من هنا: يسجّل الحركة، يحفظ آخر عملية للتراجع، ويحتفل بالمحطات الجديدة
 let lastAction=null;   // {label, changes:[{id, before, key}]}
@@ -1250,7 +1355,7 @@ function clearLeader(gid){
 }
 function toggleGroupSel(gid, on){
   membersOf(gid).forEach(s=>{ if(on) selSet.add(s.id); else selSet.delete(s.id); });
-  renderRoster();
+  refreshSelectionUI();
 }
 function applyGroupPts(gid){
   const inp=document.getElementById('gp_'+gid); if(!inp) return;
@@ -1285,8 +1390,9 @@ function setPoints(id,pts){
 }
 function stepPoints(delta){
   if(!selectedId)return;
-  awardPoints([selectedId], delta, delta>0?'إضافة يدوية':'خصم يدوي');
+  const n=awardPoints([selectedId], delta, delta>0?'إضافة يدوية':'خصم يدوي');
   renderJourney(); renderRoster();
+  if(n) toast((delta>0?'✅ +':'➖ ')+Math.abs(delta)+' — '+state.students[selectedId].name, false, true);
 }
 function onPtsInput(){
   if(!selectedId)return;
@@ -1353,7 +1459,7 @@ function deleteLog(key){
   delete state.log[key];
   if(db&&online) db.ref('log/'+key).remove();
   cacheLocal();
-  renderLog();
+  renderLog(); renderStudentSheet();
   toast('تم حذف الحركة من السجل');
 }
 
@@ -1458,6 +1564,7 @@ function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuic
 
 function renderJourney(){
   renderRanking();
+  renderStudentSheet();
   const s = selectedId ? state.students[selectedId] : null;
   const nameEl=document.getElementById('jName');
   renderAvatarEl(s);
@@ -1537,11 +1644,11 @@ function memberRowHtml(s, idx, gid){
     ? `<div class="confirm-del"><button class="yes" onclick="confirmDelete('${s.id}')">تأكيد ✓</button><button class="no" onclick="cancelDelete()">إلغاء</button></div>`
     : `<button class="del" onclick="askDelete('${s.id}')" title="حذف">✕</button>`;
   const leadBtn = '';   // القائد يُعيَّن الآن من نافذة «الأعضاء» في المجموعة
-  return `<div class="rrow ${sel} ${chk?'checked':''}">
+  return `<div class="rrow ${sel} ${chk?'checked':''}" data-id="${s.id}" onclick="rowClick(event,'${s.id}')">
     <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
     <div class="${rankCls}">${rankIc}</div>
     <div class="ravatar">${avatarMarkup(s)}</div>
-    <div class="rname" onclick="selectStudent('${s.id}')"><span class="nm">${escapeHtml(s.name)}</span><span class="code">#${s.code}</span></div>
+    <div class="rname"><span class="nm">${escapeHtml(s.name)}</span><span class="code">#${s.code}</span></div>
     <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
     <div class="rpts"><span class="pv">${clampPts(s.points)}</span><span class="pm">/${MAX_POINTS}</span></div>
     ${leadBtn}
@@ -1570,7 +1677,7 @@ function groupBlockHtml(g, i){
     : shown.map(s=>memberRowHtml(s, mem.indexOf(s), g.id)).join('');
   return `<div class="grp" style="--gc:${gc};--gc-50:${gc50}">
     <div class="grp-head">
-      <label class="gchk" title="تحديد كل المجموعة"><input type="checkbox" ${allOn?'checked':''} ${n?'':'disabled'} onchange="toggleGroupSel('${g.id}', this.checked)"></label>
+      <label class="gchk" title="تحديد كل المجموعة"><input type="checkbox" data-gid="${g.id}" ${allOn?'checked':''} ${n?'':'disabled'} onchange="toggleGroupSel('${g.id}', this.checked)"></label>
       <div class="grp-badge">${initial}</div>
       <div class="grp-title"><b>${escapeHtml(g.name)}</b><span class="gcount">${n} أعضاء</span>
         <div class="glead">${leadLine}</div></div>
@@ -1584,6 +1691,42 @@ function groupBlockHtml(g, i){
     <div class="grp-members">${rows}</div>
   </div>`;
 }
+/* =================== بطاقة الطالب (للمشرف) =================== */
+function renderStudentSheet(){
+  const m=document.getElementById('stuSheet'); if(!m || !m.classList.contains('show')) return;
+  const s = selectedId ? state.students[selectedId] : null;
+  if(!s){ m.classList.remove('show'); return; }
+  const pts=clampPts(s.points), {cur,next,rem}=stationInfo(pts);
+  document.getElementById('ssAv').innerHTML = avatarMarkup(s)+'<span class="cam">📷</span>';
+  document.getElementById('ssName').textContent = s.name;
+  const g = (s.groupId && state.groups[s.groupId]) ? ' · '+state.groups[s.groupId].name : '';
+  document.getElementById('ssMeta').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan']+g+' · #'+s.code;
+  document.getElementById('ssPts').textContent = pts;
+  document.getElementById('ssFill').style.width = fillPct(pts)+'%';
+  document.getElementById('ssSt').innerHTML = cur.icon+' '+escapeHtml(cur.name)
+    + (next ? ` ← ${next.icon} ${escapeHtml(next.name)} <em>(باقي ${rem} نقطة)</em>` : ' — <em>اكتملت الرحلة 🎉</em>');
+  const items=itemsArr(s.section||'fursan');
+  document.getElementById('ssItems').innerHTML = items.length
+    ? items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')
+    : '<div class="empty">لا توجد بنود لهذا القسم بعد.</div>';
+  const lg=logFor(s.id);
+  document.getElementById('ssLog').innerHTML = lg.length
+    ? lg.slice(0,60).map(e=>`<div class="lrow"><span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
+        <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
+        <div class="lv ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':''}${e.delta}</div>
+        <button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button></div>`).join('')
+    : '<div class="empty">لا توجد حركات بعد.</div>';
+}
+function ssApplyCustom(){
+  if(!selectedId) return;
+  const inp=document.getElementById('ssInput'); const d=parseNum(inp.value);
+  if(isNaN(d)||d===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
+  const n=awardPoints([selectedId], d, d>0?'إضافة يدوية':'خصم يدوي');
+  inp.value=''; renderJourney(); renderRoster();
+  if(!n){ toast(d>0?'وصل للحد الأعلى (2000)':'الرصيد صفر بالفعل',true); return; }
+  toast((d>0?'✅ أُضيفت ':'➖ خُصمت ')+Math.abs(d)+' — '+state.students[selectedId].name, false, true);
+}
+
 /* =================== الترتيب (المراكز والأسماء فقط) =================== */
 // ترتيب تنازلي بالنقاط؛ المتساوون يأخذون نفس المركز (1، 2، 2، 4)
 function rankedList(sec){
@@ -1666,50 +1809,43 @@ function renderRoster(){
 }
 function renderBulkBar(arr){
   const bar=document.getElementById('bulkBar'); if(!bar)return;
-  if(!arr.length){ bar.innerHTML=''; return; }
-  // نحافظ على القيمة المكتوبة والتركيز عند إعادة الرسم
-  const prev=document.getElementById('bulkPts');
-  const keepVal=prev?prev.value:'';
-  const wasFocused=prev && document.activeElement===prev;
+  if(!arr.length){ bar.innerHTML=''; renderDock(0); return; }
   const secIds=arr.map(s=>s.id);
   const n=secIds.filter(id=>selSet.has(id)).length;
   const allOn = n>0 && n===secIds.length;
   bar.classList.toggle('has-sel', n>0);
-  bar.innerHTML=`
-    <div class="bb-row">
+  // شريط ثابت الارتفاع فوق القائمة — أزرار الإضافة تظهر في الشريط السفلي
+  bar.innerHTML=`<div class="bb-row">
       <label class="ball"><input type="checkbox" ${allOn?'checked':''} onchange="toggleAll(this.checked)"> تحديد الكل</label>
-      <span class="bcount">${n ? n+' محدد' : 'لم يُحدَّد أحد'}</span>
-      ${n?`<button class="bclear" onclick="clearSel()">✕ مسح التحديد</button>`:''}
-    </div>
-    ${n?`<div class="bb-row bb-act">
+      <span class="bcount">${n ? n+' محدد' : 'لإضافة نقاط لأكثر من طالب'}</span>
+    </div>`;
+  renderDock(n);
+}
+// الشريط السفلي للإضافة الجماعية
+function renderDock(n){
+  const dock=document.getElementById('bulkDock'); if(!dock) return;
+  const show = role==='admin' && n>0;
+  dock.classList.toggle('show', show);
+  document.body.classList.toggle('has-dock', show);
+  if(!show) return;
+  const prev=document.getElementById('bulkPts');
+  const keepVal=prev?prev.value:''; const wasFocused=prev && document.activeElement===prev;
+  const items=itemsArr(activeSection), groups=groupsArr(activeSection);
+  dock.innerHTML=`
+    <div class="dk-top"><span class="dk-n">${n}</span><b>طالب محدد</b><button class="dk-clear" onclick="clearSel()">إلغاء التحديد ✕</button></div>
+    <div class="dk-row">
       <input class="input bpts" id="bulkPts" type="text" inputmode="numeric" placeholder="± نقاط" onkeydown="if(event.key==='Enter')applyBulk()">
       <button class="btn btn-primary bapply" onclick="applyBulk()">＋ إضافة للمحددين</button>
-    </div>`:''}
-    ${(n && groupsArr(activeSection).length) ? `<select class="input bgrp" onchange="assignSelectedToGroup(this.value); this.value='';">
+    </div>
+    ${items.length?`<div class="dk-items">${items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItemBulk('${it.id}')">${escapeHtml(it.name)} ${it.points>=0?'+':''}${it.points}</button>`).join('')}</div>`:''}
+    ${groups.length?`<select class="input bgrp" onchange="assignSelectedToGroup(this.value); this.value='';">
         <option value="">↪ نقل المحددين إلى مجموعة…</option>
-        ${groupsArr(activeSection).map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('')}
-        <option value="__none">بدون مجموعة</option>
-      </select>` : ''}
-    ${n?bulkItemsHtml():''}
-  `;
+        ${groups.map(g=>`<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('')}
+        <option value="__none">بدون مجموعة</option></select>`:''}`;
   const now=document.getElementById('bulkPts');
-  if(now){ now.value=keepVal; if(wasFocused){ now.focus(); const l=now.value.length; try{now.setSelectionRange(l,l);}catch(e){} } }
-  updateSelFab(n);
+  if(now){ now.value=keepVal; if(wasFocused) now.focus(); }
 }
-// زر عائم يظهر عند وجود تحديد وشريط التحديد خارج الشاشة
-let bulkBarVisible=true, lastSelN=0;
-function updateSelFab(n){
-  if(typeof n==='number') lastSelN=n;
-  const fab=document.getElementById('selFab'); if(!fab) return;
-  const nEl=document.getElementById('selFabN'); if(nEl) nEl.textContent=lastSelN;
-  fab.classList.toggle('show', role==='admin' && lastSelN>0 && !bulkBarVisible);
-}
-if('IntersectionObserver' in window){
-  document.addEventListener('DOMContentLoaded',()=>{
-    const bar=document.getElementById('bulkBar'); if(!bar) return;
-    new IntersectionObserver(es=>{ bulkBarVisible = es[0].isIntersecting; updateSelFab(); }).observe(bar);
-  });
-}
+function updateSelFab(n){ if(n===0) renderDock(0); }
 function bulkItemsHtml(){
   const arr=itemsArr(activeSection);
   if(!arr.length) return `<div class="bulk-items"><span class="bhint">أضف بنودًا في «بنود النقاط» لتطبيقها على المحددين.</span></div>`;
@@ -1795,7 +1931,12 @@ function savePin(){
 
 /* =================== ui utils =================== */
 function openModal(id){ document.getElementById(id).classList.add('show'); }
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function closeModal(id){
+  const m=document.getElementById(id); if(!m) return;
+  m.classList.remove('show');
+  // إغلاق بطاقة الطالب يلغي تحديده
+  if(id==='stuSheet' && role==='admin' && selectedId){ selectedId=null; pendingDeleteId=null; renderAll(); }
+}
 let toastT;
 // withUndo: يظهر زر «تراجع» لآخر عملية نقاط
 function toast(msg, err, withUndo){
@@ -1813,8 +1954,8 @@ function toast(msg, err, withUndo){
 
 /* =================== لمسات ممتعة: نبضة النقاط والاحتفال =================== */
 function bumpScore(){
-  const el=document.querySelector('.score-badge'); if(!el) return;
-  el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  ['.score-badge','#ssPtsBox'].forEach(q=>{ const el=document.querySelector(q); if(!el) return;
+    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); });
 }
 function awardFx(changes, promoted){
   if(selectedId && changes.some(c=>c.id===selectedId)) bumpScore();
@@ -1866,8 +2007,8 @@ function fmtDate(ts){
 }
 
 // إغلاق النوافذ بزر Esc أو بالضغط خارجها
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show')); });
-document.addEventListener('click', e=>{ if(e.target.classList && e.target.classList.contains('modal')) e.target.classList.remove('show'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.show').forEach(m=>closeModal(m.id)); });
+document.addEventListener('click', e=>{ if(e.target.classList && e.target.classList.contains('modal')) closeModal(e.target.id); });
 
 /* points input listener */
 document.addEventListener('DOMContentLoaded',()=>{
