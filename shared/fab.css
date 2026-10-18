@@ -1,0 +1,45 @@
+/* Floating contact button. Right side in Arabic, left in English; hidden while a project is open.
+   Themed through --fab-* custom properties set by each page. */
+.fab { position: fixed; bottom: var(--fab-bottom, 24px); z-index: 8000; font-family: var(--fab-font, inherit);
+  transition: opacity .35s ease, transform .35s ease; }
+.fab.is-right { right: 22px; } .fab.is-left { left: 22px; }
+.fab.is-hidden, .fab.is-away { opacity: 0; transform: translateY(20px) scale(.9); pointer-events: none; }
+.fab-btn { position: relative; width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--fab-bg, #2f8f77); color: var(--fab-fg, #fff); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 30px -6px var(--fab-glow, rgba(47,143,119,.55)); transition: transform .25s ease; }
+.fab-btn:hover { transform: translateY(-3px); }
+.fab-btn svg { width: 25px; height: 25px; transition: transform .35s cubic-bezier(.22,.61,.36,1), opacity .2s; }
+.fab-btn .i-x { position: absolute; opacity: 0; transform: rotate(-90deg); }
+.fab.is-open .fab-btn .i-phone { opacity: 0; transform: rotate(90deg); }
+.fab.is-open .fab-btn .i-x { opacity: 1; transform: none; }
+.fab-btn::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--fab-bg, #2f8f77); animation: fab-pulse 2.6s ease-out infinite; }
+.fab.is-open .fab-btn::after { animation: none; opacity: 0; }
+@keyframes fab-pulse { 0% { transform: scale(1); opacity: .55; } 75%, 100% { transform: scale(1.6); opacity: 0; } }
+
+.fab-panel { position: absolute; bottom: 72px; width: 272px; padding: 16px; border-radius: 20px;
+  background: var(--fab-panel, #f4f1ea); color: var(--fab-ink, #1d211e); border: 1px solid var(--fab-line, rgba(0,0,0,.08));
+  box-shadow: 0 24px 60px -12px rgba(0,0,0,.35); opacity: 0; visibility: hidden; transform: translateY(12px) scale(.96);
+  transition: opacity .25s ease, transform .3s cubic-bezier(.22,.61,.36,1), visibility .25s; }
+.fab.is-right .fab-panel { right: 0; transform-origin: bottom right; }
+.fab.is-left .fab-panel { left: 0; transform-origin: bottom left; }
+.fab.is-open .fab-panel { opacity: 1; visibility: visible; transform: none; }
+.fab-title { font: 500 11px/1 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--fab-muted, #7b8279); }
+.fab-num { display: block; margin: 12px 0 14px; direction: ltr; unicode-bidi: isolate; text-align: center; text-decoration: none; color: inherit;
+  font: 600 20px/1.2 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: .03em; }
+.fab-actions { display: flex; gap: 8px; }
+.fab-actions a { flex: 1; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-size: 13.5px; font-weight: 600; text-decoration: none; transition: transform .15s, background .2s; }
+.fab-actions a:active { transform: scale(.97); }
+.fab-actions svg { width: 16px; height: 16px; }
+.fab-call { background: var(--fab-bg, #2f8f77); color: var(--fab-fg, #fff); }
+.fab-wa { border: 1px solid var(--fab-line, rgba(0,0,0,.12)); color: inherit; }
+.fab-wa:hover { background: rgba(127,127,127,.1); }
+@media (max-width: 700px) {
+  .fab { bottom: var(--fab-bottom-m, var(--fab-bottom, 20px)); }
+  .fab.is-right { right: 16px; } .fab.is-left { left: 16px; }
+  .fab-btn { width: 54px; height: 54px; }
+  .fab-panel { width: min(272px, calc(100vw - 32px)); bottom: 68px; }
+}
+@media (prefers-reduced-motion: reduce) { .fab-btn::after { animation: none; } }
+
+:lang(ar) .fab-title { letter-spacing: 0; font-family: var(--fab-font, inherit); font-size: 12.5px; text-transform: none; }

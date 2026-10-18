@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>اختر التصميم — يوسف حكيم</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#111311">
+  <link rel="stylesheet" href="../shared/fonts.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #111311; color: #eef1ec; font-family: 'Readex Pro', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: clamp(32px, 6vw, 80px) clamp(16px, 4vw, 40px); }
+    h1 { margin: 0; font-size: clamp(32px, 5vw, 60px); font-weight: 600; line-height: 1.2; }
+    .lead { margin: 14px 0 0; color: #9aa39c; font-size: clamp(15px, 1.6vw, 18px); line-height: 1.9; max-width: 60ch; }
+    .grid { margin-top: clamp(32px, 5vw, 60px); display: grid; gap: 18px; }
+    .card { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 14px; align-items: end; padding: 14px; border-radius: 26px; background: #191c19; border: 1px solid rgba(238,241,236,.08);
+      text-decoration: none; color: inherit; transition: border-color .3s, transform .4s cubic-bezier(.22,.61,.36,1); }
+    .card:hover { border-color: #5ce1a6; transform: translateY(-4px); }
+    .shots { position: relative; }
+    .shots img { display: block; width: 100%; height: auto; border-radius: 16px; }
+    .phone { position: absolute; inset-inline-start: 16px; bottom: -6px; width: 22%; max-width: 150px; border-radius: 18px !important; border: 3px solid #111311; box-shadow: 0 20px 40px -10px rgba(0,0,0,.7); }
+    .info { padding: 6px 4px; }
+    .info b { display: block; font: 500 13px 'IBM Plex Mono', monospace; color: #5ce1a6; }
+    .info h2 { margin: 8px 0 6px; font-size: 26px; font-weight: 600; }
+    .info p { margin: 0; color: #9aa39c; font-size: 14px; line-height: 1.8; }
+    .go { display: inline-flex; margin-top: 14px; padding: 10px 16px; border-radius: 999px; background: #eef1ec; color: #111311; font-weight: 600; font-size: 14px; }
+    .note { margin-top: 40px; color: #7c847e; font-size: 14px; line-height: 1.9; }
+    @media (max-width: 760px) { .card { grid-template-columns: 1fr; } .phone { width: 28%; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>ثلاث اتجاهات لبورتفوليو يوسف حكيم</h1>
+    <p class="lead">افتح كل نموذج وجرّبه من الجوال والكمبيوتر: مرّر، افتح مشروع، كبّر الصور، بدّل اللغة. بعدها اختر النموذج اللي يمثلك — أو قل «خذ هذا من A وهذا من C».</p>
+    <div class="grid">
+      <a class="card" href="a/">
+        <div class="shots"><img src="thumbs/a-desktop.webp" width="1200" height="750" alt="Concept A"><img class="phone" src="thumbs/a-mobile.webp" width="420" height="909" alt=""></div>
+        <div class="info"><b>A</b><h2>حركي داكن</h2><p>سينمائي داكن، شاشة تحميل بعدّاد، اسم ضخم يتحرك مع التمرير، مؤشر فأرة مخصّص، وبطاقات مشاريع تتراكم فوق بعض.</p><span class="go">افتح النموذج ←</span></div>
+      </a>
+      <a class="card" href="b/">
+        <div class="shots"><img src="thumbs/b-desktop.webp" width="1200" height="750" alt="Concept B"><img class="phone" src="thumbs/b-mobile.webp" width="420" height="909" alt=""></div>
+        <div class="info"><b>B</b><h2>تحريري أنيق</h2><p>فاتح بهويتك الخضراء، ستارة افتتاحية، صور تنكشف بمسح ناعم، وقائمة مشاريع تظهر فيها صورة المشروع تتبع الماوس.</p><span class="go">افتح النموذج ←</span></div>
+      </a>
+      <a class="card" href="c/">
+        <div class="shots"><img src="thumbs/c-desktop.webp" width="1200" height="750" alt="Concept C"><img class="phone" src="thumbs/c-mobile.webp" width="420" height="909" alt=""></div>
+        <div class="info"><b>C</b><h2>غامر تفاعلي</h2><p>خلفية ألوان حيّة تتبدّل بلون كل مشروع، شاشات عائمة بعمق ثلاثي الأبعاد، عرض قصصي للمشاريع، ومربعات زجاجية تميل مع الماوس.</p><span class="go">افتح النموذج ←</span></div>
+      </a>
+    </div>
+    <p class="note">كل النماذج فيها: عربي/إنجليزي، عرض المشاريع بالتمرير العمودي مع التكبير، زر التواصل (يختفي داخل المشروع)، زر الرجوع في الجوال يقفل المشروع، والصور مضغوطة لتفتح أسرع.</p>
+  </div>
+</body>
+</html>
