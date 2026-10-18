@@ -23,9 +23,9 @@
   };
   var L = {
     ar: { workH: 'كل مشروع قصة — من المشكلة إلى الشاشة.', aboutH: 'تصميم يبدأ من الإنسان.', processH: 'أربع خطوات، تجربة واحدة واضحة.', expH: 'أدوات ومهارات أعمل بها.',
-      hint: 'اسحب يمين ويسار لتقليب الشاشات', open: 'افتح', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
+      hint: 'اسحب يمين ويسار لتقليب الشاشات', open: 'افتح', drag: 'اسحب', view: 'عرض', zoom: 'تكبير', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
     en: { workH: 'Every project is a story — from problem to screen.', aboutH: 'Design that starts with people.', processH: 'Four steps, one clear experience.', expH: 'The tools and skills I work with.',
-      hint: 'Swipe left and right to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
+      hint: 'Swipe left and right to flip through the screens', open: 'Open', drag: 'Drag', view: 'View', zoom: 'Zoom', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
   var BRAND = ['#2f8f77', '#4b3bd6', '#0f5bd8'];
@@ -36,7 +36,7 @@
   // Floating screens around the hero: [project, image index, left%, top%, width(vw), depth]
   var FLOAT = [
     ['studybuddy', 4, 1.5, 13, 16, .9], ['mister', 6, 84, 9, 8.5, .6], ['scrapbid', 1, 75, 68, 17, 1],
-    ['mindwell', 2, 4, 62, 7.5, .5], ['nusuk', 2, 85.5, 40, 11.5, .35], ['scrapbid', 15, 18, 76, 6.5, .3]
+    ['mindwell', 2, 4, 62, 7.5, .5], ['nusuk', 2, 88.5, 43, 9.5, .35], ['scrapbid', 15, 18, 76, 6.5, .3]
   ];
   // Fanned phone screens under the hero on small screens: [project, image index]
   var DECK = [['mindwell', 2], ['scrapbid', 13], ['mister', 0]];
@@ -92,7 +92,7 @@
       return '<div class="tile t-stat glass spot" data-tilt><b class="grad" data-n="' + n + '" data-s="' + suf + '">' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>';
     });
     var facts = t.facts.map(function (f) { return '<li><span>' + esc(f[0]) + '</span><strong>' + esc(f[1]) + '</strong></li>'; }).join('');
-    var tools = t.tools.concat(t.tools).map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('');
+    var tools = t.tools.concat(t.tools, t.tools, t.tools).map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('');
     var steps = t.process.map(function (s) {
       return '<div class="step glass spot" data-tilt><div class="step-ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" cx="32" cy="32" r="28"/></svg><b>' + s.n + '</b></div>' +
         '<div><h3 class="kufi">' + esc(s.t) + '</h3><p>' + esc(s.d) + '</p></div></div>';
@@ -164,6 +164,7 @@
           '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>LinkedIn ↗</strong></a>' +
           '<a class="c-item glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.ctaCV) + ' ↓</strong></a>' +
         '</div></div>' +
+        '<div class="sig kufi" aria-hidden="true"><span class="grad">' + esc(t.firstName + ' ' + t.lastName) + '</span></div>' +
         '<div class="footer"><span>' + esc(t.footer) + '</span><span>' + esc(t.localTime) + ' · <span class="clock" dir="ltr">--:--</span></span><button type="button" class="to-top">' + esc(t.backTop) + ' ↑</button></div>' +
       '</section>' +
       '</main>';
@@ -453,7 +454,7 @@
     gsap.to('.progress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: .4 } });
 
     /* intro */
-    var tl = gsap.timeline({ delay: first ? .1 : 0, defaults: { ease: 'expo.out' } });
+    var tl = gsap.timeline({ delay: first ? introAt : 0, defaults: { ease: 'expo.out' } });
     tl.from('.avail', { y: -16, opacity: 0, duration: 1 })
       .from('.hero-name .w > span', { yPercent: 120, rotation: 4, filter: 'blur(12px)', duration: 1.5, stagger: .14, clearProps: 'filter' }, .1)
       .from('.hero-role, .hero-intro', { y: 26, opacity: 0, filter: 'blur(6px)', duration: 1.2, stagger: .08, clearProps: 'filter' }, .45)
@@ -508,7 +509,71 @@
       gsap.from(s, { y: 60, rotationX: 18, transformPerspective: 900, opacity: 0, duration: 1.2, delay: (isSmall() ? 0 : i * .08), ease: 'expo.out', scrollTrigger: { trigger: isSmall() ? s : '.steps', start: 'top 88%' } });
     });
     gsap.from('.contact-card', { scale: .9, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.contact-card', start: 'top bottom', end: 'top 35%', scrub: 1 } });
+    gsap.from('.sig span', { yPercent: 75, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.sig', start: 'top bottom', end: 'bottom bottom', scrub: 1 } });
   }
+
+  /* ---------- custom cursor: a dot plus a trailing ring that labels what a click will do ---------- */
+  function initCursor() {
+    if (!fine || reduce) return;
+    var el = document.createElement('div');
+    el.className = 'cursor is-hidden';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<i class="cur-dot"></i><span class="cur-ring"><b></b></span>';
+    document.body.appendChild(el);
+    document.documentElement.classList.add('has-cursor');
+    var dot = el.querySelector('.cur-dot'), ring = el.querySelector('.cur-ring'), lab = ring.querySelector('b'), shown = false, last = '';
+    var dx = gsap.quickTo(dot, 'x', { duration: .12, ease: 'power3' }), dy = gsap.quickTo(dot, 'y', { duration: .12, ease: 'power3' });
+    var rx = gsap.quickTo(ring, 'x', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .5, ease: 'power3' });
+    window.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      if (!shown) { gsap.set([dot, ring], { x: e.clientX, y: e.clientY }); shown = true; }
+      el.classList.remove('is-hidden');
+      dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
+    });
+    document.addEventListener('pointerover', function (e) {
+      var t = e.target, l = L[S.lang()], label = '', link = false;
+      if (!t.closest) return;
+      if (t.closest('.sc-nav, .sc-open')) link = true;
+      else if (t.closest('.sc-stage')) label = ICON.swipe + esc(l.drag);
+      else if (t.closest('.pv-shot')) label = esc(l.zoom);
+      else if (t.closest('.sc-item, .fl')) label = esc(l.view);
+      else if (t.closest('a, button, [role="button"], label')) link = true;
+      if (label !== last) { if (label) lab.innerHTML = label; last = label; }
+      el.classList.toggle('is-label', !!label);
+      el.classList.toggle('is-link', link);
+    });
+    document.documentElement.addEventListener('mouseleave', function () { el.classList.add('is-hidden'); });
+    window.addEventListener('pointerdown', function () { el.classList.add('is-down'); });
+    window.addEventListener('pointerup', function () { el.classList.remove('is-down'); });
+  }
+
+  /* ---------- intro curtain (first visit per session) ---------- */
+  var introAt = .1;
+  function playLoader() {
+    var ld = document.querySelector('.loader');
+    if (!ld || document.documentElement.classList.contains('no-loader')) { if (ld) ld.remove(); return; }
+    try { sessionStorage.setItem('yh-intro', '1'); } catch (e) {}
+    if (lenis) lenis.stop();
+    var n = ld.querySelector('.ld-n'), o = { v: 0 };
+    gsap.timeline({ onComplete: function () { ld.remove(); if (lenis) lenis.start(); } })
+      .to(o, { v: 100, duration: 1.1, ease: 'power2.inOut', onUpdate: function () { n.textContent = pad(Math.round(o.v)); } })
+      .to(ld.querySelector('.ld-fill'), { scaleX: 1, duration: 1.1, ease: 'power2.inOut' }, 0)
+      .from(ld.querySelector('.ld-mark i'), { scale: .6, opacity: 0, duration: .8, ease: 'expo.out' }, 0)
+      .to(ld.querySelectorAll('.ld-mark, .ld-line, .ld-meta'), { y: -18, opacity: 0, duration: .35, ease: 'power2.in', stagger: .04 }, 1.15)
+      .to(ld, { clipPath: 'inset(0% 0% 100% 0%)', duration: .9, ease: 'expo.inOut' }, 1.3);
+    introAt = 1.65; // the hero starts settling as the curtain lifts
+  }
+
+  // The signature wordmark always spans the full content width.
+  function fitSig() {
+    var box = app.querySelector('.sig'), sp = box && box.querySelector('span');
+    if (!sp) return;
+    sp.style.fontSize = '100px';
+    var w = sp.getBoundingClientRect().width;
+    if (w) sp.style.fontSize = Math.min(100 * box.clientWidth / w * .97, 260) + 'px';
+  }
+  var fitT = null;
+  window.addEventListener('resize', function () { clearTimeout(fitT); fitT = setTimeout(fitSig, 150); });
 
   function mount(first) {
     if (ctx) ctx.revert();
@@ -516,6 +581,7 @@
     app.innerHTML = tpl();
     document.title = S.tr().brand + ' — ' + S.tr().role;
     bindUI();
+    fitSig();
     ctx = gsap.context(function () { motion(first); }, app);
     ST.refresh();
     window.dispatchEvent(new Event('page:render'));
@@ -531,7 +597,9 @@
   window.addEventListener('pv:close', function () { if (lenis) lenis.start(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menuOpen) setMenu(false); });
 
+  playLoader();
+  initCursor();
   mount(true);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitSig(); ST.refresh(); });
   window.addEventListener('load', function () { ST.refresh(); });
 })();

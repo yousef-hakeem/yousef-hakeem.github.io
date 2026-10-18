@@ -17,6 +17,9 @@ Agreed decisions (keep these as the source of truth for the redesign).
   drag/swipe (RTL-aware), arrows, keys or trackpad flip the active project's screens without opening it; tap opens
   the project at that screen. Light/dark theme toggle with a circular reveal (saved per visitor). Motion refined:
   directional wipes with depth, blur-in headings, magnetic CTAs, scroll progress bar.
+- Round 3 polish: once-per-visit intro curtain, custom desktop cursor (labels: Drag / View / Zoom), progressive-blur
+  bands around the phone stage, aligned process cards, fuller tools marquee, auto-fitted name signature in the footer.
+- Next: user reviews C, then decides whether it replaces the live root site.
 
 ## Must keep
 - All content: hero, about, process/methodology, focus & HCI expertise, projects, contact.

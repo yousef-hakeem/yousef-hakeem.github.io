@@ -19,10 +19,17 @@
       try { t = localStorage.getItem('yh-theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
       document.documentElement.dataset.theme = t;
       if (t === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f2f4f9');
+      // the intro curtain plays once per visit
+      try { if (sessionStorage.getItem('yh-intro') || matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('no-loader'); } catch (e) {}
     })();
   </script>
 </head>
 <body>
+  <div class="loader" aria-hidden="true">
+    <div class="ld-mark"><i class="on-grad">YH</i></div>
+    <div class="ld-line"><span class="ld-fill"></span></div>
+    <div class="ld-meta"><span>UI / UX · HCI</span><b class="ld-n">00</b></div>
+  </div>
   <div id="app"></div>
   <script src="../../shared/media.js"></script>
   <script src="../../shared/data.js"></script>
