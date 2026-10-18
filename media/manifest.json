@@ -1,4 +1,114 @@
 {
+ "scrapbid": [
+  {
+   "src": "media/scrapbid/00-cover.webp",
+   "sm": "media/scrapbid/00-cover-sm.webp",
+   "w": 3200,
+   "h": 2000
+  },
+  {
+   "src": "media/scrapbid/01-home-light.webp",
+   "sm": "media/scrapbid/01-home-light-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/02-home-dark.webp",
+   "sm": "media/scrapbid/02-home-dark-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/03-auctions-grid.webp",
+   "sm": "media/scrapbid/03-auctions-grid-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/04-listing-detail.webp",
+   "sm": "media/scrapbid/04-listing-detail-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/05-listing-detail-dark.webp",
+   "sm": "media/scrapbid/05-listing-detail-dark-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/07-register.webp",
+   "sm": "media/scrapbid/07-register-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/13-seller-workspace.webp",
+   "sm": "media/scrapbid/13-seller-workspace-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/08-admin-dashboard.webp",
+   "sm": "media/scrapbid/08-admin-dashboard-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/09-admin-dashboard-dark.webp",
+   "sm": "media/scrapbid/09-admin-dashboard-dark-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/10-admin-users.webp",
+   "sm": "media/scrapbid/10-admin-users-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/11-admin-revenue.webp",
+   "sm": "media/scrapbid/11-admin-revenue-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/14-admin-analytics.webp",
+   "sm": "media/scrapbid/14-admin-analytics-sm.webp",
+   "w": 2880,
+   "h": 1800
+  },
+  {
+   "src": "media/scrapbid/m01-home.webp",
+   "sm": "media/scrapbid/m01-home-sm.webp",
+   "w": 1170,
+   "h": 2532
+  },
+  {
+   "src": "media/scrapbid/m02-home-dark.webp",
+   "sm": "media/scrapbid/m02-home-dark-sm.webp",
+   "w": 1170,
+   "h": 2532
+  },
+  {
+   "src": "media/scrapbid/m03-listing.webp",
+   "sm": "media/scrapbid/m03-listing-sm.webp",
+   "w": 1170,
+   "h": 2532
+  },
+  {
+   "src": "media/scrapbid/m04-auctions.webp",
+   "sm": "media/scrapbid/m04-auctions-sm.webp",
+   "w": 1170,
+   "h": 2532
+  },
+  {
+   "src": "media/scrapbid/m05-admin.webp",
+   "sm": "media/scrapbid/m05-admin-sm.webp",
+   "w": 1170,
+   "h": 2532
+  }
+ ],
  "studybuddy": [
   {
    "src": "media/studybuddy/1-landing-ar.webp",

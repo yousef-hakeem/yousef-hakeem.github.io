@@ -70,8 +70,10 @@
       '<span class="pv-count">' + imgs.length + ' ' + esc(t.screens) + '</span>';
     list.dataset.kind = m.kind;
     list.innerHTML = imgs.map(function (im, i) {
-      return '<figure class="pv-shot" data-i="' + i + '">' +
-        '<img src="' + S.url(im.sm) + '" srcset="' + S.url(im.sm) + ' 760w, ' + S.url(im.src) + ' 1800w" sizes="' + sizes + '"' +
+      // Tall (phone) screens inside a web project sit three to a row instead of filling the width.
+      var tall = m.kind === 'web' && im.h > im.w * 1.1;
+      return '<figure class="pv-shot' + (tall ? ' is-tall' : '') + '" data-i="' + i + '">' +
+        '<img src="' + S.url(im.sm) + '" srcset="' + S.url(im.sm) + ' 760w, ' + S.url(im.src) + ' 1800w" sizes="' + (tall ? '(max-width: 700px) 100vw, 360px' : sizes) + '"' +
         ' width="' + im.w + '" height="' + im.h + '" alt="' + esc(p.title) + ' — ' + (i + 1) + '" loading="lazy" decoding="async">' +
         '<figcaption>' + pad(i + 1) + ' / ' + pad(imgs.length) + '</figcaption></figure>';
     }).join('');
@@ -90,12 +92,22 @@
     shots.forEach(function (s) { io.observe(s); });
   }
 
-  function open(id, fromHistory) {
+  function open(id, fromHistory, opts) {
     if (!S.meta[id]) return;
     if (!root) build();
     lastFocus = document.activeElement;
     render(id);
     scroller.scrollTop = 0;
+    if (opts && opts.screen > 0) {
+      // Opened from a specific screen: land on it.
+      var f = list.querySelector('.pv-shot[data-i="' + opts.screen + '"]');
+      if (f) {
+        f.classList.add('in');
+        requestAnimationFrame(function () {
+          scroller.scrollTop += f.getBoundingClientRect().top - scroller.getBoundingClientRect().top - 84;
+        });
+      }
+    }
     root.setAttribute('aria-hidden', 'false');
     root.classList.add('is-open');
     document.documentElement.classList.add('pv-lock');
@@ -314,7 +326,7 @@
   });
 
   window.Viewer = {
-    open: open,
+    open: function (id, opts) { open(id, false, opts); },
     close: requestClose,
     isOpen: function () { return !!current; },
     refresh: function () { if (current) render(current); }

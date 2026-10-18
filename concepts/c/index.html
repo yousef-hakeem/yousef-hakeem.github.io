@@ -12,7 +12,15 @@
   <link rel="stylesheet" href="../../shared/viewer.css">
   <link rel="stylesheet" href="../../shared/fab.css">
   <link rel="stylesheet" href="style.css">
-  <script>window.SITE_ROOT = '../../';</script>
+  <script>
+    window.SITE_ROOT = '../../';
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('yh-theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
+      document.documentElement.dataset.theme = t;
+      if (t === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f2f4f9');
+    })();
+  </script>
 </head>
 <body>
   <div id="app"></div>

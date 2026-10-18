@@ -7,13 +7,13 @@ window.SITE = {
   linkedin: 'https://www.linkedin.com/in/yousef-hakeem-b09663279/',
   cv: 'Yousef_Hakeem_CV.pdf',
 
-  order: ['studybuddy', 'qurrat', 'nusuk', 'mister', 'thoby', 'mindwell'],
+  order: ['scrapbid', 'studybuddy', 'qurrat', 'nusuk', 'mister', 'mindwell'],
   meta: {
+    scrapbid:   { kind: 'web',   accent: '#c4561f', cover: { ar: [0], en: [0] }, coverStyle: 'plain', isNew: true },
     studybuddy: { kind: 'web',   accent: '#6d5bd0', cover: { ar: [0], en: [1] } },
     qurrat:     { kind: 'web',   accent: '#1d6b5f', cover: { ar: [0], en: [0] } },
     nusuk:      { kind: 'watch', accent: '#c9a24a', cover: { ar: [1], en: [1] } },
     mister:     { kind: 'phone', accent: '#5b7cfa', cover: { ar: [0, 2, 4], en: [0, 2, 4] } },
-    thoby:      { kind: 'phone', accent: '#3a3a3a', cover: { ar: [0, 1, 3], en: [0, 1, 3] } },
     mindwell:   { kind: 'phone', accent: '#1f6b6e', cover: { ar: [1, 2, 3], en: [1, 2, 3] } }
   },
 
@@ -37,17 +37,17 @@ window.SITE = {
       aboutP: 'أعمل عبر دورة كاملة: من البحث وبناء النماذج الأوّلية إلى التصميم البصري، ثم اختبار قابلية الاستخدام والتكرار حتى تصبح التجربة جاهزة للإطلاق.',
       quote: 'البساطة ليست غياب التفاصيل، بل وضوح المقصد.',
       facts: [['الجامعة', 'جامعة أم القرى'], ['التخصص', 'تفاعل الإنسان مع الحاسب'], ['المجال', 'تصميم UI / UX'], ['اللغات', 'العربية · English']],
-      stats: [['6', 'مشاريع مختارة'], ['55+', 'شاشة مصمّمة'], ['3', 'منصّات: ويب · جوال · ساعة']],
+      stats: [['6', 'مشاريع مختارة'], ['65+', 'شاشة مصمّمة'], ['3', 'منصّات: ويب · جوال · ساعة']],
       workLabel: 'أعمال مختارة',
       workH: 'مشاريع صمّمتها من الفكرة إلى الشاشة الأخيرة.',
       viewCase: 'تصفّح الشاشات', screens: 'شاشة', nextProject: 'المشروع التالي',
-      featured: 'مشروع التخرّج',
+      featured: 'مشروع التخرّج', isNew: 'الأحدث',
       P: {
+        scrapbid: { title: 'سكراب بيد', sub: 'سوق مزادات الخردة والمعدات الصناعية', tag: 'منصّة مزادات · ويب + جوال + لوحة إدارة · UI/UX', desc: 'السوق السعودي لمزادات الخردة والمعدات الصناعية — يحوّل فائض المصانع إلى سيولة بمزاد شفاف. بائعون موثّقون بالسجل التجاري والهوية، مزايدة لحظية بعدّاد انتهاء، وبيع بسعر ثابت أو بمزاد، والتسجيل للمنشآت فقط بعد المراجعة والاعتماد. صمّمت التجربة كاملة: الواجهة وتصفّح المزادات وصفحة الإعلان والمزايدة، تسجيل المنشأة على خطوتين، لوحة البائع لإدارة القوائم والسومات وطلبات الشراء، ولوحة إدارة للتوثيق ومراجعة المحتوى والمستخدمين والإيرادات والتحليلات — بالعربية والإنجليزية، بوضعين فاتح وداكن، ونسخة للجوال.' },
         studybuddy: { title: 'StudyBuddy', sub: 'منصّة طلاب الجامعة', tag: 'مشروع تخرّج · ويب · UI/UX', desc: 'منصّة متكاملة لطلاب الجامعة تجمع المقرّرات والملاحظات واللقاءات ومساعداً ذكياً في نظام واحد، مع تتبّع المعدّل والتقدّم والشارات. صمّمت التجربة كاملة بالعربية والإنجليزية وبوضعين فاتح وداكن، مع تركيز على سهولة الاستخدام ووضوح المعلومات.' },
         qurrat: { title: 'جمعية قرة عين', sub: 'موقع جمعية + لوحة تحكم', tag: 'عمل لعميل · ويب + لوحة تحكم', desc: 'عمل حقيقي لجهة: موقع تعريفي متكامل لجمعية قرة عين للناشئين. صمّمت ونفّذت الواجهة الرئيسية و«من نحن» والبرامج ومواد الحوكمة ونموذج التواصل بهوية الجمعية الخضراء والذهبية — مع لوحة تحكم تمنح الإدارة تحكّماً كاملاً بالمحتوى دون أي برمجة.' },
         nusuk: { title: 'نُسُك', sub: 'مرافق الحج والعمرة على Apple Watch', tag: 'مشروع مادة · Apple Watch · UI', desc: 'مرافق ذكي للرحلة الروحية على Apple Watch — يعدّ أشواط الطواف والسعي مع اهتزاز عند إكمال كل شوط، ويعرض أوقات الصلاة وخريطة الحرم والاتجاهات ومؤشرات الصحة وزرّ طوارئ. واجهة داكنة فاخرة بلمسة ذهبية تناسب شاشة الساعة.' },
         mister: { title: 'مستر', sub: 'مساعد دراسي ذكي', tag: 'مشروع شخصي · مساعد AI · قيد التطوير', desc: 'تطبيق تعليمي بمساعد ذكي لطلاب المدارس مع لوحة لولي الأمر. للطالب: محادثة مع «مستر» لكل مادة، ومكتبة، ومهام، ونقاط وسلاسل تحفيزية. لولي الأمر: متابعة التقدّم والمحادثات والمهام. بشخصية ودّية (بومة) وواجهة تناسب الأعمار الصغيرة.' },
-        thoby: { title: 'ثوبي', sub: 'تفصيل الثياب حسب الطلب', tag: 'مشروع مادة · جوال · UI/UX', desc: 'تطبيق لتصميم الثوب حسب الطلب يسهّل التفصيل من المنزل: يحفظ القياسات، ويتيح اختيار القماش وتصميم الثوب وتصفّح التصاميم والأكثر مبيعاً — بتجربة تفصيل بسيطة وسلسة خطوة بخطوة.' },
         mindwell: { title: 'مايند ويل', sub: 'الصحة النفسية والتأمل', tag: 'تطبيق جوال · صحة نفسية · UI/UX', desc: 'تطبيق هادئ للصحة النفسية: تسجيل المزاج اليومي، وتمارين تنفّس موجّهة، وجلسات تأمل، ولوحة تحليلات تُظهر متوسّط المزاج والعوامل المؤثّرة — بواجهة عربية بألوان تبعث على الاسترخاء.' }
       },
       processLabel: 'المنهجية',
@@ -100,17 +100,17 @@ window.SITE = {
       aboutP: 'I work across the full cycle: from research and prototyping to visual design, then usability testing and iteration until the experience is ready to ship.',
       quote: 'Simplicity isn’t the absence of detail — it’s clarity of intent.',
       facts: [['University', 'Umm Al-Qura University'], ['Specialty', 'Human–Computer Interaction'], ['Field', 'UI / UX Design'], ['Languages', 'Arabic · English']],
-      stats: [['6', 'Selected projects'], ['55+', 'Screens designed'], ['3', 'Platforms: web · mobile · watch']],
+      stats: [['6', 'Selected projects'], ['65+', 'Screens designed'], ['3', 'Platforms: web · mobile · watch']],
       workLabel: 'Selected work',
       workH: 'Projects I designed from first idea to final screen.',
       viewCase: 'Browse screens', screens: 'screens', nextProject: 'Next project',
-      featured: 'Graduation project',
+      featured: 'Graduation project', isNew: 'Latest',
       P: {
+        scrapbid: { title: 'ScrapBid', sub: 'Industrial scrap & equipment auctions', tag: 'Auction platform · Web + mobile + admin · UI/UX', desc: 'Saudi Arabia’s marketplace for industrial scrap and equipment auctions — turning factory surplus into cash through transparent bidding. Verified sellers (commercial registration and ID), live bidding with countdowns, fixed-price or auction listings, and business-only sign-up with review and approval. I designed the whole experience: home and auction browsing, listing and bidding pages, two-step business registration, a seller workspace for listings, bids and purchase requests, and an admin console for verification, content review, users, revenue and analytics — in Arabic and English, light and dark, with a mobile version.' },
         studybuddy: { title: 'StudyBuddy', sub: 'University platform', tag: 'Graduation project · Web · UI/UX', desc: 'An all-in-one platform for university students that unifies courses, notes, meetings and an AI assistant — with GPA tracking, progress and badges. I designed the full experience in Arabic and English with light and dark modes, focused on usability and clarity.' },
         qurrat: { title: 'Qurrat Ayn', sub: 'NGO website + admin panel', tag: 'Client work · Web + Admin', desc: 'Real client work: a complete website for Qurrat Ayn, a children’s non-profit — landing, About, Programs, Governance and contact, in the association’s green and gold — plus an admin dashboard that gives staff full control of every section with no coding.' },
         nusuk: { title: 'Nusuk', sub: 'Hajj & Umrah on Apple Watch', tag: 'Course project · Apple Watch · UI', desc: 'A smart companion for the spiritual journey on Apple Watch — counts Tawaf and Sa’i laps with haptics, and shows prayer times, a Haram map, directions, health metrics and an SOS button. A premium dark UI with a gold touch, crafted for the small screen.' },
         mister: { title: 'Mister', sub: 'AI study companion', tag: 'Personal project · AI tutor · In progress', desc: 'An AI study companion for school students with a parent dashboard. Students chat with “Mister” per subject, browse a library, and earn points and streaks; parents follow progress, chats and tasks. Designed around a friendly owl mascot.' },
-        thoby: { title: 'Thoby', sub: 'Custom tailoring', tag: 'Course project · Mobile · UI/UX', desc: 'An app for designing custom thobes from home: it saves measurements, lets you pick fabric, design the thobe and browse best-sellers — a simple, smooth step-by-step tailoring flow.' },
         mindwell: { title: 'MindWell', sub: 'Mental health & mindfulness', tag: 'Mobile app · Mental health · UI/UX', desc: 'A calming mental-health app: daily mood check-ins, guided breathing, meditation sessions and an insights dashboard of mood and contributing factors — a soothing Arabic (RTL) interface.' }
       },
       processLabel: 'Process',
@@ -168,6 +168,7 @@ window.SITE.cover = function (id) {
     var im = S.img(id, i);
     return '<img class="' + (cls || '') + '" src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="" loading="lazy" decoding="async">';
   };
+  if (m.coverStyle === 'plain') return '<div class="cv cv-plain">' + pic(idx[0]) + '</div>';
   if (m.kind === 'web') {
     return '<div class="cv cv-web"><div class="cv-bar"><i></i><i></i><i></i></div>' + pic(idx[0]) + '</div>';
   }

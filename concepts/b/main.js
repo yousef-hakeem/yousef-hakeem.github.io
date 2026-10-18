@@ -31,7 +31,7 @@
     var links = ids.map(function (id) { return '<a href="#' + id + '" data-scroll="' + id + '">' + esc(t.nav[id]) + '</a>'; }).join('');
     var mlinks = ids.map(function (id, i) { return '<a href="#' + id + '" data-scroll="' + id + '">' + esc(t.nav[id]) + '<small>' + pad(i + 1) + '</small></a>'; }).join('');
     var band = t.marquee.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('');
-    var rows = S.order.slice(1).map(function (id, i) {
+    var rows = S.order.filter(function (id) { return id !== 'studybuddy'; }).map(function (id, i) {
       var p = t.P[id], im = S.img(id, S.meta[id].cover[S.lang()][0]);
       return '<div class="row" data-proj="' + id + '" data-img="' + S.url(im.sm) + '" tabindex="0" role="button" aria-label="' + esc(p.title) + '">' +
         '<span class="row-n">' + pad(i + 2) + '</span><h3>' + esc(p.title) + '</h3>' +
