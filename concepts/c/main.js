@@ -420,7 +420,11 @@
   /* ---------- motion ---------- */
   function motion(first) {
     var nav = app.querySelector('.nav');
-    ST.create({ start: 0, end: 'max', onUpdate: function (s) { nav.classList.toggle('is-hidden', s.direction === 1 && s.scroll() > innerHeight * .7 && !menuOpen); } });
+    // On phones the gallery pins to the top, so the nav stays out of its way while it is pinned.
+    var pinned = false;
+    function navState(down) { nav.classList.toggle('is-hidden', !menuOpen && (pinned || (down && window.scrollY > innerHeight * .7))); }
+    ST.create({ start: 0, end: 'max', onUpdate: function (s) { navState(s.direction === 1); } });
+    ST.create({ trigger: '.sc-wrap', start: 'top 80px', end: 'bottom 60%', onToggle: function (s) { pinned = s.isActive && isSmall(); navState(s.direction === 1); } });
     ['about', 'work', 'process', 'contact'].forEach(function (id) {
       ST.create({ trigger: '#' + id, start: 'top 50%', end: 'bottom 50%', onToggle: function (s) { if (s.isActive) app.querySelectorAll('.nav-links a').forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('data-scroll') === id); }); } });
     });

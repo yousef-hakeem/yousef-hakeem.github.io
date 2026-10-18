@@ -23,9 +23,9 @@
 .fab.is-right .fab-panel { right: 0; transform-origin: bottom right; }
 .fab.is-left .fab-panel { left: 0; transform-origin: bottom left; }
 .fab.is-open .fab-panel { opacity: 1; visibility: visible; transform: none; }
-.fab-title { font: 500 11px/1 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--fab-muted, #7b8279); }
+.fab-title { font: 500 11px/1 'IBM Plex Mono', 'Readex Pro', ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--fab-muted, #7b8279); }
 .fab-num { display: block; margin: 12px 0 14px; direction: ltr; unicode-bidi: isolate; text-align: center; text-decoration: none; color: inherit;
-  font: 600 20px/1.2 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: .03em; }
+  font: 600 20px/1.2 'IBM Plex Mono', 'Readex Pro', ui-monospace, monospace; letter-spacing: .03em; }
 .fab-actions { display: flex; gap: 8px; }
 .fab-actions a { flex: 1; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 7px;
   font-size: 13.5px; font-weight: 600; text-decoration: none; transition: transform .15s, background .2s; }
