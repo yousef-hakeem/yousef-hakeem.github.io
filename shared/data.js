@@ -64,7 +64,7 @@ window.SITE = {
         { h: 'التصميم والنمذجة', items: ['تحسين تجربة المستخدم', 'المخططات الهيكلية', 'نماذج تفاعلية عالية الدقة', 'أنظمة التصميم والمكوّنات'] },
         { h: 'التقييم والاختبار', items: ['اختبار قابلية الاستخدام', 'التقييم الإرشادي', 'اختبار A/B'] }
       ],
-      tools: ['Figma', 'FigJam', 'Adobe XD', 'Framer', 'Miro', 'Maze', 'Notion', 'HTML / CSS'],
+      tools: ['تفاعل الإنسان مع الحاسب', 'بحث المستخدم', 'قابلية الاستخدام', 'النماذج الأولية', 'المخططات الهيكلية', 'أنظمة التصميم', 'رحلة المستخدم', 'Figma', 'FigJam', 'Adobe XD', 'Framer', 'HTML / CSS'],
       timelineLabel: 'التعليم والخبرة',
       timeline: [
         { title: 'بكالوريوس هندسة البرمجيات', org: 'جامعة أم القرى', desc: 'تخصص دقيق في تفاعل الإنسان مع الحاسب (HCI): تصميم الواجهات، قابلية الاستخدام، وعلم النفس المعرفي للمستخدم.' },
@@ -127,7 +127,7 @@ window.SITE = {
         { h: 'Design & Prototyping', items: ['UX improvement', 'Wireframes', 'High-fidelity prototypes', 'Design systems'] },
         { h: 'Evaluation & Testing', items: ['Usability testing', 'Heuristic evaluation', 'A/B testing'] }
       ],
-      tools: ['Figma', 'FigJam', 'Adobe XD', 'Framer', 'Miro', 'Maze', 'Notion', 'HTML / CSS'],
+      tools: ['Human-Computer Interaction', 'UX Research', 'Usability Testing', 'Prototyping', 'Wireframing', 'Design Systems', 'User Journeys', 'Figma', 'FigJam', 'Adobe XD', 'Framer', 'HTML / CSS'],
       timelineLabel: 'Education & experience',
       timeline: [
         { title: 'BSc, Software Engineering', org: 'Umm Al-Qura University', desc: 'Focused specialty in Human–Computer Interaction (HCI): interface design, usability and user cognition.' },
