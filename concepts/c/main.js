@@ -32,6 +32,10 @@
     ['mindwell', 2, 4, 62, 7.5, .5], ['nusuk', 2, 85.5, 40, 11.5, .35], ['thoby', 3, 18, 79, 6.5, .3]
   ];
 
+  // Fanned phone screens under the hero on small screens: [project, image index]
+  var DECK = [['mindwell', 2], ['mister', 0], ['thoby', 0]];
+  var isSmall = function () { return window.innerWidth <= 960; };
+
   function tpl() {
     var t = S.tr(), l = L[S.lang()];
     var ids = ['about', 'work', 'process', 'contact'];
@@ -47,7 +51,7 @@
     var items = S.order.map(function (id, i) {
       var p = t.P[id];
       return '<article class="sc-item" data-proj="' + id + '" data-i="' + i + '" tabindex="0" role="button" aria-label="' + esc(p.title) + '" style="--c:' + S.meta[id].accent + '">' +
-        '<div class="sc-inline">' + S.cover(id) + '</div><div class="sc-body">' +
+        '<div class="sc-body">' +
         '<span class="sc-n">' + pad(i + 1) + ' — ' + pad(S.order.length) + (id === 'studybuddy' ? ' · ★ ' + esc(t.featured) : '') + '</span>' +
         '<p class="sc-tag">' + esc(p.tag) + '</p><h3 class="kufi">' + esc(p.title) + '</h3><p class="sc-sub">' + esc(p.sub) + '</p>' +
         '<p class="sc-desc">' + esc(p.desc) + '</p>' +
@@ -83,11 +87,12 @@
           '<p class="hero-intro">' + esc(t.intro) + '</p>' +
           '<div class="hero-cta"><a class="cta cta-grad" href="#work" data-scroll="work">' + esc(t.ctaWork) + ARROW.replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6') + '</a>' +
           '<a class="cta glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener">' + esc(t.ctaCV) + ' <small>PDF</small></a></div></div>' +
+        '<div class="hero-deck">' + DECK.map(function (d, k) { var im = S.img(d[0], d[1]); return '<img class="d' + (k + 1) + '" data-proj="' + d[0] + '" src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="' + esc(t.P[d[0]].title) + '">'; }).join('') + '</div>' +
         '<span class="scroll-hint" aria-hidden="true"></span>' +
       '</section>' +
 
       '<section class="showcase" id="work"><div class="sc-head"><span class="eyebrow glass"><b>02</b>' + esc(t.workLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.workH) + '</h2></div>' +
-        '<div class="sc-wrap"><div class="sc-sticky"><div class="sc-stage glass">' + visuals + '</div><div class="sc-dots">' + dots + '</div></div>' +
+        '<div class="sc-wrap"><div class="sc-sticky"><div class="sc-stage glass" data-proj="' + S.order[0] + '" role="button" tabindex="0" aria-label="' + esc(t.viewCase) + '"><div class="sc-label"><b>01 / ' + pad(S.order.length) + '</b><span>' + esc(t.P[S.order[0]].title) + '</span></div>' + visuals + '</div><div class="sc-dots">' + dots + '</div></div>' +
         '<div class="sc-list">' + items + '</div></div></section>' +
 
       '<section id="about"><div class="sc-head"><span class="eyebrow glass"><b>01</b>' + esc(t.aboutLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.aboutH) + '</h2></div>' +
@@ -184,22 +189,39 @@
 
     /* showcase: sticky visual follows the active story block */
     var items = gsap.utils.toArray('.sc-item'), visuals = gsap.utils.toArray('.sc-visual'), dots = gsap.utils.toArray('.sc-dots i');
+    var stage = app.querySelector('.sc-stage'), label = app.querySelector('.sc-label');
     var active = -1;
     function activate(i) {
       if (i === active) return;
       active = i;
       items.forEach(function (it, k) { it.classList.toggle('is-active', k === i); });
       dots.forEach(function (d, k) { d.classList.toggle('is-on', k === i); });
+      var id = S.order[i];
+      stage.setAttribute('data-proj', id);
+      label.querySelector('b').textContent = pad(i + 1) + ' / ' + pad(S.order.length);
+      label.querySelector('span').textContent = S.tr().P[id].title;
       visuals.forEach(function (v, k) {
         if (reduce) { gsap.set(v, { autoAlpha: k === i ? 1 : 0 }); return; }
-        if (k === i) gsap.fromTo(v, { autoAlpha: 0, scale: .9, rotationX: 8 }, { autoAlpha: 1, scale: 1, rotationX: 0, duration: .9, ease: 'expo.out', overwrite: true });
-        else gsap.to(v, { autoAlpha: 0, scale: 1.04, duration: .5, ease: 'power2.out', overwrite: true });
+        if (k === i) {
+          gsap.set(v, { zIndex: 2 });
+          gsap.fromTo(v, { autoAlpha: 1, clipPath: 'circle(0% at 50% 55%)' }, { clipPath: 'circle(140% at 50% 55%)', duration: 1.1, ease: 'expo.inOut', overwrite: true });
+          gsap.fromTo(v.querySelector('.cv'), { scale: 1.18, rotationX: 10 }, { scale: 1, rotationX: 0, duration: 1.3, ease: 'expo.out', overwrite: true });
+        } else {
+          gsap.set(v, { zIndex: 1 });
+          gsap.to(v, { autoAlpha: 0, duration: .4, delay: .55, ease: 'none', overwrite: true });
+        }
       });
-      setPalette(S.order[i]);
+      setPalette(id);
     }
-    items.forEach(function (it, i) {
-      ST.create({ trigger: it, start: 'top 55%', end: 'bottom 45%', onToggle: function (s) { if (s.isActive) activate(i); } });
-    });
+    // The active story is the last one whose top has crossed the activation line. Computing it on every
+    // update (instead of enter/leave toggles) stays correct even when the page jumps or is flung fast.
+    // On phones the visual pins to the top half, so the line sits lower on the screen.
+    function pickActive() {
+      var line = window.innerHeight * (isSmall() ? 0.74 : 0.55), idx = 0;
+      items.forEach(function (it, k) { if (it.getBoundingClientRect().top < line) idx = k; });
+      activate(idx);
+    }
+    ST.create({ trigger: '.sc-list', start: 'top bottom', end: 'bottom top', onUpdate: pickActive, onRefresh: pickActive });
     ST.create({ trigger: '.showcase', start: 'top 60%', end: 'bottom 40%', onLeave: function () { setPalette(null); }, onLeaveBack: function () { setPalette(null); active = -1; } });
     activate(0);
     setPalette(null, true);
@@ -224,9 +246,26 @@
     gsap.utils.toArray('[data-reveal]').forEach(function (el) {
       gsap.from(el.querySelectorAll('.w > span'), { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: .04, scrollTrigger: { trigger: el, start: 'top 88%' } });
     });
-    gsap.utils.toArray('[data-fade], .tile, .sc-item .sc-body, .sc-item .sc-inline').forEach(function (el) {
+    gsap.utils.toArray('[data-fade], .sc-item .sc-body').forEach(function (el) {
       gsap.from(el, { y: 50, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
     });
+    gsap.utils.toArray('.tile').forEach(function (el) {
+      gsap.from(el, { y: 70, rotationX: 22, opacity: 0, transformPerspective: 900, transformOrigin: '50% 100%', duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+    });
+
+    /* mobile hero deck: fanned screens that spread as you scroll */
+    var deck = app.querySelector('.hero-deck');
+    if (deck && getComputedStyle(deck).display !== 'none') {
+      var d1 = deck.querySelector('.d1'), d2 = deck.querySelector('.d2'), d3 = deck.querySelector('.d3');
+      // Fanned resting state; entrance animates the deck, scroll spreads the cards, then a gentle idle float.
+      gsap.set([d1, d2, d3], { x: 0, xPercent: -50 });
+      var dst = { trigger: deck, start: 'top 85%', end: 'bottom top', scrub: true };
+      gsap.fromTo(d1, { xPercent: -98, rotation: -9, y: 22 }, { xPercent: -125, rotation: -20, y: 40, ease: 'none', scrollTrigger: dst });
+      gsap.fromTo(d3, { xPercent: -2, rotation: 9, y: 22 }, { xPercent: 25, rotation: 20, y: 40, ease: 'none', scrollTrigger: dst });
+      gsap.fromTo(d2, { scale: 1, y: 0 }, { scale: 1.08, y: -30, ease: 'none', scrollTrigger: dst });
+      gsap.from(deck, { y: 90, opacity: 0, scale: .9, duration: 1.3, delay: .35, ease: 'expo.out' });
+      gsap.to(deck, { y: -10, duration: 2.4, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 1.8 });
+    }
     gsap.utils.toArray('.t-stat b').forEach(function (b) {
       var end = +b.dataset.n, suf = b.dataset.s || '', o = { v: 0 };
       b.textContent = '0' + suf;
@@ -236,7 +275,7 @@
     var loop = gsap.to(row, { xPercent: -50, ease: 'none', duration: 30, repeat: -1 });
     gsap.utils.toArray('.step').forEach(function (s, i) {
       gsap.to(s.querySelector('.fg'), { strokeDashoffset: 176 - 176 * (i + 1) / 4, duration: 1.6, ease: 'power2.inOut', scrollTrigger: { trigger: s, start: 'top 85%' } });
-      gsap.from(s, { y: 60, opacity: 0, duration: 1, delay: i * .08, ease: 'power3.out', scrollTrigger: { trigger: '.steps', start: 'top 85%' } });
+      gsap.from(s, { y: 60, rotationX: 18, transformPerspective: 900, opacity: 0, duration: 1.1, delay: (isSmall() ? 0 : i * .08), ease: 'expo.out', scrollTrigger: { trigger: isSmall() ? s : '.steps', start: 'top 88%' } });
     });
     gsap.from('.contact-card', { scale: .9, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.contact-card', start: 'top bottom', end: 'top 35%', scrub: true } });
     loop.play();

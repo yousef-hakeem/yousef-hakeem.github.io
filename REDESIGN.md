@@ -8,6 +8,13 @@ Agreed decisions (keep these as the source of truth for the redesign).
 - **Process:** Show design concepts first, pick one, then build the full site.
 - **Reference:** 21st.dev components (via MCP) + Adobe for Creativity (fonts, type palettes, image work).
 
+## Decision (after concepts)
+- **Chosen: Concept C — Immersive Showcase** (`/concepts/c/`).
+- Desktop loved as-is. Phone must feel just as strong: the sticky scroll-story of projects now runs on phones too
+  (visual pinned to the top half, stories scroll underneath, circular wipe + aurora colour per project),
+  fanned hero deck on phones, 3D tile entrances, and roomier line-height for Noto Kufi headings (no overlaps).
+- Pending: add the ScrapBid project (needs a working link or screenshots + short description).
+
 ## Must keep
 - All content: hero, about, process/methodology, focus & HCI expertise, projects, contact.
 - Arabic (RTL) + English (LTR) toggle, light + dark mode.
