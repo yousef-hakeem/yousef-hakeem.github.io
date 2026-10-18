@@ -1,4 +1,4 @@
-/* Concept C — Immersive Showcase */
+/* Yousef Hakeem — portfolio */
 (function () {
   'use strict';
   var S = window.SITE, gsap = window.gsap, ST = window.ScrollTrigger;

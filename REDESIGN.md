@@ -19,7 +19,9 @@ Agreed decisions (keep these as the source of truth for the redesign).
   directional wipes with depth, blur-in headings, magnetic CTAs, scroll progress bar.
 - Round 3 polish: once-per-visit intro curtain, custom desktop cursor (labels: Drag / View / Zoom), progressive-blur
   bands around the phone stage, aligned process cards, fuller tools marquee, auto-fitted name signature in the footer.
-- Next: user reviews C, then decides whether it replaces the live root site.
+- Phone gallery tightened (shorter, slimmer chrome, nav hidden while pinned); location set to Dammam, Eastern Province.
+- **Approved and live:** Concept C is now the official site at the root (`index.html` + `assets/site.*`).
+  The old exported site and concepts A/B were removed (kept in git history); `/concepts/` redirects home.
 
 ## Must keep
 - All content: hero, about, process/methodology, focus & HCI expertise, projects, contact.
