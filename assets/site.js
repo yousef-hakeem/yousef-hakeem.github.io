@@ -44,7 +44,7 @@
   /* ---------- language + theme ---------- */
   function setLang(l) { document.documentElement.lang = l; document.documentElement.dir = S.t[l].dir; try { localStorage.setItem('yh-lang', l); } catch (e) {} }
   var saved = null; try { saved = localStorage.getItem('yh-lang'); } catch (e) {}
-  setLang(saved === 'en' ? 'en' : 'ar');
+  setLang(saved === 'ar' ? 'ar' : 'en'); // English by default; Arabic is one tap away
 
   function theme() { return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'; }
   function applyTheme(th) {
