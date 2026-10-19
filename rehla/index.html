@@ -552,6 +552,37 @@
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18);}
   .stp.nxt{background:linear-gradient(160deg,rgba(255,194,102,.25),rgba(245,141,9,.18)); border-color:rgba(255,194,102,.45); color:#FFE1B0;}
   .stp-arr{font-weight:800; color:rgba(255,255,255,.5);}
+  .sh-rank{display:grid; grid-template-columns:1.15fr 1fr; gap:10px; margin-top:16px;}
+  .rk-tile{display:flex; flex-direction:column; align-items:center; text-align:center; padding:11px 8px 10px; border-radius:18px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);}
+  .rk-tile.main{background:linear-gradient(160deg,rgba(255,194,102,.26),rgba(245,141,9,.14)); border-color:rgba(255,194,102,.5);}
+  .rk-k{font-size:12px; font-weight:800; color:rgba(255,255,255,.78);}
+  .rk-tile.main .rk-k{color:#FFE1B0;}
+  .rk-v{display:flex; align-items:baseline; justify-content:center; gap:5px; margin-top:3px;}
+  .rk-v i{font-style:normal; font-size:22px; align-self:center;}
+  .rk-v b{font-size:32px; font-weight:800; line-height:1.05;}
+  .rk-tile.main .rk-v b{color:#FFC266; font-size:36px;}
+  .rk-v small{font-size:12.5px; font-weight:800; color:rgba(255,255,255,.65);}
+  .rk-s{font-size:11.5px; font-weight:700; color:rgba(255,255,255,.65); margin-top:2px;}
+  .rk-tile.none .rk-v b{color:rgba(255,255,255,.5);}
+  .sq-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+  @media(max-width:420px){ .sq-grid{grid-template-columns:repeat(2,1fr);} }
+  .sq{--qc:#1F7E7F; --qb:#E8F6F6; position:relative; display:flex; flex-direction:column; align-items:center; padding:14px 6px 11px; border-radius:16px;
+    background:var(--qb); border:1.5px solid transparent; text-align:center;}
+  .sq.q2{--qc:#C76A00; --qb:#FEF3E2;} .sq.q3{--qc:#C8371F; --qb:#FEEDEA;} .sq.q4{--qc:#2E387E; --qb:#ECEEF8;}
+  .sq-n{font-size:12.5px; font-weight:800; color:var(--qc);}
+  .sq b{font-size:26px; font-weight:800; color:var(--navy); line-height:1.15; margin-top:4px; font-variant-numeric:tabular-nums;}
+  .sq small{font-size:11.5px; font-weight:700; color:var(--muted);}
+  .sq.cur{border-color:var(--qc); box-shadow:0 6px 16px rgba(29,28,68,.08);}
+  .sq-badge{position:absolute; top:-9px; left:50%; transform:translateX(-50%); font-size:10.5px; font-weight:800; color:#fff; background:var(--qc);
+    padding:1px 9px; border-radius:999px; white-space:nowrap;}
+  .sq.locked{background:#F4F5F9; border:1.5px dashed #D8DBE6;}
+  .sq.locked .sq-n{color:#9A9EB5;}
+  .sq b.lk{font-size:20px; opacity:.6;}
+  .sq-sum{margin-top:12px; padding:10px 12px; border-radius:12px; background:var(--soft); border:1px solid var(--line); font-size:13.5px; font-weight:700; color:var(--navy); text-align:center;}
+  .sq-sum b{color:var(--orange-d); font-size:16px;}
+  .lq{display:inline-block; font-size:10.5px; font-weight:800; padding:0 7px; border-radius:999px; margin-inline-end:4px; background:#E8F6F6; color:#1F7E7F;}
+  .lq.q2{background:#FEF3E2; color:#B65F00;} .lq.q3{background:#FEEDEA; color:#C23A24;} .lq.q4{background:#ECEEF8; color:#2E387E;}
   .sh-goal{margin-top:16px; padding:13px 14px; border-radius:18px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.13);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
   .shg-top{display:flex; align-items:center; gap:11px;}
@@ -943,6 +974,7 @@
         </div>
         <div class="sh-stline" id="jStation"></div>
       </div>
+      <div class="sh-rank" id="jRank"></div>
       <div class="sh-goal" id="goalBox">
         <div class="shg-top">
           <span class="shg-ic" id="goalIc">🎯</span>
@@ -952,6 +984,13 @@
       </div>
       <div class="sh-chips" id="jChips"></div>
       <div class="motiv" id="jMotiv"></div>
+    </section>
+
+    <!-- ===== STUDENT: نقاطه في كل ربع ===== -->
+    <section class="card sq-card" id="qCard" style="display:none">
+      <div class="card-head"><h2><span class="h-ic teal">📊</span>نقاطي في الأرباع</h2><span class="sub" id="qCardSub"></span></div>
+      <div class="sq-grid" id="sqGrid"></div>
+      <div class="sq-sum" id="sqSum"></div>
     </section>
 
     <!-- ===== STUDENT: journey map ===== -->
@@ -1274,6 +1313,13 @@ function qPoints(s,q){
   if(q===1) return Math.max(0, clampPts(s.points) - qExtra(s,2) - qExtra(s,3) - qExtra(s,4));
   return qExtra(s,q);
 }
+function curQuarter(){ let c=1; for(let q=1;q<=4;q++) if(quarterOpen(q)) c=q; return c; }   // أحدث ربع مفتوح
+// مركز الطالب في قسمه حسب دالة نقاط (المتساوون نفس المركز)
+function rankOf(id, fn){
+  const me=state.students[id]; if(!me) return null;
+  const arr=sectionArr(me.section||'fursan'), v=fn(me);
+  return { rank: arr.filter(s=>fn(s)>v).length+1, of: arr.length, v };
+}
 function aPts(s){ return role==='admin' ? qPoints(s, activeQuarter) : clampPts(s.points); }   // النقاط حسب الواجهة
 function entryQ(e){ return Number(e && e.q) || 1; }
 let selSet=new Set();          // الطلاب المحددون للإضافة الجماعية
@@ -1424,6 +1470,7 @@ function enterApp(){
   // المشرف: الصفحة تبدأ بالأقسام والطلاب مباشرة، وبطاقة الطالب تفتح كنافذة من الأسفل
   document.getElementById('journey').style.display = admin?'none':'';
   document.getElementById('pathCard').style.display = admin?'none':'';
+  document.getElementById('qCard').style.display = admin?'none':'';
   document.getElementById('logCard').style.display = '';
   document.getElementById('toolsCard').style.display = admin?'':'none';
   document.getElementById('adminControls').style.display = 'none';
@@ -2271,6 +2318,30 @@ function renderJourney(){
     : `<span class="stp nxt">🏆 وصلت القمة</span>`;
   updateMotiv();
   const wk=weekGain(selectedId);
+  // مركزه: في الربع الحالي + العام (مجموع الأرباع)
+  const cq=curQuarter();
+  const rq=rankOf(selectedId, x=>qPoints(x,cq)), rt=rankOf(selectedId, x=>clampPts(x.points));
+  const medal=r=> r===1?'🥇':r===2?'🥈':r===3?'🥉':'🏅';
+  const rTile=(r, k, sub, main)=> (r && r.v>0)
+    ? `<div class="rk-tile ${main?'main':''} ${r.rank<=3?'top':''}"><span class="rk-k">${k}</span>
+         <span class="rk-v"><i>${medal(r.rank)}</i><b>${r.rank}</b><small>من ${r.of}</small></span><span class="rk-s">${sub}</span></div>`
+    : `<div class="rk-tile ${main?'main':''} none"><span class="rk-k">${k}</span>
+         <span class="rk-v"><i>🎯</i><b>—</b></span><span class="rk-s">اجمع نقاطك ويطلع مركزك</span></div>`;
+  document.getElementById('jRank').innerHTML =
+    rTile(rq, 'مركزك في '+Q_NAMES[cq], (rq?rq.v:0)+' نقطة في هذا الربع', true) +
+    rTile(rt, 'مركزك العام', 'مجموع كل الأرباع', false);
+  // نقاطه في كل ربع
+  document.getElementById('sqGrid').innerHTML = [1,2,3,4].map(q=>{
+    const open=quarterOpen(q), v=qPoints(s,q);
+    return `<div class="sq q${q} ${q===cq?'cur':''} ${open?'':'locked'}">
+      ${q===cq?'<span class="sq-badge">الحالي</span>':''}
+      <span class="sq-n">${Q_NAMES[q]}</span>
+      ${open ? `<b>${v}</b><small>نقطة</small>` : `<b class="lk">🔒</b><small>قريبًا</small>`}
+    </div>`;
+  }).join('');
+  setText('qCardSub', 'المجموع '+pts);
+  document.getElementById('sqSum').innerHTML = `🗺️ كل نقاط الأرباع تنجمع في خط سيرك: <b>${pts}</b> نقطة`;
+
   document.getElementById('jChips').innerHTML =
     `<span class="sh-chip">${wk>0 ? `📈 <b>${sn(wk)}</b> هذا الأسبوع` : '💪 ابدأ أسبوعك بقوة'}</span>`+
     `<span class="sh-chip">🏁 المحطة <b>${stationIdx(pts)+1}</b> من ${STATIONS.length}</span>`;
@@ -2659,7 +2730,7 @@ function renderLog(){
   const LIM=5, shown = (role==='student' && !logFull) ? arr.slice(0,LIM) : arr;
   box.innerHTML=shown.map(e=>`<div class="lrow">
     <span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
-    <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld">${fmtDate(e.ts)}</div></div>
+    <div class="linfo"><b>${escapeHtml(e.itemName)}</b><div class="ld"><span class="lq q${entryQ(e)}">${Q_NAMES[entryQ(e)]}</span> ${fmtDate(e.ts)}</div></div>
     <div class="lv ${e.delta>=0?'pos':'neg'}">${sn(e.delta)}</div>
     ${role==='admin'?`<button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button>`:''}
   </div>`).join('')
