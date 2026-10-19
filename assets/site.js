@@ -99,6 +99,9 @@
     }).join('');
     var exp = t.expertise.map(function (g) { return '<div class="exp-col glass spot" data-fade><h3 class="kufi">' + esc(g.h) + '</h3><ul>' + g.items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>'; }).join('');
     var tl = t.timeline.map(function (e, i) { return '<div class="tl-item"><b>' + pad(i + 1) + '</b><div><h3>' + esc(e.title) + '</h3><small>' + esc(e.org) + '</small></div><p>' + esc(e.desc) + '</p></div>'; }).join('');
+    var cvLinks = [[S.cv, t.cvUX, t.cvUXd], [S.cvIT, t.cvIT, t.cvITd]].map(function (c) {
+      return '<a role="menuitem" href="' + S.url(c[0]) + '" target="_blank" rel="noopener"><b>' + esc(c[1]) + '</b><small>' + esc(c[2]) + '</small><i>PDF ↓</i></a>';
+    }).join('');
     var name = '<span class="w"><span>' + esc(t.firstName) + '</span></span> <span class="w"><span class="grad">' + esc(t.lastName) + '</span></span>';
     var dark = theme() === 'dark';
 
@@ -113,16 +116,17 @@
           '<a class="gbtn gbtn-grad on-grad" href="#contact" data-scroll="contact">' + esc(t.nav.contact) + '</a>' +
           '<button class="gbtn menu-btn" type="button">' + esc(t.menu) + '</button></div></header>' +
       '<div class="menu"><nav class="menu-links">' + links + '</nav><div class="menu-foot"><a class="gbtn" href="mailto:' + S.email + '">' + esc(t.emailLbl) + '</a>' +
-        '<a class="gbtn" href="' + S.whatsapp + '" target="_blank" rel="noopener">' + esc(t.whatsapp) + '</a><a class="gbtn" href="' + S.url(S.cv) + '" target="_blank" rel="noopener">' + esc(t.ctaCV) + ' PDF</a></div></div>' +
+        '<a class="gbtn" href="' + S.whatsapp + '" target="_blank" rel="noopener">' + esc(t.whatsapp) + '</a><a class="gbtn" href="' + S.url(S.cv) + '" target="_blank" rel="noopener">' + esc(t.cvUX) + ' PDF</a><a class="gbtn" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener">' + esc(t.cvIT) + ' PDF</a></div></div>' +
 
       '<main>' +
       '<section class="hero" id="top" data-fab-hide><div class="floaters">' + floaters + '</div>' +
         '<div class="hero-inner"><span class="avail glass"><i></i>' + esc(t.available) + '</span>' +
           '<h1 class="hero-name kufi" aria-label="' + esc(t.fullName) + '">' + name + '</h1>' +
-          '<p class="hero-role">' + esc(t.role) + ' <span>· ' + esc(t.roleSub) + '</span></p>' +
+          '<p class="hero-role">' + esc(t.role) + ' <span class="rs"><i>·</i> ' + esc(t.roleSub) + '</span></p>' +
           '<p class="hero-intro">' + esc(t.intro) + '</p>' +
           '<div class="hero-cta"><a class="cta cta-grad on-grad" data-mag href="#work" data-scroll="work">' + esc(t.ctaWork) + ICON.down + '</a>' +
-          '<a class="cta glass" data-mag href="' + S.url(S.cv) + '" target="_blank" rel="noopener">' + esc(t.ctaCV) + ' <small>PDF</small></a></div></div>' +
+          '<div class="cv-pick"><button class="cta glass cv-toggle" data-mag type="button" aria-expanded="false" aria-haspopup="true">' + esc(t.ctaCV) + ' <small>PDF</small>' + ICON.down + '</button>' +
+            '<div class="cv-menu glass" role="menu">' + cvLinks + '</div></div></div></div>' +
         '<div class="hero-deck">' + DECK.map(function (d, k) { var im = S.img(d[0], d[1]); return '<img class="d' + (k + 1) + '" data-proj="' + d[0] + '" src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="' + esc(t.P[d[0]].title) + '">'; }).join('') + '</div>' +
         '<span class="scroll-hint" aria-hidden="true"></span>' +
       '</section>' +
@@ -162,7 +166,9 @@
           '<a class="c-item glass" href="tel:' + S.phone + '"><span>' + esc(t.call) + '</span><strong>' + S.phoneDisplay + '</strong></a>' +
           '<a class="c-item glass" href="' + S.whatsapp + '" target="_blank" rel="noopener"><span>' + esc(t.whatsapp) + '</span><strong>WhatsApp ↗</strong></a>' +
           '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>LinkedIn ↗</strong></a>' +
-          '<a class="c-item glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.ctaCV) + ' ↓</strong></a>' +
+          '<a class="c-item glass" href="mailto:' + S.email + '"><span>' + esc(t.emailLbl) + '</span><strong>Email ↗</strong></a>' +
+          '<a class="c-item glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvUX) + ' ↓</strong></a>' +
+          '<a class="c-item glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvIT) + ' ↓</strong></a>' +
         '</div></div>' +
         '<div class="sig kufi" aria-hidden="true"><span class="grad">' + esc(t.firstName + ' ' + t.lastName) + '</span></div>' +
         '<div class="footer"><span>' + esc(t.footer) + '</span><span>' + esc(t.localTime) + ' · <span class="clock" dir="ltr">--:--</span></span><button type="button" class="to-top">' + esc(t.backTop) + ' ↑</button></div>' +
@@ -381,6 +387,11 @@
       window.scrollTo(0, y); if (lenis) lenis.scrollTo(y, { immediate: true });
     });
     app.querySelector('.menu-btn').addEventListener('click', function () { setMenu(!menuOpen); });
+    var pick = app.querySelector('.cv-pick'), pickBtn = pick.querySelector('.cv-toggle');
+    function setPick(on) { pick.classList.toggle('is-open', on); pickBtn.setAttribute('aria-expanded', on ? 'true' : 'false'); }
+    pickBtn.addEventListener('click', function (e) { e.stopPropagation(); setPick(!pick.classList.contains('is-open')); });
+    document.addEventListener('click', function (e) { if (!pick.contains(e.target)) setPick(false); });
+    pick.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setPick(false); pickBtn.focus(); } });
     app.querySelector('.to-top').addEventListener('click', function () { scrollToId('top'); });
     var clockEl = app.querySelector('.clock');
     var fmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Riyadh' });
