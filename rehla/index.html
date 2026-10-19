@@ -392,6 +392,67 @@
   .ssj-s.hl{background:var(--orange-50); border-color:#F7D6A4;}
   .ssj-s.hl b{color:var(--orange-d); font-size:16px;}
 
+  /* ===== الأرباع ===== */
+  body.adm-picking main.wrap > :not(#admPick):not(#dataBanner){display:none !important;}
+  body:not(.adm-picking) #admPick{display:none;}
+  .seg-top{display:none !important;}
+  .adm-pick{padding:6px 0 20px; max-width:720px; margin:0 auto;}
+  .pk-head{text-align:center; margin:10px 0 18px;}
+  .pk-k{display:inline-block; font-size:13px; font-weight:800; color:var(--teal-d); background:var(--teal-50,#E8F6F6); padding:3px 12px; border-radius:999px;}
+  .pk-head h1{margin:10px 0 4px; font-size:26px; font-weight:800; color:var(--navy);}
+  .pk-head p{margin:0 auto; max-width:420px; font-size:14px; font-weight:700; color:var(--muted); line-height:1.7;}
+  .pk-back{display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:6px 14px; border-radius:12px; font-family:inherit; font-size:14px; font-weight:800;
+    color:var(--indigo); background:#fff; border:1px solid var(--line); box-shadow:var(--sh-1); cursor:pointer;}
+  .qp-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+  .qp-card{--qc:#37A8A9; --qd:#1F7E7F; position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-height:168px;
+    padding:16px 16px 14px; border-radius:22px; text-align:right; font-family:inherit; color:#fff; cursor:pointer;
+    background:linear-gradient(150deg, var(--qc), var(--qd)); box-shadow:0 12px 26px color-mix(in srgb, var(--qd) 35%, transparent); transition:transform .15s;}
+  .qp-card:active{transform:scale(.98);}
+  .qp-card::after{content:""; position:absolute; width:150px; height:150px; border-radius:50%; left:-50px; bottom:-70px; background:rgba(255,255,255,.12);}
+  .qp-card.q2{--qc:#F8A33A; --qd:#E0700A;}
+  .qp-card.q3{--qc:#F7765E; --qd:#D9442C;}
+  .qp-card.q4{--qc:#4352A8; --qd:#262D6B;}
+  .qp-card.locked{background:#F1F2F7; color:#8D91AA; box-shadow:none; border:1.5px dashed #CFD3E3;}
+  .qp-card.locked::after{display:none;}
+  .qp-num{width:48px; height:48px; border-radius:15px; display:grid; place-items:center; font-size:26px; font-weight:800; background:rgba(255,255,255,.2); margin-bottom:6px;}
+  .qp-card.locked .qp-num{background:#E4E6EF; font-size:20px;}
+  .qp-t{font-size:19px; font-weight:800;}
+  .qp-s{font-size:12.5px; font-weight:700; opacity:.92; line-height:1.5;}
+  .qp-s b{font-size:14px;}
+  .qp-go{margin-top:auto; padding-top:8px; font-size:13px; font-weight:800; opacity:.95;}
+  .qp-badge{position:absolute; top:12px; left:12px; z-index:1; font-size:11.5px; font-weight:800; color:var(--navy); background:#fff; padding:2px 10px; border-radius:999px;}
+  .qp-card.cur{outline:3px solid #fff; outline-offset:-6px;}
+  .sp-grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:4px;}
+  @media(min-width:600px){ .sp-grid{grid-template-columns:1fr 1fr;} }
+  .sp-card{display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:18px; border-radius:22px; text-align:right; font-family:inherit; cursor:pointer;
+    color:#fff; background:linear-gradient(150deg,#36418F,var(--navy)); box-shadow:0 14px 30px rgba(29,28,68,.25); position:relative; overflow:hidden;}
+  .sp-card.fityan{background:linear-gradient(150deg,#37A8A9,#1F6E7A);}
+  .sp-card::after{content:""; position:absolute; width:180px; height:180px; border-radius:50%; left:-60px; top:-90px; background:rgba(255,255,255,.1);}
+  .sp-card:active{transform:scale(.99);}
+  .sp-ic{font-size:40px; line-height:1;}
+  .sp-t{font-size:24px; font-weight:800; margin-top:6px;}
+  .sp-s{font-size:13.5px; font-weight:700; opacity:.9;}
+  .sp-s b{font-size:15px;}
+  .pk-k.q1{background:#E8F6F6; color:#1F7E7F;} .pk-k.q2{background:#FEF3E2; color:#B65F00;}
+  .pk-k.q3{background:#FEEDEA; color:#C23A24;} .pk-k.q4{background:#ECEEF8; color:#2E387E;}
+  .adm-bar{display:flex; align-items:center; gap:8px; padding:8px; margin-bottom:12px; background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:var(--sh-1);}
+  .ab-back{width:42px; height:42px; flex:none; border-radius:12px; font-size:18px; font-weight:800; color:var(--indigo); background:var(--indigo-50); cursor:pointer;}
+  .ab-t{flex:1; min-width:0; line-height:1.25;}
+  .ab-t small{display:inline-block; font-size:11.5px; font-weight:800; padding:1px 9px; border-radius:999px;}
+  .ab-t small.q1{background:#E8F6F6; color:#1F7E7F;} .ab-t small.q2{background:#FEF3E2; color:#B65F00;}
+  .ab-t small.q3{background:#FEEDEA; color:#C23A24;} .ab-t small.q4{background:#ECEEF8; color:#2E387E;}
+  .ab-t b{display:block; font-size:17px; font-weight:800; color:var(--navy); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .ab-sw,.ab-q{flex:none; min-height:42px; padding:0 12px; border-radius:12px; font-family:inherit; font-size:13px; font-weight:800; cursor:pointer;}
+  .ab-sw{color:var(--indigo); background:var(--soft); border:1px solid var(--line);}
+  .ab-q{color:#fff; background:var(--indigo);}
+  @media(max-width:380px){ .ab-sw{padding:0 9px; font-size:12px;} .ab-q{padding:0 9px; font-size:12px;} }
+  .qo-card{text-align:center;}
+  .qo-ic{font-size:40px;}
+  .qo-card h3{margin:6px 0; font-size:20px; color:var(--navy);}
+  .qo-card p{margin:0 0 16px; font-size:14px; font-weight:700; color:var(--muted); line-height:1.8;}
+  .qo-actions{display:flex; gap:10px; justify-content:center;}
+  .qo-actions .btn{flex:1;}
+
   /* admin: tabs + section journey */
   .seg-top{background:#fff; border:1px solid var(--line); box-shadow:var(--sh-1); margin-bottom:12px;}
   .seg-top .sec-tab:not(.active){color:var(--muted);}
@@ -843,6 +904,9 @@
   <main class="wrap">
     <div id="dataBanner"></div>
 
+    <!-- ===== ADMIN: اختيار الربع ثم القسم ===== -->
+    <section class="adm-pick" id="admPick"></section>
+
     <!-- ===== STUDENT: hero ===== -->
     <section class="hero s-hero" id="journey">
       <div class="sh-stars" aria-hidden="true"></div>
@@ -919,6 +983,7 @@
 
     <!-- ===== ADMIN ONLY ===== -->
     <div id="adminOnly">
+      <div class="adm-bar" id="admBar"></div>
       <div class="seg seg-top" role="tablist">
         <button id="tabFursan" class="sec-tab active" onclick="setSection('fursan')">🐎 الفرسان</button>
         <button id="tabFityan" class="sec-tab" onclick="setSection('fityan')">🧒 الفتيان</button>
@@ -1021,7 +1086,7 @@
     <div class="ss-head">
       <div class="ss-av" id="ssAv" onclick="onAvatarClick()" title="تكبير الصورة"></div>
       <div class="ss-who"><b id="ssName"></b><small id="ssMeta"></small></div>
-      <div class="ss-pts" id="ssPtsBox"><b id="ssPts">0</b><small>نقطة</small></div>
+      <div class="ss-pts" id="ssPtsBox"><b id="ssPts">0</b><small id="ssPtsL">نقطة</small></div>
       <button class="gm-x" onclick="closeModal('stuSheet')" aria-label="إغلاق">✕</button>
     </div>
     <div class="ss-prog">
@@ -1103,6 +1168,19 @@
   </div>
 </div>
 
+<!-- فتح ربع مقفل -->
+<div class="modal" id="qOpenModal">
+  <div class="modal-card qo-card">
+    <div class="qo-ic">🔒</div>
+    <h3 id="qoTitle"></h3>
+    <p id="qoText"></p>
+    <div class="qo-actions">
+      <button class="btn btn-ghost" onclick="closeModal('qOpenModal')">لاحقًا</button>
+      <button class="btn btn-primary" id="qoBtn" onclick="confirmOpenQuarter()">فتح الربع</button>
+    </div>
+  </div>
+</div>
+
 <!-- settings modal -->
 <div class="modal" id="settingsModal">
   <div class="modal-card">
@@ -1177,6 +1255,27 @@ let role=null;                 // 'admin' | 'student'
 let selectedId=null;           // admin: selected student id ; student: own id
 let pendingDeleteId=null;
 let activeSection='fursan';    // 'fursan' | 'fityan'
+/* ===== الأرباع: لكل ربع حسبة نقاط مستقلة عند المشرف =====
+   - رصيد الطالب الكلي يبقى في students/{id}/points (هو اللي يشوفه المثابر ويتجمّع من كل الأرباع)
+   - نقاط الربع 2/3/4 تنحفظ في students/{id}/qpts/{q}
+   - نقاط الربع الأول = الرصيد الكلي − (الربع 2 + 3 + 4)  ← يعني الحسبة الحالية كما هي بدون أي تعديل للبيانات
+   - كل حركة جديدة في السجل تحمل رقم ربعها q (الحركات القديمة = الربع الأول) */
+let activeQuarter=1;           // الربع المفتوح عند المشرف
+let admStep='quarter';         // 'quarter' | 'section' | 'page'
+const Q_NAMES=['','الربع الأول','الربع الثاني','الربع الثالث','الربع الرابع'];
+function quarterOpen(q){
+  const m=state.meta && state.meta.quarters && state.meta.quarters[q];
+  if(m && typeof m.open==='boolean') return m.open;
+  return q<=2;                 // الأول والثاني مفتوحين، الثالث والرابع مقفلين لين يجي وقتهم
+}
+function qExtra(s,q){ const v=s && s.qpts && s.qpts[q]; return Math.max(0, Math.round(Number(v)||0)); }
+function qPoints(s,q){
+  if(!s) return 0;
+  if(q===1) return Math.max(0, clampPts(s.points) - qExtra(s,2) - qExtra(s,3) - qExtra(s,4));
+  return qExtra(s,q);
+}
+function aPts(s){ return role==='admin' ? qPoints(s, activeQuarter) : clampPts(s.points); }   // النقاط حسب الواجهة
+function entryQ(e){ return Number(e && e.q) || 1; }
 let selSet=new Set();          // الطلاب المحددون للإضافة الجماعية
 const LS_KEY='rehla_students_v2';
 
@@ -1335,13 +1434,20 @@ function enterApp(){
   document.getElementById('appTitle').textContent = admin ? 'رحلة مثابر' : 'رحلتي';
   document.getElementById('appSub').textContent = admin ? 'لوحة المشرف' : 'برنامج نافس';
   window.scrollTo(0,0);
-  renderAll();
+  if(admin){
+    activeQuarter=1; admStep='quarter';
+    try{ history.replaceState({adm:'quarter'}, ''); }catch(e){}
+    admGo('quarter', false);
+  } else {
+    document.body.classList.remove('adm-picking');
+    renderAll();
+  }
   startMotiv();
 }
 function logout(){
   if(motivTimer){ clearInterval(motivTimer); motivTimer=null; }
   role=null; selectedId=null; pendingDeleteId=null; selSet.clear(); updateSelFab(0); mapScrollKey='';
-  document.body.classList.remove('student-mode');
+  document.body.classList.remove('student-mode','adm-picking'); admStep='quarter';
   document.getElementById('app').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
   showGate('choose');
@@ -1415,16 +1521,25 @@ let lastAction=null;   // {label, changes:[{id, before, key}]}
 function stationIdx(pts){ let i=0; pts=clampPts(pts); STATIONS.forEach((st,k)=>{ if(pts>=st.p) i=k; }); return i; }
 function awardPoints(ids, delta, label){
   const changes=[], promoted=[];
+  const Q = role==='admin' ? activeQuarter : 1;
   ids.forEach(id=>{
     const s=state.students[id]; if(!s) return;
     const cur=clampPts(s.points);
-    const nv=clampPts(cur+delta);
+    let d=delta;
+    if(d<0) d=Math.max(d, -qPoints(s,Q));          // نقاط الربع ما تنزل تحت الصفر
+    const nv=clampPts(cur+d);
     const applied=nv-cur;
     if(applied!==0){
       s.points=nv;
-      dbSet('students/'+id+'/points', nv);
-      const key=addLog(id, label, applied);
-      changes.push({id, before:cur, key});
+      dbSet('students/'+id+'/points', nv);         // الرصيد الكلي (حق المثابر) يزيد دائمًا
+      let qBefore=null;
+      if(Q>=2){
+        qBefore=qExtra(s,Q);
+        s.qpts=Object.assign({}, s.qpts||{}, {[Q]: qBefore+applied});
+        dbSet('students/'+id+'/qpts/'+Q, qBefore+applied);
+      }
+      const key=addLog(id, label, applied, Q);
+      changes.push({id, before:cur, key, q:Q, qBefore});
       if(stationIdx(nv)>stationIdx(cur)) promoted.push(id);
     }
   });
@@ -1438,6 +1553,7 @@ function undoLast(){
   a.changes.forEach(c=>{
     const s=state.students[c.id]; if(!s) return;
     s.points=c.before; dbSet('students/'+c.id+'/points', c.before);
+    if(c.q>=2 && c.qBefore!==null){ s.qpts=Object.assign({}, s.qpts||{}, {[c.q]: c.qBefore}); dbSet('students/'+c.id+'/qpts/'+c.q, c.qBefore); }
     if(c.key && state.log[c.key]){ delete state.log[c.key]; if(db&&online) db.ref('log/'+c.key).remove(); }
   });
   cacheLocal(); renderAll();
@@ -1483,7 +1599,7 @@ function membersOf(gid){   // القائد أولاً ثم الباقي حسب �
   const lid = leaderOf(gid);
   return studentsArr().filter(s=>s.groupId===gid).sort((a,b)=>{
     if(a.id===lid) return -1; if(b.id===lid) return 1;
-    return (clampPts(b.points)-clampPts(a.points)) || ((a.createdAt||0)-(b.createdAt||0));
+    return (aPts(b)-aPts(a)) || ((a.createdAt||0)-(b.createdAt||0));
   });
 }
 function addGroup(){ openGroupEditor(null); }
@@ -1668,7 +1784,7 @@ function stepPoints(delta){
 function onPtsInput(){
   if(!selectedId)return;
   const v=clampPts(document.getElementById('ptsInput').value);
-  const cur=clampPts(state.students[selectedId].points);
+  const cur=aPts(state.students[selectedId]);
   if(v===cur) return;
   awardPoints([selectedId], v-cur, 'تعديل يدوي');
   renderJourney(); renderRoster();
@@ -1707,13 +1823,13 @@ function applyItem(id){
   const it=state.items[id]; if(!it)return;
   const n=awardPoints([selectedId], it.points, it.name);
   renderJourney(); renderRoster();
-  if(!n){ toast(it.points>0?'وصل للحد الأعلى (2000)':'الرصيد صفر بالفعل', true); return; }
+  if(!n){ toast(it.points>0?'وصل للحد الأعلى (2000)':'نقاطه في '+Q_NAMES[activeQuarter]+' صفر', true); return; }
   toast('✅ '+it.name+' ('+snT(it.points)+') — '+state.students[selectedId].name, false, true);
 }
 
 /* =================== log =================== */
-function addLog(studentId, itemName, delta){
-  const entry={ studentId, itemName, delta, ts:Date.now() };
+function addLog(studentId, itemName, delta, q){
+  const entry={ studentId, itemName, delta, ts:Date.now(), q: q||1 };
   const key=dbPush('log', entry);
   state.log[key]=entry;
   cacheLocal();
@@ -1724,6 +1840,7 @@ function logFor(id){
   return Object.entries(state.log).map(([k,e])=>({k,...e}))
     .filter(e=>e.studentId===id).sort((a,b)=>b.ts-a.ts);
 }
+function logForQ(id,q){ return logFor(id).filter(e=>entryQ(e)===q); }
 // حذف حركة من السجل (لا يغيّر رصيد الطالب الحالي — الرصيد محفوظ كرقم مستقل)
 function deleteLog(key){
   if(role!=='admin' || !state.log[key]) return;
@@ -1868,7 +1985,118 @@ function processAvatarImage(file, cb){
 }
 
 /* =================== RENDER =================== */
-function renderAll(){ renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
+/* =================== الأرباع: التنقّل =================== */
+function qStats(q){
+  let pts=0; studentsArr().forEach(s=>pts+=qPoints(s,q));
+  const moves=Object.values(state.log).filter(e=>entryQ(e)===q).length;
+  return {pts, moves};
+}
+function admGo(step, push){
+  if(role!=='admin') return;
+  admStep=step;
+  selSet.clear(); selectedId=null; pendingDeleteId=null; dashOpenSt=null; lastAction=null;
+  const sh=document.getElementById('stuSheet'); if(sh) sh.classList.remove('show');
+  document.body.classList.toggle('adm-picking', step!=='page');
+  if(push!==false){ try{ history.pushState({adm:step, q:activeQuarter, sec:activeSection}, ''); }catch(e){} }
+  setText('appSub', step==='page' ? ('لوحة المشرف · '+Q_NAMES[activeQuarter]) : 'لوحة المشرف');
+  updateSelFab(0);
+  renderAll();
+  window.scrollTo(0,0);
+}
+function pickQuarter(q){
+  if(!quarterOpen(q)){ askOpenQuarter(q); return; }
+  activeQuarter=q; admGo('section');
+}
+function pickSection(sec){
+  activeSection=sec;
+  const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
+  if(tf) tf.classList.toggle('active', sec==='fursan');
+  if(ty) ty.classList.toggle('active', sec==='fityan');
+  rosterQuery=''; const rs=document.getElementById('rosterSearch'); if(rs) rs.value='';
+  const rx=document.getElementById('rosterSearchX'); if(rx) rx.style.display='none';
+  admGo('page');
+}
+let qToOpen=0;
+function askOpenQuarter(q){
+  if(q>1 && !quarterOpen(q-1)){ toast('افتح '+Q_NAMES[q-1]+' أولاً', true); return; }
+  qToOpen=q;
+  setText('qoTitle', Q_NAMES[q]+' مقفل');
+  setText('qoText', 'إذا جاء وقته افتحه الحين، وتبدأ حسبة نقاطه من الصفر عند المشرف. نقاط المثابر الكلية ما تتأثر.');
+  setText('qoBtn', 'فتح '+Q_NAMES[q]);
+  openModal('qOpenModal');
+}
+function confirmOpenQuarter(){
+  const q=qToOpen; if(!q) return;
+  state.meta=state.meta||{};
+  state.meta.quarters=Object.assign({}, state.meta.quarters||{}, {[q]:{open:true, openedAt:Date.now()}});
+  dbSet('meta/quarters/'+q, {open:true, openedAt:Date.now()});
+  cacheLocal();
+  closeModal('qOpenModal');
+  toast('🔓 تم فتح '+Q_NAMES[q]);
+  renderAdmPick();
+}
+const Q_ORD=['','١','٢','٣','٤'];
+function renderAdmPick(){
+  const box=document.getElementById('admPick'); if(!box) return;
+  if(role!=='admin' || admStep==='page'){ box.innerHTML=''; return; }
+  if(admStep==='quarter'){
+    // أحدث ربع مفتوح = الربع الحالي
+    let curQ=1; for(let q=1;q<=4;q++) if(quarterOpen(q)) curQ=q;
+    box.innerHTML = `
+      <div class="pk-head">
+        <div class="pk-k">لوحة المشرف</div>
+        <h1>اختر الربع</h1>
+        <p>كل ربع له حسبة نقاط مستقلة هنا، ونقاط المثابر تتجمّع من كل الأرباع.</p>
+      </div>
+      <div class="qp-grid">${[1,2,3,4].map(q=>{
+        const open=quarterOpen(q), st=open?qStats(q):null;
+        return `<button type="button" class="qp-card q${q} ${open?'':'locked'} ${q===curQ?'cur':''}" onclick="pickQuarter(${q})">
+          ${q===curQ?'<span class="qp-badge">الحالي</span>':''}
+          <span class="qp-num">${open?Q_ORD[q]:'🔒'}</span>
+          <span class="qp-t">${Q_NAMES[q]}</span>
+          <span class="qp-s">${open ? `<b>${st.pts}</b> نقطة · ${st.moves} حركة` : 'مقفل — يُفتح إذا جاء وقته'}</span>
+          ${open?'<span class="qp-go">دخول ←</span>':''}
+        </button>`; }).join('')}
+      </div>`;
+    return;
+  }
+  // اختيار القسم
+  const secCard=(sec, ic)=>{
+    const arr=sectionArr(sec), pts=arr.reduce((t,s)=>t+qPoints(s,activeQuarter),0);
+    return `<button type="button" class="sp-card ${sec}" onclick="pickSection('${sec}')">
+      <span class="sp-ic">${ic}</span>
+      <span class="sp-t">${SECTION_LABELS[sec]}</span>
+      <span class="sp-s"><b>${arr.length}</b> طالب · <b>${pts}</b> نقطة في ${Q_NAMES[activeQuarter]}</span>
+      <span class="qp-go">دخول ←</span>
+    </button>`;
+  };
+  box.innerHTML = `
+    <button type="button" class="pk-back" onclick="admGo('quarter')">→ الأرباع</button>
+    <div class="pk-head">
+      <div class="pk-k q${activeQuarter}">${Q_NAMES[activeQuarter]}</div>
+      <h1>اختر القسم</h1>
+    </div>
+    <div class="sp-grid">${secCard('fursan','🐎')}${secCard('fityan','🧒')}</div>`;
+}
+function renderAdmBar(){
+  const bar=document.getElementById('admBar'); if(!bar) return;
+  if(role!=='admin'){ bar.innerHTML=''; return; }
+  const other = activeSection==='fursan' ? 'fityan' : 'fursan';
+  const ic = sec=> sec==='fityan' ? '🧒' : '🐎';
+  bar.innerHTML = `
+    <button type="button" class="ab-back" onclick="admGo('section')" aria-label="رجوع">→</button>
+    <div class="ab-t"><small class="q${activeQuarter}">${Q_NAMES[activeQuarter]}</small><b>${ic(activeSection)} ${SECTION_LABELS[activeSection]}</b></div>
+    <button type="button" class="ab-sw" onclick="pickSection('${other}')">${ic(other)} ${SECTION_LABELS[other]}</button>
+    <button type="button" class="ab-q" onclick="admGo('quarter')">الأرباع</button>`;
+}
+window.addEventListener('popstate', e=>{
+  if(role!=='admin') return;
+  const st=e.state||{};
+  if(st.q) activeQuarter=st.q;
+  if(st.sec){ activeSection=st.sec; }
+  admGo(st.adm || 'quarter', false);
+});
+function renderAll(){ renderAdmPick(); renderAdmBar(); renderJourney(); renderRoster(); renderItems(); renderQuickItems(); renderStudentItems(); renderLog(); }
 
 function sn(n){ n=Number(n)||0; return `<bdi class="sn" dir="ltr">${n>=0?'+':'−'}${Math.abs(n)}</bdi>`; }
 function snT(n){ n=Number(n)||0; return '\u2066'+(n>=0?'+':'−')+Math.abs(n)+'\u2069'; }
@@ -2109,7 +2337,7 @@ function memberRowHtml(s, idx, gid){
     <div class="ravatar ${s.avatar?'zoom':''}" ${s.avatar?`onclick="viewAvatar(event,'${s.id}')" title="تكبير الصورة"`:''}>${avatarMarkup(s)}</div>
     <div class="rname"><span class="nm">${escapeHtml(s.name)}</span><span class="code">#${s.code}</span></div>
     <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
-    <div class="rpts"><span class="pv">${clampPts(s.points)}</span><span class="pm">/${MAX_POINTS}</span></div>
+    <div class="rpts"><span class="pv">${aPts(s)}</span><span class="pm">${role==='admin'?'نقطة':'/'+MAX_POINTS}</span></div>
     ${leadBtn}
     ${delUI}
   </div>`;
@@ -2122,7 +2350,7 @@ function groupBlockHtml(g, i){
   const [gc, gc50] = GROUP_COLORS[(i||0) % GROUP_COLORS.length];
   const mem=membersOf(g.id);
   const n=mem.length;
-  const total=mem.reduce((t,s)=>t+clampPts(s.points),0);
+  const total=mem.reduce((t,s)=>t+aPts(s),0);
   const selCount=mem.filter(s=>selSet.has(s.id)).length;
   const allOn = n>0 && selCount===n;
   const lid=leaderOf(g.id);
@@ -2161,8 +2389,9 @@ function renderStudentSheet(){
   ssAv.classList.toggle('zoom', !!s.avatar);
   document.getElementById('ssName').textContent = s.name;
   const g = (s.groupId && state.groups[s.groupId]) ? ' · '+state.groups[s.groupId].name : '';
-  document.getElementById('ssMeta').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan']+g+' · #'+s.code;
-  document.getElementById('ssPts').textContent = pts;
+  document.getElementById('ssMeta').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan']+g+' · #'+s.code+' · المجموع الكلي '+pts;
+  document.getElementById('ssPts').textContent = aPts(s);
+  setText('ssPtsL', Q_NAMES[activeQuarter]);
   document.getElementById('ssFill').style.width = fillPct(pts)+'%';
   document.getElementById('ssDots').innerHTML = STATIONS.map(st=>{
     const c = st.p===cur.p ? 'cur' : (pts>=st.p ? 'done' : '');
@@ -2178,13 +2407,13 @@ function renderStudentSheet(){
   document.getElementById('ssItems').innerHTML = items.length
     ? items.map(it=>`<button class="item-btn ${it.points<0?'neg':''}" onclick="applyItem('${it.id}')">${escapeHtml(it.name)} ${sn(it.points)}</button>`).join('')
     : '<div class="empty">لا توجد بنود لهذا القسم بعد.</div>';
-  const lg=logFor(selectedId);
+  const lg=logForQ(selectedId, activeQuarter);
   document.getElementById('ssLog').innerHTML = lg.length
     ? lg.map((e,i)=>`<div class="lrow ${i===0?'latest':''}"><span class="lic ${e.delta>=0?'pos':'neg'}">${e.delta>=0?'+':'−'}</span>
         <div class="linfo"><b>${escapeHtml(e.itemName)}</b>${i===0?'<span class="new-tag">آخر إضافة</span>':''}<div class="ld">${fmtDate(e.ts)}</div></div>
         <div class="lv ${e.delta>=0?'pos':'neg'}">${sn(e.delta)}</div>
         <button class="ldel" onclick="deleteLog('${e.k}')" title="حذف الحركة">✕</button></div>`).join('')
-    : '<div class="empty">لا توجد حركات بعد.</div>';
+    : '<div class="empty">لا توجد حركات في '+Q_NAMES[activeQuarter]+' بعد.</div>';
 }
 function ssApplyCustom(){
   if(!selectedId) return;
@@ -2192,16 +2421,16 @@ function ssApplyCustom(){
   if(isNaN(d)||d===0){ toast('اكتب عدد النقاط (+ أو −)',true); return; }
   const n=awardPoints([selectedId], d, d>0?'إضافة يدوية':'خصم يدوي');
   inp.value=''; renderJourney(); renderRoster();
-  if(!n){ toast(d>0?'وصل للحد الأعلى (2000)':'الرصيد صفر بالفعل',true); return; }
+  if(!n){ toast(d>0?'وصل للحد الأعلى (2000)':'نقاطه في '+Q_NAMES[activeQuarter]+' صفر',true); return; }
   toast((d>0?'✅ أُضيفت ':'➖ خُصمت ')+Math.abs(d)+' — '+state.students[selectedId].name, false, true);
 }
 
 /* =================== الترتيب (المراكز والأسماء فقط) =================== */
 // ترتيب تنازلي بالنقاط؛ المتساوون يأخذون نفس المركز (1، 2، 2، 4)
 function rankedList(sec){
-  const arr=sectionArr(sec).slice().sort((a,b)=>(clampPts(b.points)-clampPts(a.points)) || (a.name||'').localeCompare(b.name||'','ar'));
+  const arr=sectionArr(sec).slice().sort((a,b)=>(aPts(b)-aPts(a)) || (a.name||'').localeCompare(b.name||'','ar'));
   let prev=null, rank=0;
-  return arr.map((s,i)=>{ const p=clampPts(s.points); if(p!==prev){ rank=i+1; prev=p; } return {s, rank}; });
+  return arr.map((s,i)=>{ const p=aPts(s); if(p!==prev){ rank=i+1; prev=p; } return {s, rank}; });
 }
 function renderRanking(){
   const box=document.getElementById('rankList'); if(!box) return;
@@ -2209,7 +2438,7 @@ function renderRanking(){
   const me = null;
   const sec = activeSection;   // الترتيب يتبع القسم المفتوح (الفرسان أو الفتيان)
   const list=rankedList(sec);
-  const rs=document.getElementById('rankSec'); if(rs) rs.textContent = SECTION_LABELS[sec];
+  const rs=document.getElementById('rankSec'); if(rs) rs.textContent = SECTION_LABELS[sec]+' · '+Q_NAMES[activeQuarter];
   const who=document.getElementById('rankWho');
   if(who) who.textContent = list.length ? (list.length+' طالب') : '';
   if(!list.length){ box.innerHTML='<li class="empty">لا يوجد طلاب في هذا القسم بعد.</li>'; return; }
@@ -2220,7 +2449,7 @@ function renderRanking(){
       <span class="rk-n">${medal[rank]||rank}</span>
       <span class="rk-name">${escapeHtml(s.name)}</span>
       ${isMe?'<span class="rk-me">أنت</span>':''}
-      <span class="rk-pts"><b>${clampPts(s.points)}</b><small>نقطة</small></span>
+      <span class="rk-pts"><b>${aPts(s)}</b><small>نقطة</small></span>
     </li>`;
   }).join('');
 }
@@ -2245,10 +2474,11 @@ function toggleDashStation(i){ dashOpenSt = (dashOpenSt===i ? null : i); renderA
 function renderAdminDash(){
   const box=document.getElementById('admDash'); if(!box || role!=='admin') return;
   const arr=sectionArr(activeSection);
-  const n=arr.length, total=arr.reduce((t,s)=>t+clampPts(s.points),0);
+  const n=arr.length, total=arr.reduce((t,s)=>t+aPts(s),0);
   const avg=n?Math.round(total/n):0;
-  const top=rankedList(activeSection)[0];
-  const prog=n?Math.round(total/(n*MAX_POINTS)*100):0;
+  let top=rankedList(activeSection)[0]; if(top && !aPts(top.s)) top=null;   // ما فيه أعلى إذا الكل صفر
+  const cum=arr.reduce((t,s)=>t+clampPts(s.points),0);
+  const prog=n?Math.round(cum/(n*MAX_POINTS)*100):0;   // تقدّم الرحلة الكلية
   const groups=STATIONS.map(()=>[]);
   arr.forEach(s=>groups[stationIdx(s.points)].push(s));
   groups.forEach(g=>g.sort((a,b)=>clampPts(b.points)-clampPts(a.points)));
@@ -2271,16 +2501,16 @@ function renderAdminDash(){
   }
   box.innerHTML = `
     <div class="ad-head">
-      <div><div class="ad-k">رحلة القسم</div><div class="ad-t">${secIc} ${SECTION_LABELS[activeSection]}</div></div>
-      <div class="ad-prog"><b>${prog}%</b><small>تقدّم القسم</small></div>
+      <div><div class="ad-k">${Q_NAMES[activeQuarter]}</div><div class="ad-t">${secIc} ${SECTION_LABELS[activeSection]}</div></div>
+      <div class="ad-prog"><b>${prog}%</b><small>تقدّم الرحلة الكلية</small></div>
     </div>
     <div class="ad-stats">
       <div class="ad-s"><span>👥</span><b>${n}</b><small>طالب</small></div>
-      <div class="ad-s"><span>⭐</span><b>${total}</b><small>مجموع النقاط</small></div>
+      <div class="ad-s"><span>⭐</span><b>${total}</b><small>نقاط الربع</small></div>
       <div class="ad-s"><span>📊</span><b>${avg}</b><small>المتوسط</small></div>
-      <div class="ad-s gold"><span>🥇</span><b>${top ? escapeHtml(top.s.name) : '—'}</b><small>${top ? 'الأعلى · '+clampPts(top.s.points) : 'الأعلى'}</small></div>
+      <div class="ad-s gold"><span>🥇</span><b>${top ? escapeHtml(top.s.name) : '—'}</b><small>${top ? 'الأعلى · '+aPts(top.s) : 'الأعلى'}</small></div>
     </div>
-    <div class="ad-jh">🗺️ الرحلة — وين وصل كل طالب <small>اضغط المحطة لعرض أسمائهم</small></div>
+    <div class="ad-jh">🗺️ الرحلة الكلية — وين وصل كل طالب <small>محسوبة من مجموع كل الأرباع · اضغط المحطة لعرض أسمائهم</small></div>
     <div class="ad-grid">${tiles}</div>
     ${list}`;
 }
@@ -2290,7 +2520,7 @@ function renderRoster(){
   const box=document.getElementById('roster'); if(!box)return;
   const arr=sectionArr(activeSection)
     .slice()
-    .sort((a,b)=> (clampPts(b.points)-clampPts(a.points)) || ((a.createdAt||0)-(b.createdAt||0)));
+    .sort((a,b)=> (aPts(b)-aPts(a)) || ((a.createdAt||0)-(b.createdAt||0)));
   document.getElementById('rosterCount').textContent=arr.length+' / '+MAX_PER_SECTION;
   const tf=document.getElementById('tabFursan'), ty=document.getElementById('tabFityan');
   if(tf) tf.innerHTML='🐎 الفرسان <span class="tcount">'+sectionArr('fursan').length+'</span>';
@@ -2408,9 +2638,9 @@ function renderLog(){
   if(role==='admin'){
     // المشرف: آخر الحركات لكل طلاب القسم المفتوح
     const ids=new Set(sectionArr(activeSection).map(s=>s.id));
-    const all=Object.entries(state.log).map(([k,e])=>({k,...e})).filter(e=>ids.has(e.studentId)).sort((a,b)=>b.ts-a.ts);
-    const w=document.getElementById('logWho'); if(w) w.textContent='قسم '+SECTION_LABELS[activeSection]+' · '+all.length+' حركة';
-    if(!all.length){ box.innerHTML='<div class="empty">لا توجد حركات في هذا القسم بعد.</div>'; return; }
+    const all=Object.entries(state.log).map(([k,e])=>({k,...e})).filter(e=>ids.has(e.studentId) && entryQ(e)===activeQuarter).sort((a,b)=>b.ts-a.ts);
+    const w=document.getElementById('logWho'); if(w) w.textContent=SECTION_LABELS[activeSection]+' · '+Q_NAMES[activeQuarter]+' · '+all.length+' حركة';
+    if(!all.length){ box.innerHTML='<div class="empty">لا توجد حركات في '+Q_NAMES[activeQuarter]+' لهذا القسم بعد.</div>'; return; }
     box.innerHTML=all.map(e=>{
       const st=state.students[e.studentId];
       return `<div class="lrow">
