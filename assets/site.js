@@ -92,7 +92,7 @@
       return '<div class="tile t-stat glass spot" data-tilt><b class="grad" data-n="' + n + '" data-s="' + suf + '">' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>';
     });
     var facts = t.facts.map(function (f) { return '<li><span>' + esc(f[0]) + '</span><strong>' + esc(f[1]) + '</strong></li>'; }).join('');
-    var tools = t.tools.concat(t.tools, t.tools, t.tools).map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('');
+    var tools = t.tools.concat(t.tools, t.tools, t.tools).map(function (x) { return '<span' + (/[\u0600-\u06FF]/.test(x) ? ' class="ar"' : '') + '>' + esc(x) + '</span>'; }).join('');
     var steps = t.process.map(function (s) {
       return '<div class="step glass spot" data-tilt><div class="step-ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" cx="32" cy="32" r="28"/></svg><b>' + s.n + '</b></div>' +
         '<div><h3 class="kufi">' + esc(s.t) + '</h3><p>' + esc(s.d) + '</p></div></div>';
@@ -146,7 +146,7 @@
 
       '<section id="about"><div class="sc-head"><span class="eyebrow glass"><b class="on-grad">01</b>' + esc(t.aboutLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.aboutH) + '</h2></div>' +
         '<div class="bento">' +
-          '<div class="tile t-statement glass spot" data-tilt><p>' + W(t.statement, 'sw') + '</p><small>' + esc(t.aboutP) + '</small></div>' +
+          '<div class="tile t-statement glass spot"><p>' + W(t.statement, 'sw') + '</p><small>' + esc(t.aboutP) + '</small></div>' +
           stats[0] + stats[1] +
           '<div class="tile t-facts glass spot" data-tilt><ul>' + facts + '</ul></div>' +
           '<div class="tile t-quote glass spot" data-tilt><p class="kufi">' + esc(t.quote) + '</p></div>' +
@@ -408,12 +408,16 @@
       });
       app.querySelectorAll('[data-tilt]').forEach(function (el) {
         var rx = gsap.quickTo(el, 'rotationX', { duration: .7, ease: 'power3' }), ry = gsap.quickTo(el, 'rotationY', { duration: .7, ease: 'power3' });
+        var clamp = gsap.utils.clamp(-.5, .5), box = null;
+        gsap.set(el, { transformPerspective: 900 });
+        // Measure once on entry: the tilted box would feed back into its own angle and run away.
+        el.addEventListener('pointerenter', function () { box = el.getBoundingClientRect(); });
         el.addEventListener('pointermove', function (e) {
-          var r = el.getBoundingClientRect();
-          ry(((e.clientX - r.left) / r.width - .5) * 8);
-          rx(-((e.clientY - r.top) / r.height - .5) * 8);
+          if (!box) box = el.getBoundingClientRect();
+          ry(clamp((e.clientX - box.left) / box.width - .5) * 7);
+          rx(-clamp((e.clientY - box.top) / box.height - .5) * 7);
         });
-        el.addEventListener('pointerleave', function () { rx(0); ry(0); });
+        el.addEventListener('pointerleave', function () { box = null; rx(0); ry(0); });
       });
       app.querySelectorAll('[data-mag]').forEach(function (el) {
         var xTo = gsap.quickTo(el, 'x', { duration: .7, ease: 'elastic.out(1, .45)' }), yTo = gsap.quickTo(el, 'y', { duration: .7, ease: 'elastic.out(1, .45)' });
@@ -496,7 +500,7 @@
       gsap.from(it.querySelectorAll('.sc-n, .sc-tag, .sc-sub, .sc-desc, .sc-btn'), { y: 26, opacity: 0, duration: 1, ease: 'expo.out', stagger: .06, scrollTrigger: st });
     });
     gsap.utils.toArray('.tile').forEach(function (el) {
-      gsap.from(el, { y: 70, rotationX: 20, opacity: 0, transformPerspective: 900, transformOrigin: '50% 100%', duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+      gsap.from(el, { y: 60, rotationX: 12, opacity: 0, transformPerspective: 900, transformOrigin: '50% 100%', duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
     });
     gsap.to('.t-statement p .sw', { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: '.t-statement', start: 'top 80%', end: 'bottom 55%', scrub: true } });
     gsap.from('.sc-stage', { opacity: 0, scale: .94, y: 40, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: '.sc-wrap', start: 'top 85%' } });

@@ -242,8 +242,8 @@ section { position: relative; padding: clamp(80px, 10vw, 140px) var(--pad); }
 .sv .cv-web img, .sv .cv-plain img, .sv .cv-watch img { max-height: calc(100vh - var(--nav-h) - 240px); object-fit: contain; }
 
 /* bento */
-.bento { max-width: 1240px; margin: clamp(30px, 5vw, 60px) auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; perspective: 1400px; }
-.tile { border-radius: 26px; padding: clamp(20px, 2.4vw, 32px); transform-style: preserve-3d; will-change: transform; }
+.bento { max-width: 1240px; margin: clamp(30px, 5vw, 60px) auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tile { border-radius: 26px; padding: clamp(20px, 2.4vw, 32px); }
 .tile > * { position: relative; }
 .t-statement { grid-column: span 3; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 30px; }
 .t-statement p { margin: 0; font-size: clamp(22px, 2.8vw, 40px); line-height: 1.55; font-weight: 600; }
@@ -262,6 +262,7 @@ section { position: relative; padding: clamp(80px, 10vw, 140px) var(--pad); }
 .t-tools { grid-column: span 4; overflow: hidden; padding-inline: 0; direction: ltr; }
 .tools-row { display: flex; gap: 10px; width: max-content; direction: ltr; }
 .tools-row span { padding: 12px 22px; border-radius: 999px; background: var(--glass-2); border: 1px solid var(--glass-line); font: 500 14px 'IBM Plex Mono', 'Readex Pro', monospace; white-space: nowrap; }
+.tools-row span.ar { font-family: 'Readex Pro', sans-serif; font-size: 14.5px; }
 
 /* process */
 .steps { max-width: 1240px; margin: clamp(30px, 5vw, 60px) auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
