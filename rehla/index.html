@@ -400,6 +400,7 @@
   .ch-card{max-width:560px;}
   .ch-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
   .ch-head b{font-size:18px; color:var(--navy);}
+  .ch-ver{font-size:11px; font-weight:700; color:var(--muted); background:var(--soft); border:1px solid var(--line); border-radius:999px; padding:1px 8px; margin-inline-start:6px; vertical-align:middle;}
   .ch-prev{display:flex; flex-direction:column; gap:18px;}
   .ch-item{border-radius:18px; padding:10px; background:var(--soft); border:1px solid var(--line);}
   .ch-cap{font-size:15px; font-weight:800; color:var(--navy); margin:2px 4px 8px;}
@@ -1246,7 +1247,7 @@
 <!-- صورة الأبطال -->
 <div class="modal" id="champModal">
   <div class="modal-card ch-card">
-    <div class="ch-head"><b>📸 صور الأبطال — كل بطل لحاله</b><button class="gm-x" onclick="closeModal('champModal')" aria-label="إغلاق">✕</button></div>
+    <div class="ch-head"><b>📸 صور الأبطال — كل بطل لحاله <small class="ch-ver" id="chVer"></small></b><button class="gm-x" onclick="closeModal('champModal')" aria-label="إغلاق">✕</button></div>
     <div class="ch-prev" id="chPrev"></div>
     <p class="ch-hint">على الآيفون: اضغط مطوّلًا على الصورة واختر «حفظ في الصور».</p>
   </div>
@@ -1319,6 +1320,20 @@ const PRESET_ITEMS = [
   {name:'التحذير', points:-50},
   {name:'الملاحظة', points:-150},
 ];
+// رقم النسخة: إذا نزلت نسخة أحدث على الموقع، الصفحة تحدّث نفسها تلقائيًا (ما تعلق على نسخة قديمة محفوظة بالجوال)
+const BUILD='58';
+(function autoUpdate(){
+  try{
+    if(!/^https?:$/.test(location.protocol) || location.hostname==='app.local') return;
+    fetch(location.pathname+'?_='+Date.now(), {cache:'no-store'}).then(r=>r.ok?r.text():'').then(t=>{
+      const m=t && t.match(/const BUILD='(\d+)'/);
+      if(!m || m[1]===BUILD) return;
+      const k='rehla_upd_'+m[1];
+      try{ if(sessionStorage.getItem(k)) return; sessionStorage.setItem(k,'1'); }catch(e){}
+      location.replace(location.pathname+'?v='+m[1]);
+    }).catch(()=>{});
+  }catch(e){}
+})();
 const STATIONS = [
   {p:0,    name:'الانطلاق',  icon:'🚩'},
   {p:200,  name:'المبتدئ',   icon:'🌱'},
@@ -2301,6 +2316,7 @@ async function openChampImage(){
   const prev=document.getElementById('chPrev');
   prev.innerHTML='<div class="ch-load">⏳ جارٍ تجهيز صور الأبطال…</div>';
   openModal('champModal');
+  setText('chVer', 'نسخة '+BUILD);
   champFiles.forEach(f=>URL.revokeObjectURL(f.url)); champFiles=[];
   try{
     const top=rankedList(activeSection).filter(o=>aPts(o.s)>0).slice(0,3);
