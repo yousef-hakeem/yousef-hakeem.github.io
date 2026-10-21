@@ -2141,7 +2141,7 @@ async function buildStudentPoster(o){
   x.font='700 34px Tajawal'; x.fillStyle='rgba(255,255,255,.86)';
   x.fillText((sec==='fityan'?'🧒 ':'🐎 ')+'قسم '+SECTION_LABELS[sec]+'  ·  رحلة مثابر', W/2, 326);
   // الصورة
-  const R=140, ay=560;
+  const R=118, ay=520;
   x.save(); x.shadowColor='rgba(0,0,0,.35)'; x.shadowBlur=34;
   const rg=x.createLinearGradient(W/2-R,ay-R,W/2+R,ay+R); rg.addColorStop(0,M.c[0]); rg.addColorStop(1,M.c[1]);
   x.fillStyle=rg; x.beginPath(); x.arc(W/2,ay,R+12,0,Math.PI*2); x.fill(); x.restore();
@@ -2151,7 +2151,7 @@ async function buildStudentPoster(o){
   else { const ag=x.createLinearGradient(0,ay-R,0,ay+R); ag.addColorStop(0,'#3FB9BA'); ag.addColorStop(1,'#2E387E'); x.fillStyle=ag; x.fillRect(W/2-R,ay-R,R*2,R*2);
     x.font='800 '+Math.round(R*.9)+'px Tajawal'; x.fillStyle='#fff'; x.fillText((s.name||'؟').trim().charAt(0), W/2, ay+R*.32); }
   x.restore();
-  if(o.rank===1){ x.font='62px sans-serif'; x.fillText('👑', W/2, ay-R-18); }
+  if(o.rank===1){ x.font='54px sans-serif'; x.fillText('👑', W/2, ay-R-16); }
   // شريط المركز على أسفل الصورة
   x.font='800 34px Tajawal';
   const rt=M.em+'  '+M.word, rw=x.measureText(rt).width+70, ry=ay+R+8;
@@ -2161,15 +2161,15 @@ async function buildStudentPoster(o){
   // الاسم
   x.font='800 58px Tajawal'; x.fillStyle='#fff';
   const lines=wrapLines(x, s.name, 900);
-  const n0=ry+100;
+  const n0=ry+92;
   lines.forEach((t,i)=>x.fillText(t, W/2, n0+i*66));
   // بطاقة النقاط لحالها
-  const cy0=n0+(lines.length-1)*66+34, cw=440, chh=128;
+  const cy0=n0+(lines.length-1)*66+28, cw=420, chh=112;
   x.fillStyle='rgba(255,255,255,.09)'; rrect(x,(W-cw)/2,cy0,cw,chh,30); x.fill();
   x.strokeStyle='rgba(255,214,102,.55)'; x.lineWidth=2.5; x.stroke();
   const ng=x.createLinearGradient(0,cy0+20,0,cy0+90); ng.addColorStop(0,'#FFF1C7'); ng.addColorStop(1,'#FFB938');
-  x.font='800 72px Tajawal'; x.fillStyle=ng; x.fillText(String(pts), W/2, cy0+80);
-  x.font='700 26px Tajawal'; x.fillStyle='rgba(255,255,255,.8)'; x.fillText('نقطة في '+Q_NAMES[q], W/2, cy0+114);
+  x.font='800 64px Tajawal'; x.fillStyle=ng; x.fillText(String(pts), W/2, cy0+70);
+  x.font='700 25px Tajawal'; x.fillStyle='rgba(255,255,255,.8)'; x.fillText('نقطة في '+Q_NAMES[q], W/2, cy0+100);
   const ly=cy0+chh;
   // ===== خريطة الرحلة (نفس طريق الطالب) =====
   const MX=50, MY=ly+62, MW=W-100, MH=H-MY-90;
@@ -2186,29 +2186,29 @@ async function buildStudentPoster(o){
   x.lineTo(MX+MW,my0+mh*1.6); x.lineTo(MX,my0+mh*1.6); x.closePath(); x.fill();
   // غيوم
   const cloud=(cx,cy,k)=>{ x.fillStyle='rgba(255,255,255,.85)'; [[0,0,40,17],[-17,-11,20,15],[14,-14,23,18]].forEach(([dx,dy,rx,ry])=>{ x.beginPath(); x.ellipse(cx+dx*k,cy+dy*k,rx*k,ry*k,0,0,Math.PI*2); x.fill(); }); };
-  cloud(MX+MW*.1,MY+MH*.3,1.2); cloud(MX+MW*.88,MY+MH*.36,1); cloud(MX+MW*.12,MY+MH*.56,.9); cloud(MX+MW*.9,MY+MH*.63,1.1);
+  cloud(MX+MW*.5,MY+MH*.47,1.1);
   // تلال
   const h1=MY+MH*.86, h2=MY+MH*.92;
   x.fillStyle='#BFE7CB'; x.beginPath(); x.moveTo(MX,h1); x.bezierCurveTo(MX+MW*.25,h1-50,MX+MW*.55,h1+40,MX+MW,h1-34); x.lineTo(MX+MW,MY+MH); x.lineTo(MX,MY+MH); x.fill();
   x.fillStyle='#A6DDB8'; x.beginPath(); x.moveTo(MX,h2); x.bezierCurveTo(MX+MW*.3,h2+30,MX+MW*.62,h2-44,MX+MW,h2); x.lineTo(MX+MW,MY+MH); x.lineTo(MX,MY+MH); x.fill();
   const tree=(tx,ty,k)=>{ x.fillStyle='#9B6B43'; x.fillRect(tx-3.5*k,ty+10*k,7*k,12*k); x.fillStyle='#4FB27A'; x.beginPath(); x.moveTo(tx,ty-28*k); x.lineTo(tx+17*k,ty+3*k); x.lineTo(tx-17*k,ty+3*k); x.fill();
     x.fillStyle='#3E9F69'; x.beginPath(); x.moveTo(tx,ty-15*k); x.lineTo(tx+20*k,ty+14*k); x.lineTo(tx-20*k,ty+14*k); x.fill(); };
-  [[.06,.78],[.94,.74],[.09,.9],[.92,.88],[.05,.66],[.95,.6]].forEach(([fx,fy])=>tree(MX+MW*fx, MY+MH*fy, 1.1+rnd()*.4));
+  [[.05,.955,1],[.12,.985,1.25],[.2,.965,.95]].forEach(([fx,fy,k])=>tree(MX+MW*fx, MY+MH*fy, k));
   // نقاط المحطات (القمة فوق)
-  const N=STATIONS.length, TOP=100, GAP=(MH-TOP-80)/(N-1), cx=MX+MW/2, amp=Math.min(205, MW*.21);
-  const P=STATIONS.slice().reverse().map((st,k)=>({st, i:N-1-k, x:cx+Math.sin(k*1.2+0.5)*amp, y:MY+TOP+k*GAP}));
+  const N=STATIONS.length, TOP=100, GAP=(MH-TOP-78)/(N-1), cx=MX+MW/2, COL=140;
+  const P=STATIONS.slice().reverse().map((st,k)=>({st, i:N-1-k, x: k===0 ? cx : (k%2 ? cx+COL : cx-COL), y:MY+TOP+k*GAP}));
   const seg=(a,b)=>{ x.moveTo(b.x,b.y); x.bezierCurveTo(b.x,b.y-GAP/2,a.x,a.y+GAP/2,a.x,a.y); };
   const last=P[N-1];
-  const roadPath=(upto)=>{ x.beginPath(); x.moveTo(last.x-40, MY+MH+20); x.bezierCurveTo(last.x-40,MY+MH-30,last.x,last.y+50,last.x,last.y);
+  const roadPath=(upto)=>{ x.beginPath(); x.moveTo(last.x, MY+MH+30); x.lineTo(last.x,last.y);
     for(let k=N-1;k>0;k--){ if(P[k-1].i>upto) break; seg(P[k-1],P[k]); } };
   x.lineCap='round'; x.lineJoin='round';
-  x.save(); x.translate(0,6); roadPath(99); x.strokeStyle='rgba(29,28,68,.12)'; x.lineWidth=50; x.stroke(); x.restore();
-  roadPath(99); x.strokeStyle='#E2C590'; x.lineWidth=44; x.stroke();
-  roadPath(99); x.strokeStyle='#FBEBC8'; x.lineWidth=35; x.stroke();
-  roadPath(ci); x.strokeStyle='#D4690A'; x.lineWidth=44; x.stroke();
+  x.save(); x.translate(0,6); roadPath(99); x.strokeStyle='rgba(29,28,68,.12)'; x.lineWidth=42; x.stroke(); x.restore();
+  roadPath(99); x.strokeStyle='#E2C590'; x.lineWidth=36; x.stroke();
+  roadPath(99); x.strokeStyle='#FBEBC8'; x.lineWidth=28; x.stroke();
+  roadPath(ci); x.strokeStyle='#D4690A'; x.lineWidth=36; x.stroke();
   const pg=x.createLinearGradient(0,MY+MH,0,MY); pg.addColorStop(0,'#FFC266'); pg.addColorStop(.6,'#F58D09'); pg.addColorStop(1,'#F7583E');
-  roadPath(ci); x.strokeStyle=pg; x.lineWidth=35; x.stroke();
-  x.setLineDash([12,18]); roadPath(99); x.strokeStyle='rgba(255,255,255,.95)'; x.lineWidth=4; x.stroke(); x.setLineDash([]);
+  roadPath(ci); x.strokeStyle=pg; x.lineWidth=28; x.stroke();
+  x.setLineDash([10,16]); roadPath(99); x.strokeStyle='rgba(255,255,255,.95)'; x.lineWidth=3.5; x.stroke(); x.setLineDash([]);
   // أشعة القمة
   const sm=P[0];
   x.save(); x.translate(sm.x,sm.y); const rr=x.createRadialGradient(0,0,20,0,0,120); rr.addColorStop(0,'rgba(255,214,102,.55)'); rr.addColorStop(1,'rgba(255,214,102,0)');
@@ -2224,22 +2224,20 @@ async function buildStudentPoster(o){
     x.lineWidth=cur?8:5; x.strokeStyle= cur ? '#FFFFFF' : (done ? '#FFE2B3' : '#E3E7F2'); x.stroke();
     x.save(); if(!done) x.globalAlpha=.45;
     x.font=(cur?46:36)+'px sans-serif'; x.textAlign='center'; x.fillText(pnt.st.icon, pnt.x, pnt.y+(cur?16:13)); x.restore();
-    // اسم المحطة: بطاقة أنيقة على الجهة الخارجية من الطريق
-    x.font='800 31px Tajawal';
-    const t1=pnt.st.name, w1=x.measureText(t1).width;
-    const ICW=34, bw=w1+ICW+46, bh=58, off=nr+30;
-    let outRight = pnt.x>=cx;
-    let bxp = outRight ? pnt.x+off : pnt.x-off-bw;
-    if(bxp<MX+14 || bxp+bw>MX+MW-14){ outRight=!outRight; bxp = outRight ? pnt.x+off : pnt.x-off-bw; }
+    // اسم المحطة: بطاقات بنفس العرض، مصفوفة في عمودين على الجهة الخارجية
+    x.font='800 30px Tajawal';
+    const t1=pnt.st.name;
+    if(!x.__bw){ x.__bw=Math.max(...STATIONS.map(st=>x.measureText(st.name).width))+92; }
+    const ICW=34, bw=x.__bw, bh=56, off=nr+24;
+    const outRight = pnt.x>=cx;           // البطل (في الوسط) اسمه على اليمين
+    const bxp = outRight ? pnt.x+off : pnt.x-off-bw;
     const byp=pnt.y-bh/2, cyl=pnt.y;
-    // خط وصل صغير من المحطة للبطاقة
-    x.strokeStyle= done ? 'rgba(245,141,9,.75)' : 'rgba(255,255,255,.85)'; x.lineWidth=4; x.setLineDash([2,7]); x.lineCap='round';
+    x.strokeStyle= done ? 'rgba(245,141,9,.8)' : 'rgba(255,255,255,.9)'; x.lineWidth=4; x.setLineDash([2,7]); x.lineCap='round';
     x.beginPath(); x.moveTo(outRight? pnt.x+nr+4 : pnt.x-nr-4, cyl); x.lineTo(outRight? bxp-2 : bxp+bw+2, cyl); x.stroke(); x.setLineDash([]);
-    // البطاقة
     x.save(); x.shadowColor='rgba(29,28,68,.18)'; x.shadowBlur=14; x.shadowOffsetY=4;
     if(summit && done){ const sg=x.createLinearGradient(0,byp,0,byp+bh); sg.addColorStop(0,'#FFF3C4'); sg.addColorStop(1,'#FFC94A'); x.fillStyle=sg; }
     else if(done){ const dg=x.createLinearGradient(0,byp,0,byp+bh); dg.addColorStop(0,'#FFFFFF'); dg.addColorStop(1,'#F3F5FB'); x.fillStyle=dg; }
-    else x.fillStyle='rgba(255,255,255,.78)';
+    else x.fillStyle='rgba(255,255,255,.8)';
     rrect(x,bxp,byp,bw,bh,bh/2); x.fill(); x.restore();
     x.lineWidth=2.5; x.strokeStyle= summit&&done ? '#F2B533' : (cur ? '#F58D09' : (done ? 'rgba(245,141,9,.35)' : 'rgba(29,28,68,.08)'));
     rrect(x,bxp,byp,bw,bh,bh/2); x.stroke();
@@ -2255,13 +2253,13 @@ async function buildStudentPoster(o){
       x.font='17px sans-serif'; x.textAlign='center'; x.fillText('🔒', icx, icy+6);
     }
     // اسم المحطة
-    x.font='800 31px Tajawal'; x.textAlign='center';
+    x.font='800 30px Tajawal'; x.textAlign='center';
     x.fillStyle= summit&&done ? '#7A4F00' : (cur ? '#C76A00' : (done ? '#1D1C44' : '#7D829C'));
-    x.fillText(t1, bxp+(bw-ICW-12)/2+6, byp+bh/2+11);
+    x.fillText(t1, bxp+(bw-ICW-12)/2+4, byp+bh/2+11);
   });
   // دبوس الطالب فوق محطته
   const cp=P.find(pp=>pp.i===ci), atTop=ci===N-1;
-  const pr=atTop?32:40, pcx=atTop?(cp.x>=cx?cp.x-62:cp.x+62):cp.x, pyc=atTop?cp.y-40:cp.y-50-14-pr;   // عند القمة: الصورة جنب الكأس
+  const pr=atTop?32:40, pcx=atTop?cp.x-66:cp.x, pyc=atTop?cp.y-40:cp.y-50-14-pr;   // عند القمة: الصورة جنب الكأس
   const cpx=pcx;
   if(!atTop){ x.fillStyle='#fff'; x.beginPath(); x.moveTo(cp.x-14,pyc+pr-4); x.lineTo(cp.x+14,pyc+pr-4); x.lineTo(cp.x,pyc+pr+16); x.fill(); }
   x.save(); x.shadowColor='rgba(0,0,0,.3)'; x.shadowBlur=14; x.fillStyle='#fff'; x.beginPath(); x.arc(cpx,pyc,pr+6,0,Math.PI*2); x.fill(); x.restore();
