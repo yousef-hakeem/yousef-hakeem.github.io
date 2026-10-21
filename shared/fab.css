@@ -3,7 +3,7 @@
 .fab { position: fixed; bottom: var(--fab-bottom, 24px); z-index: 8000; font-family: var(--fab-font, inherit);
   transition: opacity .35s ease, transform .35s ease; }
 .fab.is-right { right: 22px; } .fab.is-left { left: 22px; }
-.fab.is-hidden, .fab.is-away { opacity: 0; transform: translateY(20px) scale(.9); pointer-events: none; }
+.fab.is-hidden, .fab.is-away, .fab.is-tucked { opacity: 0; transform: translateY(20px) scale(.9); pointer-events: none; }
 .fab-btn { position: relative; width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
   background: var(--fab-bg, #2f8f77); color: var(--fab-fg, #fff); display: flex; align-items: center; justify-content: center;
   box-shadow: 0 10px 30px -6px var(--fab-glow, rgba(47,143,119,.55)); transition: transform .25s ease; }

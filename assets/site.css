@@ -74,14 +74,17 @@ main, .nav { position: relative; z-index: 1; }
 .cur-dot { position: fixed; left: -3px; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transition: opacity .25s; }
 .cur-ring { position: fixed; left: -19px; top: -19px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
   display: flex; align-items: center; justify-content: center; transition: width .45s var(--ease), height .45s var(--ease), left .45s var(--ease), top .45s var(--ease), background .35s, border-color .35s, opacity .3s; }
-.cur-ring b { font: 600 12.5px 'Readex Pro', sans-serif; color: var(--on-accent); white-space: nowrap; opacity: 0; transform: scale(.6); transition: opacity .3s, transform .45s var(--ease); display: flex; align-items: center; gap: 4px; }
-.cur-ring b svg { width: 14px; height: 14px; }
-.cursor.is-link .cur-ring { width: 58px; height: 58px; left: -29px; top: -29px; border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.cur-ring i { display: flex; color: var(--accent); opacity: 0; scale: .6; transition: opacity .3s, scale .45s var(--ease); }
+.cur-ring i svg { width: 16px; height: 16px; }
+/* links and projects: the ring tightens around the target */
+.cursor.is-link .cur-ring { width: 44px; height: 44px; left: -22px; top: -22px; border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .cursor.is-link .cur-dot { opacity: 0; }
-.cursor.is-label .cur-ring { width: 92px; height: 92px; left: -46px; top: -46px; border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 16px 40px -12px var(--fab-glow); }
-.cursor.is-label .cur-ring b { opacity: 1; transform: none; }
-.cursor.is-label .cur-dot { opacity: 0; }
-.cursor.is-down .cur-ring { scale: .82; }
+/* gallery / zoomable screens: a small frosted ring with a quiet hint icon */
+.cursor.is-hint .cur-ring { width: 46px; height: 46px; left: -23px; top: -23px; border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.cursor.is-hint .cur-ring i { opacity: 1; scale: 1; }
+.cursor.is-hint .cur-dot { opacity: 0; }
+.cursor.is-down .cur-ring { scale: .86; }
 .cur-ring { transition-property: width, height, left, top, background, border-color, opacity, scale; }
 .cursor.is-hidden .cur-dot, .cursor.is-hidden .cur-ring { opacity: 0; }
 

@@ -54,4 +54,15 @@
   }
   window.addEventListener('page:render', watch);
   watch();
+
+  // On phones the button tucks away while reading down the page and comes back on the way up,
+  // so it never sits on top of the text being read.
+  var lastY = window.scrollY, small = window.matchMedia('(max-width: 960px)');
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY, dy = y - lastY;
+    if (Math.abs(dy) < 6) return;
+    lastY = y;
+    var tuck = small.matches && dy > 0 && y > 120 && !el.classList.contains('is-open');
+    el.classList.toggle('is-tucked', tuck);
+  }, { passive: true });
 })();

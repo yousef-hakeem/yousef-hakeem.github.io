@@ -23,9 +23,9 @@
   };
   var L = {
     ar: { workH: 'كل مشروع قصة — من المشكلة إلى الشاشة.', aboutH: 'تصميم يبدأ من الإنسان.', processH: 'أربع خطوات، تجربة واحدة واضحة.', expH: 'أدوات ومهارات أعمل بها.',
-      hint: 'اسحب يمين ويسار لتقليب الشاشات', open: 'افتح', drag: 'اسحب', view: 'عرض', zoom: 'تكبير', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
+      hint: 'اسحب يمين ويسار لتقليب الشاشات', open: 'افتح', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
     en: { workH: 'Every project is a story — from problem to screen.', aboutH: 'Design that starts with people.', processH: 'Four steps, one clear experience.', expH: 'The tools and skills I work with.',
-      hint: 'Swipe left and right to flip through the screens', open: 'Open', drag: 'Drag', view: 'View', zoom: 'Zoom', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
+      hint: 'Swipe left and right to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
   var BRAND = ['#2f8f77', '#4b3bd6', '#0f5bd8'];
@@ -531,16 +531,20 @@
     gsap.from('.sig span', { yPercent: 75, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.sig', start: 'top bottom', end: 'bottom bottom', scrub: 1 } });
   }
 
-  /* ---------- custom cursor: a dot plus a trailing ring that labels what a click will do ---------- */
+  /* ---------- custom cursor: a dot plus a trailing ring that hints at what a click will do ---------- */
+  var CUR = {
+    drag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg>',
+    zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M11 8.5v5M8.5 11h5M20 20l-4.2-4.2"/></svg>'
+  };
   function initCursor() {
     if (!fine || reduce) return;
     var el = document.createElement('div');
     el.className = 'cursor is-hidden';
     el.setAttribute('aria-hidden', 'true');
-    el.innerHTML = '<i class="cur-dot"></i><span class="cur-ring"><b></b></span>';
+    el.innerHTML = '<i class="cur-dot"></i><span class="cur-ring"><i></i></span>';
     document.body.appendChild(el);
     document.documentElement.classList.add('has-cursor');
-    var dot = el.querySelector('.cur-dot'), ring = el.querySelector('.cur-ring'), lab = ring.querySelector('b'), shown = false, last = '';
+    var dot = el.querySelector('.cur-dot'), ring = el.querySelector('.cur-ring'), lab = ring.querySelector('i'), shown = false, last = '';
     var dx = gsap.quickTo(dot, 'x', { duration: .12, ease: 'power3' }), dy = gsap.quickTo(dot, 'y', { duration: .12, ease: 'power3' });
     var rx = gsap.quickTo(ring, 'x', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .5, ease: 'power3' });
     window.addEventListener('pointermove', function (e) {
@@ -550,15 +554,14 @@
       dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
     });
     document.addEventListener('pointerover', function (e) {
-      var t = e.target, l = L[S.lang()], label = '', link = false;
+      var t = e.target, hint = '', link = false;
       if (!t.closest) return;
       if (t.closest('.sc-nav, .sc-open')) link = true;
-      else if (t.closest('.sc-stage')) label = ICON.swipe + esc(l.drag);
-      else if (t.closest('.pv-shot')) label = esc(l.zoom);
-      else if (t.closest('.sc-item, .fl')) label = esc(l.view);
-      else if (t.closest('a, button, [role="button"], label')) link = true;
-      if (label !== last) { if (label) lab.innerHTML = label; last = label; }
-      el.classList.toggle('is-label', !!label);
+      else if (t.closest('.sc-stage')) hint = 'drag';
+      else if (t.closest('.pv-shot')) hint = 'zoom';
+      else if (t.closest('a, button, [role="button"], label, .fl')) link = true;
+      if (hint !== last) { if (hint) lab.innerHTML = CUR[hint]; last = hint; }
+      el.classList.toggle('is-hint', !!hint);
       el.classList.toggle('is-link', link);
     });
     document.documentElement.addEventListener('mouseleave', function () { el.classList.add('is-hidden'); });
