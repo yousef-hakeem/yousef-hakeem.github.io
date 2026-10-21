@@ -392,6 +392,22 @@
   .ssj-s.hl{background:var(--orange-50); border-color:#F7D6A4;}
   .ssj-s.hl b{color:var(--orange-d); font-size:16px;}
 
+  /* ===== صورة الأبطال ===== */
+  .champ-btn{margin-inline-start:auto; display:inline-flex; align-items:center; gap:6px; min-height:38px; padding:6px 14px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:13.5px; font-weight:800; color:#7A4A00; background:linear-gradient(160deg,#FFE7A6,#FFC24D); border:1px solid #F5C063;
+    box-shadow:0 6px 14px rgba(245,165,36,.28);}
+  .champ-btn.on-dark{display:flex; width:100%; justify-content:center; margin:14px 0 0; min-height:44px; font-size:14.5px;}
+  .ch-card{max-width:560px;}
+  .ch-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .ch-head b{font-size:18px; color:var(--navy);}
+  .ch-prev{border-radius:16px; overflow:hidden; background:#1E2154; min-height:200px; display:grid; place-items:center;}
+  .ch-prev img{display:block; width:100%; height:auto;}
+  .ch-load{color:#fff; font-weight:800; padding:40px 10px; text-align:center;}
+  .ch-actions{display:flex; gap:10px; margin-top:12px;}
+  .ch-actions .btn{flex:1; text-decoration:none;}
+  .ch-hint{margin:10px 0 0; font-size:12.5px; font-weight:700; color:var(--muted); text-align:center;}
+  @media(max-width:560px){ #champModal .modal-card{max-height:92vh; overflow:auto;} }
+
   /* ===== الأرباع ===== */
   body.adm-picking main.wrap > :not(#admPick):not(#dataBanner){display:none !important;}
   body:not(.adm-picking) #admPick{display:none;}
@@ -1098,6 +1114,7 @@
     <section class="card" id="rankCard" style="display:none">
       <div class="card-head">
         <h2><span class="h-ic orange">🏆</span>الترتيب <span class="count" id="rankSec"></span></h2>
+        <button class="champ-btn" type="button" onclick="openChampImage()">📸 صورة الأبطال</button>
         <span class="sub" id="rankWho"></span>
       </div>
       <ol class="ranklist" id="rankList"></ol>
@@ -1220,6 +1237,19 @@
       <button class="btn btn-ghost" onclick="closeModal('importModal')">إلغاء</button>
       <button class="btn btn-primary" onclick="doImport()">استيراد</button>
     </div>
+  </div>
+</div>
+
+<!-- صورة الأبطال -->
+<div class="modal" id="champModal">
+  <div class="modal-card ch-card">
+    <div class="ch-head"><b>📸 صورة الأبطال</b><button class="gm-x" onclick="closeModal('champModal')" aria-label="إغلاق">✕</button></div>
+    <div class="ch-prev" id="chPrev"></div>
+    <div class="ch-actions">
+      <a class="btn btn-primary" id="chDl" href="#" download="abtal.png">⬇️ تحميل الصورة</a>
+      <button class="btn btn-ghost" id="chShare" type="button" onclick="shareChamp()">📤 مشاركة</button>
+    </div>
+    <p class="ch-hint">على الآيفون: اضغط مطوّلًا على الصورة واختر «حفظ في الصور».</p>
   </div>
 </div>
 
@@ -2055,6 +2085,145 @@ function processAvatarImage(file, cb){
 }
 
 /* =================== RENDER =================== */
+/* =================== صورة الأبطال (أول 3 في القسم والربع المفتوح) =================== */
+let champBlob=null, champUrl='';
+function brandLogo(cls){
+  const css=(document.getElementById('brand-assets')||{}).textContent||'';
+  const m=css.match(new RegExp('\\.'+cls+'\\{background-image:url\\(([^)]+)\\)'));
+  return m ? m[1].replace(/^["']|["']$/g,'') : '';
+}
+function loadImg(src){ return new Promise(res=>{ if(!src) return res(null); const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=src; }); }
+function rrect(x,X,Y,w,h,r){ x.beginPath(); x.moveTo(X+r,Y); x.arcTo(X+w,Y,X+w,Y+h,r); x.arcTo(X+w,Y+h,X,Y+h,r); x.arcTo(X,Y+h,X,Y,r); x.arcTo(X,Y,X+w,Y,r); x.closePath(); }
+function wrapLines(x, text, maxW){
+  const words=(text||'').split(/\s+/).filter(Boolean), lines=[]; let line='';
+  words.forEach(w=>{ const t=line?line+' '+w:w; if(x.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; });
+  if(line) lines.push(line);
+  if(lines.length>2){ lines[1]=lines.slice(1).join(' '); lines.length=2; }
+  return lines;
+}
+async function hiAvatar(s){
+  if(avatarHiCache[s.id]) return avatarHiCache[s.id];
+  if(db && online){
+    try{
+      const snap=await Promise.race([db.ref('avatarsHi/'+s.id).once('value'), new Promise((_,rej)=>setTimeout(()=>rej('t'),4000))]);
+      const v=snap && snap.val(); if(typeof v==='string' && v.startsWith('data:image')){ avatarHiCache[s.id]=v; return v; }
+    }catch(e){}
+  }
+  return s.avatar||'';
+}
+async function buildChampImage(){
+  const W=1080, H=1350, c=document.createElement('canvas'); c.width=W; c.height=H;
+  const x=c.getContext('2d');
+  await Promise.all(['800 76px Tajawal','700 34px Tajawal','500 26px Tajawal'].map(f=>document.fonts.load(f).catch(()=>{})));
+  const sec=activeSection, q=activeQuarter;
+  // الخلفية
+  let g=x.createLinearGradient(0,0,W,H); g.addColorStop(0,'#343F90'); g.addColorStop(.5,'#262A6A'); g.addColorStop(1,'#15153A');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  const glow=(cx,cy,r,col)=>{ const rg=x.createRadialGradient(cx,cy,0,cx,cy,r); rg.addColorStop(0,col); rg.addColorStop(1,'rgba(0,0,0,0)'); x.fillStyle=rg; x.fillRect(0,0,W,H); };
+  glow(120,120,520,'rgba(55,168,169,.35)'); glow(W-80,H-160,560,'rgba(247,88,62,.22)'); glow(W/2,700,460,'rgba(255,200,90,.20)');
+  let r=11; const rnd=()=> (r=(r*9301+49297)%233280)/233280;
+  for(let i=0;i<80;i++){ x.fillStyle=`rgba(255,255,255,${(.15+rnd()*.5).toFixed(2)})`; x.beginPath(); x.arc(rnd()*W, rnd()*H*.62, .8+rnd()*1.8, 0, Math.PI*2); x.fill(); }
+  // الشعارات داخل شريط أبيض
+  const [lh, ln] = await Promise.all([loadImg(brandLogo('logo-habka-full')), loadImg(brandLogo('logo-nafis'))]);
+  const LH=78, wh=lh? lh.width*LH/lh.height : 0, wn=ln? ln.width*LH/ln.height : 0;
+  const pillW=wh+wn+(lh&&ln?90:50), pillX=(W-pillW)/2, pillY=52;
+  x.fillStyle='rgba(255,255,255,.96)'; rrect(x,pillX,pillY,pillW,LH+34,30); x.fill();
+  let lx=pillX+25;
+  if(ln){ x.drawImage(ln, lx, pillY+17, wn, LH); lx+=wn+20; }
+  if(lh&&ln){ x.fillStyle='#DADDEB'; x.fillRect(lx, pillY+28, 2, LH-22); lx+=22; }
+  if(lh){ x.drawImage(lh, lx, pillY+17, wh, LH); }
+  // العنوان
+  x.direction='rtl'; x.textAlign='center'; x.textBaseline='alphabetic';
+  x.font='800 78px Tajawal';
+  const tg=x.createLinearGradient(0,200,0,270); tg.addColorStop(0,'#FFE7A6'); tg.addColorStop(1,'#F5A524');
+  x.fillStyle=tg; x.shadowColor='rgba(0,0,0,.25)'; x.shadowBlur=18; x.fillText('أبطال '+Q_NAMES[q], W/2, 268); x.shadowBlur=0;
+  x.font='700 36px Tajawal'; x.fillStyle='rgba(255,255,255,.88)';
+  x.fillText((sec==='fityan'?'🧒 ':'🐎 ')+'قسم '+SECTION_LABELS[sec]+'  ·  رحلة مثابر', W/2, 322);
+  x.strokeStyle='rgba(255,214,102,.5)'; x.lineWidth=2; x.beginPath(); x.moveTo(W/2-150,352); x.lineTo(W/2-14,352); x.moveTo(W/2+14,352); x.lineTo(W/2+150,352); x.stroke();
+  x.fillStyle='#FFD56B'; x.save(); x.translate(W/2,352); x.rotate(Math.PI/4); x.fillRect(-6,-6,12,12); x.restore();
+  // المنصّة: الثاني يمين، الأول وسط، الثالث يسار
+  const top=rankedList(sec).filter(o=>aPts(o.s)>0).slice(0,3);
+  const MED=[null,
+    {c:['#FFF0B8','#F2B533','#B9800A'], ring:['#FFE7A3','#E09A12'], em:'🥇', h:215, R:112, cx:W/2},
+    {c:['#FFFFFF','#C9D1E2','#8F98B0'], ring:['#FFFFFF','#AEB7CC'], em:'🥈', h:160, R:94, cx:W-205},
+    {c:['#FFDDC2','#D9874C','#97501F'], ring:['#FFD3B0','#C9763D'], em:'🥉', h:120, R:94, cx:205}];
+  const base=1218;
+  for(let i=0;i<3;i++){
+    const o=top[i], M=MED[i+1], colW=300, bx=M.cx-colW/2+10, bw=colW-20, bt=base-M.h;
+    // البلوك
+    const bg=x.createLinearGradient(0,bt,0,base); bg.addColorStop(0,M.c[0]); bg.addColorStop(.35,M.c[1]); bg.addColorStop(1,M.c[2]);
+    x.fillStyle=bg; x.beginPath(); x.moveTo(bx,base); x.lineTo(bx,bt+22); x.arcTo(bx,bt,bx+22,bt,22); x.lineTo(bx+bw-22,bt); x.arcTo(bx+bw,bt,bx+bw,bt+22,22); x.lineTo(bx+bw,base); x.closePath(); x.fill();
+    x.fillStyle='rgba(255,255,255,.35)'; x.fillRect(bx+14,bt+8,bw-28,4);
+    x.font='800 '+(i===0?120:96)+'px Tajawal'; x.fillStyle='rgba(255,255,255,.92)'; x.shadowColor='rgba(0,0,0,.2)'; x.shadowBlur=10;
+    x.fillText(String(o?o.rank:i+1), M.cx, bt+(i===0?140:112)); x.shadowBlur=0;
+    if(!o){ x.font='700 30px Tajawal'; x.fillStyle='rgba(255,255,255,.5)'; x.fillText('—', M.cx, bt-60); continue; }
+    const s=o.s, pts=aPts(s), jp=journeyPts(s), {cur}=stationInfo(jp), done=stationIdx(jp);
+    // خط السير
+    const ty=bt-42, tw=250, tx0=M.cx+tw/2, step=tw/9;
+    x.strokeStyle='rgba(255,255,255,.18)'; x.lineWidth=5; x.lineCap='round'; x.beginPath(); x.moveTo(tx0,ty); x.lineTo(tx0-tw,ty); x.stroke();
+    x.strokeStyle='#FFB547'; x.beginPath(); x.moveTo(tx0,ty); x.lineTo(tx0-step*done,ty); x.stroke();
+    for(let k=0;k<10;k++){
+      const px=tx0-step*k, on=k<=done;
+      if(k===9 && on){ x.font='34px sans-serif'; x.fillText('🏆', px, ty+12); continue; }
+      x.beginPath(); x.arc(px,ty,k===done?10:7,0,Math.PI*2); x.fillStyle= on ? (k===done?'#FFFFFF':'#FFC266') : 'rgba(255,255,255,.22)'; x.fill();
+      if(k===done){ x.strokeStyle='#F58D09'; x.lineWidth=4; x.stroke(); }
+    }
+    x.font='700 25px Tajawal'; x.fillStyle='rgba(255,255,255,.8)';
+    x.fillText(done===9 ? 'خط السير: وصل «البطل»' : 'خط السير: '+cur.icon+' '+cur.name, M.cx, ty-30);
+    // النقاط
+    x.font='800 32px Tajawal'; const ptxt=pts+' نقطة', pw=x.measureText(ptxt).width+48, py=ty-104;
+    x.fillStyle='rgba(255,255,255,.1)'; rrect(x,M.cx-pw/2,py-38,pw,54,27); x.fill();
+    x.strokeStyle='rgba(255,214,102,.65)'; x.lineWidth=2; x.stroke();
+    x.fillStyle='#FFD56B'; x.fillText(ptxt, M.cx, py);
+    // الاسم
+    x.font='800 '+(i===0?44:38)+'px Tajawal'; x.fillStyle='#FFFFFF';
+    const lines=wrapLines(x, s.name, 280), LHt=i===0?52:46, ny=py-62;
+    lines.forEach((ln2,li)=>x.fillText(ln2, M.cx, ny-(lines.length-1-li)*LHt));
+    // الصورة
+    const R=M.R, ay=ny-(lines.length-1)*LHt-62-R;
+    x.save(); x.shadowColor='rgba(0,0,0,.35)'; x.shadowBlur=30;
+    const rg=x.createLinearGradient(M.cx-R,ay-R,M.cx+R,ay+R); rg.addColorStop(0,M.ring[0]); rg.addColorStop(1,M.ring[1]);
+    x.fillStyle=rg; x.beginPath(); x.arc(M.cx,ay,R+10,0,Math.PI*2); x.fill(); x.restore();
+    const img=await loadImg(await hiAvatar(s));
+    x.save(); x.beginPath(); x.arc(M.cx,ay,R,0,Math.PI*2); x.clip();
+    if(img){ const sz=Math.min(img.width,img.height); x.drawImage(img,(img.width-sz)/2,(img.height-sz)/2,sz,sz,M.cx-R,ay-R,R*2,R*2); }
+    else { const ag=x.createLinearGradient(0,ay-R,0,ay+R); ag.addColorStop(0,'#3FB9BA'); ag.addColorStop(1,'#2E387E'); x.fillStyle=ag; x.fillRect(M.cx-R,ay-R,R*2,R*2);
+      x.font='800 '+Math.round(R*.9)+'px Tajawal'; x.fillStyle='#fff'; x.fillText((s.name||'؟').trim().charAt(0), M.cx, ay+R*.32); }
+    x.restore();
+    // ميدالية
+    const mx=M.cx-R*.72, my=ay+R*.72;
+    x.fillStyle='#fff'; x.beginPath(); x.arc(mx,my,34,0,Math.PI*2); x.fill();
+    x.font='44px sans-serif'; x.fillText(M.em, mx, my+16);
+    if(i===0){ x.font='58px sans-serif'; x.fillText('👑', M.cx, ay-R-16); }
+  }
+  // التذييل
+  x.font='500 26px Tajawal'; x.fillStyle='rgba(255,255,255,.6)';
+  x.fillText('mothaber.habka.org', W/2, 1292);
+  return new Promise(res=>c.toBlob(b=>res(b),'image/png'));
+}
+async function openChampImage(){
+  if(role!=='admin') return;
+  const prev=document.getElementById('chPrev');
+  prev.innerHTML='<div class="ch-load">⏳ جارٍ تجهيز الصورة…</div>';
+  openModal('champModal');
+  try{
+    champBlob=await buildChampImage();
+    if(champUrl) URL.revokeObjectURL(champUrl);
+    champUrl=URL.createObjectURL(champBlob);
+    prev.innerHTML=`<img src="${champUrl}" alt="صورة الأبطال">`;
+    const dl=document.getElementById('chDl');
+    dl.href=champUrl; dl.download='abtal-'+activeSection+'-q'+activeQuarter+'.png';
+    const sh=document.getElementById('chShare');
+    const f=new File([champBlob], dl.download, {type:'image/png'});
+    sh.style.display = (navigator.canShare && navigator.canShare({files:[f]})) ? '' : 'none';
+  }catch(e){ console.warn(e); prev.innerHTML='<div class="ch-load">تعذّر تجهيز الصورة، حاول مرة ثانية.</div>'; }
+}
+async function shareChamp(){
+  if(!champBlob) return;
+  const f=new File([champBlob], 'abtal-'+activeSection+'-q'+activeQuarter+'.png', {type:'image/png'});
+  try{ await navigator.share({files:[f], title:'أبطال '+Q_NAMES[activeQuarter]+' — '+SECTION_LABELS[activeSection]}); }catch(e){}
+}
+
 /* =================== الأرباع: التنقّل =================== */
 function qStats(q){
   let pts=0; studentsArr().forEach(s=>pts+=qPoints(s,q));
@@ -2621,6 +2790,7 @@ function renderAdminDash(){
       <div><div class="ad-k">${Q_NAMES[activeQuarter]}</div><div class="ad-t">${secIc} ${SECTION_LABELS[activeSection]}</div></div>
       <div class="ad-prog"><b>${prog}%</b><small>تقدّم الرحلة الكلية</small></div>
     </div>
+    <button class="champ-btn on-dark" type="button" onclick="openChampImage()">📸 صورة أول 3 أبطال في ${Q_NAMES[activeQuarter]}</button>
     <div class="ad-stats">
       <div class="ad-s"><span>👥</span><b>${n}</b><small>طالب</small></div>
       <div class="ad-s"><span>⭐</span><b>${total}</b><small>نقاط الربع</small></div>
