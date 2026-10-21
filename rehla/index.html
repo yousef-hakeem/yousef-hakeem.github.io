@@ -2109,6 +2109,12 @@ async function hiAvatar(s){
   }
   return s.avatar||'';
 }
+// خط الإيموجي: الآيفون ما يرسم الإيموجي إذا كان لون التعبئة متدرّج، فنرسمها دائمًا بلون عادي
+const EMO=n=>n+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+function drawEmoji(x, e, cx, cy, size, alpha){
+  x.save(); x.globalAlpha=alpha==null?1:alpha; x.fillStyle='#000'; x.textAlign='center'; x.textBaseline='middle';
+  x.font=EMO(size); x.fillText(e, cx, cy+size*.04); x.restore();
+}
 // صورة لكل بطل لحاله: الاسم + الصورة + النقاط + خط سيره على نفس طريق الرحلة
 const MEDALS={1:{em:'🥇', word:'المركز الأول', c:['#FFE7A3','#E09A12']}, 2:{em:'🥈', word:'المركز الثاني', c:['#FFFFFF','#AEB7CC']}, 3:{em:'🥉', word:'المركز الثالث', c:['#FFD3B0','#C9763D']}};
 async function buildStudentPoster(o){
@@ -2151,7 +2157,7 @@ async function buildStudentPoster(o){
   else { const ag=x.createLinearGradient(0,ay-R,0,ay+R); ag.addColorStop(0,'#3FB9BA'); ag.addColorStop(1,'#2E387E'); x.fillStyle=ag; x.fillRect(W/2-R,ay-R,R*2,R*2);
     x.font='800 '+Math.round(R*.9)+'px Tajawal'; x.fillStyle='#fff'; x.fillText((s.name||'؟').trim().charAt(0), W/2, ay+R*.32); }
   x.restore();
-  if(o.rank===1){ x.font='54px sans-serif'; x.fillText('👑', W/2, ay-R-16); }
+  if(o.rank===1) drawEmoji(x, '👑', W/2, ay-R-34, 56);
   // شريط المركز على أسفل الصورة
   x.font='800 34px Tajawal';
   const rt=M.em+'  '+M.word, rw=x.measureText(rt).width+70, ry=ay+R+8;
@@ -2215,15 +2221,23 @@ async function buildStudentPoster(o){
   x.fillStyle=rr; for(let k=0;k<12;k++){ x.rotate(Math.PI/6); x.beginPath(); x.moveTo(0,0); x.lineTo(120,-18); x.lineTo(120,18); x.closePath(); x.fill(); } x.restore();
   // المحطات + الأسماء
   P.forEach(pnt=>{
-    const done=pnt.i<=ci, cur=pnt.i===ci, summit=pnt.i===N-1, nr=cur?50:(summit?44:38);
-    x.fillStyle = done ? '#C9650A' : '#CCD3E6';
+    const done=pnt.i<=ci, cur=pnt.i===ci, summit=pnt.i===N-1, nr=summit?50:(cur?48:40);
+    // هالة خفيفة للمحطة الحالية
+    if(cur){ const hg=x.createRadialGradient(pnt.x,pnt.y,nr,pnt.x,pnt.y,nr+26); hg.addColorStop(0,'rgba(255,200,90,.55)'); hg.addColorStop(1,'rgba(255,200,90,0)');
+      x.fillStyle=hg; x.beginPath(); x.arc(pnt.x,pnt.y,nr+26,0,Math.PI*2); x.fill(); }
+    // قاعدة بارزة (ثلاثية الأبعاد)
+    x.fillStyle = done ? (summit ? '#B98100' : '#C9650A') : '#C9D0E2';
     x.beginPath(); x.arc(pnt.x,pnt.y+6,nr,0,Math.PI*2); x.fill();
+    // الحلقة الخارجية
     if(done){ const ng=x.createLinearGradient(pnt.x,pnt.y-nr,pnt.x,pnt.y+nr); ng.addColorStop(0, summit?'#FFE58A':'#FFC266'); ng.addColorStop(1, summit?'#F0A400':'#EE6F12'); x.fillStyle=ng; }
     else x.fillStyle='#FFFFFF';
     x.beginPath(); x.arc(pnt.x,pnt.y,nr,0,Math.PI*2); x.fill();
-    x.lineWidth=cur?8:5; x.strokeStyle= cur ? '#FFFFFF' : (done ? '#FFE2B3' : '#E3E7F2'); x.stroke();
-    x.save(); if(!done) x.globalAlpha=.45;
-    x.font=(cur?46:36)+'px sans-serif'; x.textAlign='center'; x.fillText(pnt.st.icon, pnt.x, pnt.y+(cur?16:13)); x.restore();
+    // قرص داخلي فاتح عشان الأيقونة تبرز
+    x.fillStyle = done ? (summit ? '#FFF8DC' : '#FFFFFF') : '#F2F4F9';
+    x.beginPath(); x.arc(pnt.x,pnt.y,nr-9,0,Math.PI*2); x.fill();
+    x.lineWidth=2; x.strokeStyle= done ? 'rgba(201,101,10,.18)' : 'rgba(29,28,68,.06)'; x.stroke();
+    // الأيقونة (ميداليات/تاج/كأس...) — بلون عادي عشان تطلع في الآيفون
+    drawEmoji(x, pnt.st.icon, pnt.x, pnt.y, summit?44:(cur?40:34), done?1:.4);
     // اسم المحطة: بطاقات بنفس العرض، مصفوفة في عمودين على الجهة الخارجية
     x.font='800 27px Tajawal';
     const t1=pnt.st.name;
@@ -2251,7 +2265,7 @@ async function buildStudentPoster(o){
       x.beginPath(); x.moveTo(icx-7,icy+1); x.lineTo(icx-2,icy+6); x.lineTo(icx+8,icy-5); x.stroke();
     } else {
       x.fillStyle='#E4E7F0'; x.beginPath(); x.arc(icx,icy,15,0,Math.PI*2); x.fill();
-      x.font='17px sans-serif'; x.textAlign='center'; x.fillText('🔒', icx, icy+6);
+      drawEmoji(x, '🔒', icx, icy, 16);
     }
     // اسم المحطة
     x.font='800 27px Tajawal'; x.textAlign='center';
