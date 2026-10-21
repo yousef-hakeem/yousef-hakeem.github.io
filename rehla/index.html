@@ -2195,7 +2195,7 @@ async function buildStudentPoster(o){
     x.fillStyle='#3E9F69'; x.beginPath(); x.moveTo(tx,ty-15*k); x.lineTo(tx+20*k,ty+14*k); x.lineTo(tx-20*k,ty+14*k); x.fill(); };
   [[.06,.78],[.94,.74],[.09,.9],[.92,.88],[.05,.66],[.95,.6]].forEach(([fx,fy])=>tree(MX+MW*fx, MY+MH*fy, 1.1+rnd()*.4));
   // نقاط المحطات (القمة فوق)
-  const N=STATIONS.length, TOP=100, GAP=(MH-TOP-80)/(N-1), cx=MX+MW/2, amp=Math.min(230, MW*.24);
+  const N=STATIONS.length, TOP=100, GAP=(MH-TOP-80)/(N-1), cx=MX+MW/2, amp=Math.min(205, MW*.21);
   const P=STATIONS.slice().reverse().map((st,k)=>({st, i:N-1-k, x:cx+Math.sin(k*1.2+0.5)*amp, y:MY+TOP+k*GAP}));
   const seg=(a,b)=>{ x.moveTo(b.x,b.y); x.bezierCurveTo(b.x,b.y-GAP/2,a.x,a.y+GAP/2,a.x,a.y); };
   const last=P[N-1];
@@ -2224,22 +2224,44 @@ async function buildStudentPoster(o){
     x.lineWidth=cur?8:5; x.strokeStyle= cur ? '#FFFFFF' : (done ? '#FFE2B3' : '#E3E7F2'); x.stroke();
     x.save(); if(!done) x.globalAlpha=.45;
     x.font=(cur?46:36)+'px sans-serif'; x.textAlign='center'; x.fillText(pnt.st.icon, pnt.x, pnt.y+(cur?16:13)); x.restore();
-    // اسم المحطة فقط (بدون نقاط)
-    const right=pnt.x>cx, off=nr+16;
-    x.font='800 28px Tajawal'; const t1=pnt.st.name, w1=x.measureText(t1).width;
-    const bw=w1+(done?62:36), bh=50, bxp= right ? pnt.x-off-bw : pnt.x+off, byp=pnt.y-bh/2;
-    x.save(); x.shadowColor='rgba(29,28,68,.12)'; x.shadowBlur=10; x.fillStyle= cur ? '#FFFFFF' : 'rgba(255,255,255,.95)'; rrect(x,bxp,byp,bw,bh,25); x.fill(); x.restore();
-    if(cur||summit){ x.strokeStyle='#F5A524'; x.lineWidth=3; rrect(x,bxp,byp,bw,bh,25); x.stroke(); }
-    x.fillStyle= summit ? '#B07A00' : (done ? '#1D1C44' : '#6F7492');
+    // اسم المحطة: بطاقة أنيقة على الجهة الخارجية من الطريق
+    x.font='800 31px Tajawal';
+    const t1=pnt.st.name, w1=x.measureText(t1).width;
+    const ICW=34, bw=w1+ICW+46, bh=58, off=nr+30;
+    let outRight = pnt.x>=cx;
+    let bxp = outRight ? pnt.x+off : pnt.x-off-bw;
+    if(bxp<MX+14 || bxp+bw>MX+MW-14){ outRight=!outRight; bxp = outRight ? pnt.x+off : pnt.x-off-bw; }
+    const byp=pnt.y-bh/2, cyl=pnt.y;
+    // خط وصل صغير من المحطة للبطاقة
+    x.strokeStyle= done ? 'rgba(245,141,9,.75)' : 'rgba(255,255,255,.85)'; x.lineWidth=4; x.setLineDash([2,7]); x.lineCap='round';
+    x.beginPath(); x.moveTo(outRight? pnt.x+nr+4 : pnt.x-nr-4, cyl); x.lineTo(outRight? bxp-2 : bxp+bw+2, cyl); x.stroke(); x.setLineDash([]);
+    // البطاقة
+    x.save(); x.shadowColor='rgba(29,28,68,.18)'; x.shadowBlur=14; x.shadowOffsetY=4;
+    if(summit && done){ const sg=x.createLinearGradient(0,byp,0,byp+bh); sg.addColorStop(0,'#FFF3C4'); sg.addColorStop(1,'#FFC94A'); x.fillStyle=sg; }
+    else if(done){ const dg=x.createLinearGradient(0,byp,0,byp+bh); dg.addColorStop(0,'#FFFFFF'); dg.addColorStop(1,'#F3F5FB'); x.fillStyle=dg; }
+    else x.fillStyle='rgba(255,255,255,.78)';
+    rrect(x,bxp,byp,bw,bh,bh/2); x.fill(); x.restore();
+    x.lineWidth=2.5; x.strokeStyle= summit&&done ? '#F2B533' : (cur ? '#F58D09' : (done ? 'rgba(245,141,9,.35)' : 'rgba(29,28,68,.08)'));
+    rrect(x,bxp,byp,bw,bh,bh/2); x.stroke();
+    // الأيقونة الصغيرة (✓ أو قفل) على يمين البطاقة (بداية القراءة)
+    const icx=bxp+bw-12-ICW/2, icy=byp+bh/2;
     if(done){
-      x.fillText(t1, bxp+bw/2+13, byp+35);
-      x.fillStyle='#37A8A9'; x.beginPath(); x.arc(bxp+24, byp+bh/2, 11, 0, Math.PI*2); x.fill();
-      x.strokeStyle='#fff'; x.lineWidth=3; x.beginPath(); x.moveTo(bxp+19, byp+bh/2); x.lineTo(bxp+23, byp+bh/2+4); x.lineTo(bxp+29, byp+bh/2-4); x.stroke();
-    } else x.fillText(t1, bxp+bw/2, byp+35);
+      const cg=x.createLinearGradient(0,icy-17,0,icy+17); cg.addColorStop(0, summit?'#E0A100':'#3FBFC0'); cg.addColorStop(1, summit?'#B07A00':'#1F8F90');
+      x.fillStyle=cg; x.beginPath(); x.arc(icx,icy,16,0,Math.PI*2); x.fill();
+      x.strokeStyle='#fff'; x.lineWidth=3.5; x.lineCap='round'; x.lineJoin='round';
+      x.beginPath(); x.moveTo(icx-7,icy+1); x.lineTo(icx-2,icy+6); x.lineTo(icx+8,icy-5); x.stroke();
+    } else {
+      x.fillStyle='#E4E7F0'; x.beginPath(); x.arc(icx,icy,16,0,Math.PI*2); x.fill();
+      x.font='17px sans-serif'; x.textAlign='center'; x.fillText('🔒', icx, icy+6);
+    }
+    // اسم المحطة
+    x.font='800 31px Tajawal'; x.textAlign='center';
+    x.fillStyle= summit&&done ? '#7A4F00' : (cur ? '#C76A00' : (done ? '#1D1C44' : '#7D829C'));
+    x.fillText(t1, bxp+(bw-ICW-12)/2+6, byp+bh/2+11);
   });
   // دبوس الطالب فوق محطته
   const cp=P.find(pp=>pp.i===ci), atTop=ci===N-1;
-  const pr=atTop?32:40, pcx=atTop?cp.x+62:cp.x, pyc=atTop?cp.y-40:cp.y-50-14-pr;   // عند القمة: الصورة جنب الكأس
+  const pr=atTop?32:40, pcx=atTop?(cp.x>=cx?cp.x-62:cp.x+62):cp.x, pyc=atTop?cp.y-40:cp.y-50-14-pr;   // عند القمة: الصورة جنب الكأس
   const cpx=pcx;
   if(!atTop){ x.fillStyle='#fff'; x.beginPath(); x.moveTo(cp.x-14,pyc+pr-4); x.lineTo(cp.x+14,pyc+pr-4); x.lineTo(cp.x,pyc+pr+16); x.fill(); }
   x.save(); x.shadowColor='rgba(0,0,0,.3)'; x.shadowBlur=14; x.fillStyle='#fff'; x.beginPath(); x.arc(cpx,pyc,pr+6,0,Math.PI*2); x.fill(); x.restore();
