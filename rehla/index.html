@@ -1321,7 +1321,7 @@ const PRESET_ITEMS = [
   {name:'الملاحظة', points:-150},
 ];
 // رقم النسخة: إذا نزلت نسخة أحدث على الموقع، الصفحة تحدّث نفسها تلقائيًا (ما تعلق على نسخة قديمة محفوظة بالجوال)
-const BUILD='58';
+const BUILD='59';
 (function autoUpdate(){
   try{
     if(!/^https?:$/.test(location.protocol) || location.hostname==='app.local') return;
@@ -2147,13 +2147,17 @@ async function buildStudentPoster(o){
   for(let i=0;i<70;i++){ x.fillStyle=`rgba(255,255,255,${(.15+rnd()*.5).toFixed(2)})`; x.beginPath(); x.arc(rnd()*W, rnd()*820, .8+rnd()*1.8, 0, Math.PI*2); x.fill(); }
   // الشعارات
   const [lh, ln] = await Promise.all([loadImg(brandLogo('logo-habka-full')), loadImg(brandLogo('logo-nafis'))]);
-  const LH=74, wh=lh? lh.width*LH/lh.height : 0, wn=ln? ln.width*LH/ln.height : 0;
-  const pillW=wh+wn+(lh&&ln?90:50), pillX=(W-pillW)/2, pillY=56;
-  x.fillStyle='rgba(255,255,255,.96)'; rrect(x,pillX,pillY,pillW,LH+32,30); x.fill();
-  let lx=pillX+25;
-  if(ln){ x.drawImage(ln, lx, pillY+16, wn, LH); lx+=wn+20; }
-  if(lh&&ln){ x.fillStyle='#DADDEB'; x.fillRect(lx, pillY+26, 2, LH-20); lx+=22; }
-  if(lh){ x.drawImage(lh, lx, pillY+16, wh, LH); }
+  // حبكة يسار، ونافس يمين
+  const HH=86, NH=80, PAD=36, GAPL=30;
+  const wh=lh? lh.width*HH/lh.height : 0, wn=ln? ln.width*NH/ln.height : 0;
+  const pillH=HH+34, pillW=PAD*2+wh+wn+(lh&&ln?GAPL*2+2:0), pillX=(W-pillW)/2, pillY=48;
+  x.save(); x.shadowColor='rgba(0,0,0,.28)'; x.shadowBlur=24; x.shadowOffsetY=8;
+  x.fillStyle='#FFFFFF'; rrect(x,pillX,pillY,pillW,pillH,pillH/2); x.fill(); x.restore();
+  let lx=pillX+PAD;
+  if(lh){ x.drawImage(lh, lx, pillY+(pillH-HH)/2, wh, HH); lx+=wh+GAPL; }
+  if(lh&&ln){ const dg=x.createLinearGradient(0,pillY+18,0,pillY+pillH-18); dg.addColorStop(0,'rgba(218,221,235,0)'); dg.addColorStop(.5,'#D3D7E6'); dg.addColorStop(1,'rgba(218,221,235,0)');
+    x.fillStyle=dg; x.fillRect(lx, pillY+16, 2, pillH-32); lx+=2+GAPL; }
+  if(ln){ x.drawImage(ln, lx, pillY+(pillH-NH)/2, wn, NH); }
   // العنوان
   x.direction='rtl'; x.textAlign='center'; x.textBaseline='alphabetic';
   x.font='800 70px Tajawal';
