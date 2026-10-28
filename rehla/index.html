@@ -251,6 +251,8 @@
     transition:border-color .15s, background .15s, box-shadow .15s;}
   .rrow:hover{border-color:var(--line-2); box-shadow:0 3px 12px rgba(29,28,68,.05);}
   .rrow.checked{border-color:#B4BBE6; background:#F5F6FD;}
+  #roster.sel-mode .rrow{user-select:none; -webkit-user-select:none;}
+  #roster.sel-mode .rrow:active{transform:scale(.99);}
   .rrow.sel{border-color:var(--orange); background:#FFF9F0; box-shadow:0 0 0 3px rgba(245,141,9,.13);}
   .rank{min-width:24px; text-align:center; font-size:13px; font-weight:800; color:#9EA2B9; flex:none; font-variant-numeric:tabular-nums;}
   .rank.top{font-size:17px;}
@@ -1321,7 +1323,7 @@ const PRESET_ITEMS = [
   {name:'الملاحظة', points:-150},
 ];
 // رقم النسخة: إذا نزلت نسخة أحدث على الموقع، الصفحة تحدّث نفسها تلقائيًا (ما تعلق على نسخة قديمة محفوظة بالجوال)
-const BUILD='60';
+const BUILD='61';
 (function autoUpdate(){
   try{
     if(!/^https?:$/.test(location.protocol) || location.hostname==='app.local') return;
@@ -1590,9 +1592,16 @@ function selectStudent(id){
   renderAll();
 }
 // الضغط على أي مكان في صف الطالب يفتح بطاقته (عدا مربع التحديد والأزرار)
+// وضع التحديد: إذا فيه طالب محدد بالقسم، الضغط على أي صف يحدده/يشيل تحديده بدل ما يفتح بطاقته
+function selMode(){ return role==='admin' && selectedTargets().length>0; }
 function rowClick(ev, id){
   if(ev.target.closest('input,button,label')) return;
+  if(selMode()){ toggleSel(id, !selSet.has(id)); return; }
   selectStudent(id);
+}
+function avatarTap(ev, id){
+  if(selMode()){ ev.stopPropagation(); toggleSel(id, !selSet.has(id)); return; }
+  viewAvatar(ev, id);
 }
 function setSection(sec){
   activeSection=sec; pendingDeleteId=null; selSet.clear(); dashOpenSt=null;
@@ -1627,6 +1636,7 @@ function refreshSelectionUI(){
   document.querySelectorAll('#roster .gchk input[data-gid]').forEach(c=>{
     const mem=membersOf(c.dataset.gid); c.checked = mem.length>0 && mem.every(s=>selSet.has(s.id));
   });
+  const rs=document.getElementById('roster'); if(rs) rs.classList.toggle('sel-mode', selMode());
   renderBulkBar(sectionArr(activeSection));
 }
 // منح/خصم نقاط لمجموعة من المعرّفات مع تسجيلها — يرجع عدد من تغيّرت نقاطهم
@@ -2743,7 +2753,7 @@ function memberRowHtml(s, idx, gid){
   return `<div class="rrow ${sel} ${chk?'checked':''}" data-id="${s.id}" onclick="rowClick(event,'${s.id}')">
     <input type="checkbox" class="rchk" ${chk?'checked':''} onchange="toggleSel('${s.id}', this.checked)" title="تحديد">
     <div class="${rankCls}">${rankIc}</div>
-    <div class="ravatar ${s.avatar?'zoom':''}" ${s.avatar?`onclick="viewAvatar(event,'${s.id}')" title="تكبير الصورة"`:''}>${avatarMarkup(s)}</div>
+    <div class="ravatar ${s.avatar?'zoom':''}" ${s.avatar?`onclick="avatarTap(event,'${s.id}')" title="تكبير الصورة"`:''}>${avatarMarkup(s)}</div>
     <div class="rname"><span class="nm">${escapeHtml(s.name)}</span><span class="code">#${s.code}</span></div>
     <div class="mini"><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>
     <div class="rpts"><span class="pv">${aPts(s)}</span><span class="pm">${role==='admin'?'نقطة':'/'+MAX_POINTS}</span></div>
@@ -2928,6 +2938,7 @@ function renderRoster(){
   renderAdminDash();
   if(role!=='admin')return;
   const box=document.getElementById('roster'); if(!box)return;
+  box.classList.toggle('sel-mode', selMode());
   const arr=sectionArr(activeSection)
     .slice()
     .sort((a,b)=> (aPts(b)-aPts(a)) || ((a.createdAt||0)-(b.createdAt||0)));
@@ -2971,7 +2982,7 @@ function renderBulkBar(arr){
   // شريط ثابت الارتفاع فوق القائمة — أزرار الإضافة تظهر في الشريط السفلي
   bar.innerHTML=`<div class="bb-row">
       <label class="ball"><input type="checkbox" ${allOn?'checked':''} onchange="toggleAll(this.checked)"> تحديد الكل</label>
-      <span class="bcount">${n ? n+' محدد' : 'لإضافة نقاط لأكثر من طالب'}</span>
+      <span class="bcount">${n ? n+' محدد · اضغط أي اسم لتحديده' : 'حدّد أول طالب من المربع، وبعدها اضغط الأسماء'}</span>
     </div>`;
   renderDock(n);
 }
