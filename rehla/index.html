@@ -1321,7 +1321,7 @@ const PRESET_ITEMS = [
   {name:'الملاحظة', points:-150},
 ];
 // رقم النسخة: إذا نزلت نسخة أحدث على الموقع، الصفحة تحدّث نفسها تلقائيًا (ما تعلق على نسخة قديمة محفوظة بالجوال)
-const BUILD='59';
+const BUILD='60';
 (function autoUpdate(){
   try{
     if(!/^https?:$/.test(location.protocol) || location.hostname==='app.local') return;
@@ -1386,7 +1386,7 @@ function q1Top3(s){
   const v=qPoints(s,1); if(v<=0) return false;
   return sectionArr(s.section||'fursan').filter(x=>qPoints(x,1)>v).length < 3;
 }
-function journeyPts(s){ return q1Top3(s) ? MAX_POINTS : clampPts(s.points); }
+function journeyPts(s){ return clampPts(s.points); }   // خط السير حسب النقاط الحقيقية للجميع
 function aPts(s){ return role==='admin' ? qPoints(s, activeQuarter) : clampPts(s.points); }   // النقاط حسب الواجهة
 function entryQ(e){ return Number(e && e.q) || 1; }
 let selSet=new Set();          // الطلاب المحددون للإضافة الجماعية
@@ -2293,9 +2293,9 @@ async function buildStudentPoster(o){
   });
   // دبوس الطالب فوق محطته
   const cp=P.find(pp=>pp.i===ci), atTop=ci===N-1;
-  const pr=atTop?32:40, pcx=atTop?cp.x-66:cp.x, pyc=atTop?cp.y-40:cp.y-50-14-pr;   // عند القمة: الصورة جنب الكأس
-  const cpx=pcx;
-  if(!atTop){ x.fillStyle='#fff'; x.beginPath(); x.moveTo(cp.x-14,pyc+pr-4); x.lineTo(cp.x+14,pyc+pr-4); x.lineTo(cp.x,pyc+pr+16); x.fill(); }
+  // صورة الطالب جنب محطته، على الجهة المعاكسة لبطاقة الاسم (ما تغطي شي)
+  const pr=34, side = cp.x>=cx ? -1 : 1, nrr=atTop?50:48;
+  const cpx=cp.x+side*(nrr+pr+4), pyc=cp.y-26;
   x.save(); x.shadowColor='rgba(0,0,0,.3)'; x.shadowBlur=14; x.fillStyle='#fff'; x.beginPath(); x.arc(cpx,pyc,pr+6,0,Math.PI*2); x.fill(); x.restore();
   x.save(); x.beginPath(); x.arc(cpx,pyc,pr,0,Math.PI*2); x.clip();
   if(img){ const sz=Math.min(img.width,img.height); x.drawImage(img,(img.width-sz)/2,(img.height-sz)/2,sz,sz,cpx-pr,pyc-pr,pr*2,pr*2); }
@@ -2614,7 +2614,7 @@ function renderJourney(){
   if(role!=='student' || !s) return;   // واجهة المثابر فقط
 
   const pts=clampPts(s.points);                 // نقاطه الحقيقية
-  const champ=q1Top3(s), jp=journeyPts(s);       // خط السير (مكتمل لأول 3 في الربع الأول)
+  const champ=false, jp=journeyPts(s);           // خط السير حسب نقاطه الحقيقية
   const {cur,next,pct,rem}=stationInfo(jp);
   checkStudentMilestone(s);
   const hr=new Date().getHours();
@@ -3171,7 +3171,7 @@ function checkStudentMilestone(s){
   let prev=null; try{ prev=localStorage.getItem(k); }catch(e){}
   if(prev!==null && cur>parseInt(prev,10)){
     const st=STATIONS[cur];
-    if(q1Top3(s) && cur===STATIONS.length-1)
+    if(false)
       setTimeout(()=>celebrate('🏆', 'مبروك! أكملت الرحلة ووصلت «البطل»', 'لأنك من أول 3 في الربع الأول 🥇'), 400);
     else
       setTimeout(()=>celebrate(st.icon, 'مبروك! وصلت محطة «'+st.name+'»', 'استمر… القمة تنتظرك 👑'), 400);
