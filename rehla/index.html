@@ -375,6 +375,18 @@
     font-size:10px; display:grid; place-items:center; border:2px solid #fff;}
   .ss-who{flex:1; min-width:0;}
   .ss-who b{display:block; font-size:17px; font-weight:800; color:var(--navy); line-height:1.3;}
+  .ss-nm{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .ss-nm b{display:inline; overflow-wrap:anywhere;}
+  .ss-ren{flex:none; display:inline-flex; align-items:center; gap:3px; padding:3px 10px; border-radius:999px; cursor:pointer; font-family:inherit;
+    font-size:12px; font-weight:800; color:var(--indigo); background:var(--indigo-50); border:1px solid #D9DDF2;}
+  .ss-ren:active{transform:scale(.96);}
+  .ss-edit{display:none; margin:0 0 12px; padding:12px; border-radius:16px; background:#F7F8FE; border:1.5px solid #CBD1F0; animation:fadeUp .2s ease;}
+  .ss-edit.show{display:block;}
+  .ss-edit label{display:block; font-size:13px; font-weight:800; color:var(--indigo); margin-bottom:8px;}
+  .ss-edit-row{display:flex; gap:8px;}
+  .ss-edit-row .input{flex:1; min-width:0; font-size:16px; font-weight:800;}
+  .ss-edit-row .btn{flex:none; padding:10px 14px;}
+  .ss-edit small{display:block; margin-top:8px; font-size:11.5px; font-weight:700; color:var(--muted); line-height:1.6;}
   .ss-who small{display:block; font-size:12px; font-weight:700; color:var(--muted); margin-top:1px;}
   .ss-pts{flex:none; text-align:center; color:#fff; border-radius:14px; padding:6px 12px; line-height:1.05;
     background:linear-gradient(160deg,#FFAE3A,var(--orange) 55%,#E5730A); box-shadow:0 6px 14px rgba(245,141,9,.3);}
@@ -1163,9 +1175,19 @@
   <div class="modal-card ss-card">
     <div class="ss-head">
       <div class="ss-av" id="ssAv" onclick="onAvatarClick()" title="تكبير الصورة"></div>
-      <div class="ss-who"><b id="ssName"></b><small id="ssMeta"></small></div>
+      <div class="ss-who"><div class="ss-nm"><b id="ssName"></b><button class="ss-ren" type="button" onclick="startRename()" title="تعديل الاسم">✏️ تعديل</button></div><small id="ssMeta"></small></div>
       <div class="ss-pts" id="ssPtsBox"><b id="ssPts">0</b><small id="ssPtsL">نقطة</small></div>
       <button class="gm-x" onclick="closeModal('stuSheet')" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="ss-edit" id="ssEdit">
+      <label for="ssNameInp">✏️ تعديل اسم الطالب</label>
+      <div class="ss-edit-row">
+        <input id="ssNameInp" class="input" type="text" maxlength="40" autocomplete="off"
+          onkeydown="if(event.key==='Enter')saveRename(); if(event.key==='Escape'){event.stopPropagation();cancelRename();}">
+        <button class="btn btn-primary" type="button" onclick="saveRename()">حفظ</button>
+        <button class="btn btn-ghost" type="button" onclick="cancelRename()">إلغاء</button>
+      </div>
+      <small>يتغيّر الاسم في كل مكان (القائمة، الترتيب، السجل، صور الأبطال) — النقاط والكود ما تتغيّر.</small>
     </div>
     <div class="ss-prog">
       <div class="ssj" id="ssDots"></div>
@@ -1323,7 +1345,7 @@ const PRESET_ITEMS = [
   {name:'الملاحظة', points:-150},
 ];
 // رقم النسخة: إذا نزلت نسخة أحدث على الموقع، الصفحة تحدّث نفسها تلقائيًا (ما تعلق على نسخة قديمة محفوظة بالجوال)
-const BUILD='61';
+const BUILD='62';
 (function autoUpdate(){
   try{
     if(!/^https?:$/.test(location.protocol) || location.hostname==='app.local') return;
@@ -1572,6 +1594,31 @@ function logout(){
 }
 
 /* =================== ADMIN: students =================== */
+// تعديل اسم الطالب (من بطاقته)
+function startRename(){
+  if(role!=='admin' || !selectedId || !state.students[selectedId]) return;
+  const box=document.getElementById('ssEdit'), inp=document.getElementById('ssNameInp');
+  inp.value=state.students[selectedId].name||'';
+  box.classList.add('show');
+  setTimeout(()=>{ inp.focus(); inp.select(); },30);
+}
+function cancelRename(){ const b=document.getElementById('ssEdit'); if(b) b.classList.remove('show'); }
+function saveRename(){
+  if(role!=='admin' || !selectedId) return;
+  const s=state.students[selectedId]; if(!s) return;
+  const name=(document.getElementById('ssNameInp').value||'').replace(/\s+/g,' ').trim();
+  if(!name){ toast('اكتب الاسم',true); return; }
+  if(name===s.name){ cancelRename(); return; }
+  const dup=sectionArr(s.section||'fursan').some(x=>x.id!==selectedId && (x.name||'').trim()===name);
+  if(dup && !confirm('فيه طالب ثاني بنفس الاسم «'+name+'» في هذا القسم. تبي تحفظ؟')) return;
+  const old=s.name;
+  s.name=name;
+  dbSet('students/'+selectedId+'/name', name);      // نغيّر الاسم فقط
+  cacheLocal();
+  cancelRename();
+  renderAll();
+  toast('✅ تم تعديل الاسم: '+old+' ← '+name);
+}
 function addStudent(){
   const inp=document.getElementById('newStudent'); const name=inp.value.trim();
   if(!name) return;
@@ -2798,6 +2845,7 @@ function groupBlockHtml(g, i){
   </div>`;
 }
 /* =================== بطاقة الطالب (للمشرف) =================== */
+let ssEditFor=null;
 function renderStudentSheet(){
   const m=document.getElementById('stuSheet'); if(!m || !m.classList.contains('show')) return;
   const s = selectedId ? state.students[selectedId] : null;
@@ -2807,6 +2855,7 @@ function renderStudentSheet(){
   ssAv.innerHTML = avatarMarkup(s) + (s.avatar ? '<span class="cam">🔍</span>' : '');
   ssAv.classList.toggle('zoom', !!s.avatar);
   document.getElementById('ssName').textContent = s.name;
+  if(ssEditFor!==selectedId){ cancelRename(); ssEditFor=selectedId; }
   const g = (s.groupId && state.groups[s.groupId]) ? ' · '+state.groups[s.groupId].name : '';
   document.getElementById('ssMeta').textContent = 'قسم '+SECTION_LABELS[s.section||'fursan']+g+' · #'+s.code+' · المجموع الكلي '+pts;
   document.getElementById('ssPts').textContent = aPts(s);
@@ -3121,6 +3170,7 @@ function closeModal(id){
   const m=document.getElementById(id); if(!m) return;
   m.classList.remove('show');
   // إغلاق بطاقة الطالب يلغي تحديده
+  if(id==='stuSheet'){ cancelRename(); ssEditFor=null; }
   if(id==='stuSheet' && role==='admin' && selectedId){ selectedId=null; pendingDeleteId=null; renderAll(); }
 }
 let toastT;
