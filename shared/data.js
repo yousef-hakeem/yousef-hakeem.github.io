@@ -5,12 +5,12 @@ window.SITE = {
   whatsapp: 'https://wa.me/966590700541',
   email: 'yousef.z.hakeem@gmail.com',
   linkedin: 'https://www.linkedin.com/in/yousef-hakeem-b09663279/',
-  cv: 'Yousef_Hakeem_CV.pdf?v=20261021a',
-  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261021a',
+  cv: 'Yousef_Hakeem_CV.pdf?v=20261105a',
+  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261105a',
 
   order: ['scrapbid', 'studybuddy', 'qurrat', 'nusuk', 'mister', 'mindwell'],
   meta: {
-    scrapbid:   { kind: 'web',   accent: '#c4561f', cover: { ar: [0], en: [0] }, coverStyle: 'plain', isNew: true },
+    scrapbid:   { kind: 'web',   accent: '#c4561f', cover: { ar: [0], en: [0] }, coverStyle: 'plain', isNew: true, demo: 'https://www.scrapbid.net/' },
     studybuddy: { kind: 'web',   accent: '#6d5bd0', cover: { ar: [0], en: [1] } },
     qurrat:     { kind: 'web',   accent: '#1d6b5f', cover: { ar: [0], en: [0] } },
     nusuk:      { kind: 'watch', accent: '#c9a24a', cover: { ar: [1], en: [1] } },
@@ -22,7 +22,16 @@ window.SITE = {
     ar: {
       dir: 'rtl', langBtn: 'EN',
       brand: 'يوسف حكيم',
-      nav: { about: 'نبذة', work: 'الأعمال', process: 'المنهجية', contact: 'تواصل' },
+      nav: { work: 'الأعمال', about: 'نبذة', experience: 'الخبرة', skills: 'المهارات', process: 'المنهجية', contact: 'تواصل' },
+      lead: {
+        work: 'ستة مشاريع مختارة على الويب والجوال وApple Watch. قلّب الشاشات هنا مباشرة، أو افتح المشروع لترى دوري وما قمت به.',
+        about: 'مصمم UI/UX ومتخصص تقنية معلومات — أصمّم للمستخدم الحقيقي وأبني ما أصمّمه.',
+        experience: 'أين طبّقت التصميم والهندسة في جهات حقيقية، وما درسته.',
+        skills: 'البحث والتصميم والتطوير والدعم التقني — الأدوات التي أعمل بها.',
+        process: 'طريقة واضحة وقابلة للتكرار للانتقال من مشكلة حقيقية إلى منتج سهل الاستخدام.'
+      },
+      expLabel: 'الخبرة', eduLabel: 'التعليم', skillsLabel: 'المهارات',
+      caseRole: 'الدور', casePlatform: 'المنصّة', caseTools: 'الأدوات', caseDid: 'أبرز ما قمت به', liveDemo: 'زيارة الموقع المباشر',
       menu: 'القائمة', close: 'إغلاق',
       firstName: 'يوسف', lastName: 'حكيم',
       fullName: 'يوسف زين العابدين حكيم',
@@ -53,6 +62,14 @@ window.SITE = {
         mindwell: { title: 'مايند ويل', sub: 'الصحة النفسية والتأمل', tag: 'تطبيق جوال · صحة نفسية · UI/UX', desc: 'تطبيق هادئ للصحة النفسية: تسجيل المزاج اليومي، وتمارين تنفّس موجّهة، وجلسات تأمل، ولوحة تحليلات تُظهر متوسّط المزاج والعوامل المؤثّرة — بواجهة عربية بألوان تبعث على الاسترخاء.' }
       },
       processLabel: 'المنهجية',
+      C: {
+        scrapbid: { role: 'تصميم UI/UX', platform: 'ويب · جوال · لوحة إدارة', did: ['تسجيل للمنشآت على خطوتين مع التوثيق بالسجل التجاري والهوية', 'مزايدة لحظية بعدّاد انتهاء، مع البيع بسعر ثابت', 'مساحة عمل للبائع لإدارة القوائم والسومات وطلبات الشراء', 'لوحة إدارة للتوثيق ومراجعة المحتوى والمستخدمين والإيرادات', 'عربي وإنجليزي، فاتح وداكن، كمبيوتر وجوال'] },
+        studybuddy: { role: 'تصميم UI/UX وتطوير كامل', platform: 'ويب', tools: 'Figma · Flutter · PostgreSQL', did: ['منصّة واحدة تجمع المقرّرات والملاحظات واللقاءات ومساعداً ذكياً', 'تتبّع المعدّل والتقدّم والشارات', 'صمّمت الواجهات في Figma ثم برمجتها بـ Flutter وPostgreSQL', 'عربي وإنجليزي بوضعين فاتح وداكن'] },
+        qurrat: { role: 'تصميم وتطوير (عمل لجهة)', platform: 'موقع + لوحة تحكم', did: ['الصفحة الرئيسية و«من نحن» والبرامج والحوكمة والتواصل بهوية الجمعية', 'لوحة تحكم عربية يدير بها فريق غير تقني كل المحتوى', 'سلّمت المشروع كاملاً بصفتي القائد التقني للجمعية'] },
+        nusuk: { role: 'بحث تجربة المستخدم وتصميم الواجهات', platform: 'Apple Watch', tools: 'Figma', did: ['تقييم تطبيق نسك بمبادئ Nielsen الإرشادية', 'دراسة لخريطة الزحام الحرارية', 'نموذج أولي لمرافق على Apple Watch: عدّاد أشواط الطواف والسعي مع اهتزاز، أوقات الصلاة، خريطة الحرم، وزر طوارئ'] },
+        mister: { role: 'هوية بصرية وتصميم منتج', platform: 'تطبيق جوال', tools: 'Figma', did: ['الشعار وشخصية البومة ونظام الألوان ودليل الهوية', 'تجربة الطالب: محادثة لكل مادة ومكتبة ومهام ونقاط وسلاسل', 'لوحة لولي الأمر لمتابعة التقدّم والمحادثات والمهام'] },
+        mindwell: { role: 'تصميم وتطوير Flutter', platform: 'جوال (متعدد المنصّات)', tools: 'Flutter · Firebase', did: ['15 شاشة: تسجيل المزاج اليومي وتمارين التنفّس والتأمل ولوحة التحليلات', 'تسجيل دخول عبر Firebase Authentication', 'واجهة عربية كاملة من اليمين لليسار'] }
+      },
       processH: 'كيف أحوّل المشكلة إلى منتج يستحق الإطلاق.',
       process: [
         { n: '01', t: 'البحث', d: 'أفهم المستخدم والمشكلة قبل أي بكسل: مقابلات، تحليل، وخرائط رحلة.' },
@@ -70,12 +87,12 @@ window.SITE = {
       tools: ['تفاعل الإنسان مع الحاسب', 'بحث المستخدم', 'قابلية الاستخدام', 'النماذج الأولية', 'أنظمة التصميم', 'الدعم التقني', 'إدارة الأنظمة', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
       timelineLabel: 'التعليم والخبرة',
       timeline: [
-        { title: 'قائد تقني', org: 'جمعية قرة عين · الدمام · يناير – أغسطس 2026', desc: 'بنيت نظام الجمعية كاملاً من الصفر: الموقع والخادم ولوحة تحكم عربية لإدارة المحتوى، وسلّمته وحدي لفريق غير تقني يدير المحتوى بنفسه.' },
-        { title: 'متدرب تقنية معلومات (تدريب تعاوني)', org: 'شركة أميانتيت العربية السعودية · مارس – يوليو 2025', desc: 'دعم فني في مكتب المساعدة وإدارة الأنظمة: حل مشاكل الأجهزة والبرامج والشبكات، وإدارة الخوادم وحسابات المستخدمين.' },
-        { title: 'بكالوريوس تفاعل الإنسان مع الحاسب (HCI)', org: 'جامعة أم القرى · قسم هندسة البرمجيات · 2026', desc: 'تصميم الواجهات وقابلية الاستخدام وعلم النفس المعرفي للمستخدم، على أساس من هندسة البرمجيات.' }
+        { kind: 'work', title: 'قائد تقني', org: 'جمعية قرة عين · الدمام', date: 'يناير – أغسطس 2026', desc: 'بنيت نظام الجمعية كاملاً من الصفر: الموقع والخادم ولوحة تحكم عربية لإدارة المحتوى، وسلّمته وحدي لفريق غير تقني يدير المحتوى بنفسه.' },
+        { kind: 'work', title: 'متدرب تقنية معلومات (تدريب تعاوني)', org: 'شركة أميانتيت العربية السعودية', date: 'مارس – يوليو 2025', desc: 'دعم فني في مكتب المساعدة وإدارة الأنظمة: حل مشاكل الأجهزة والبرامج والشبكات، وإدارة الخوادم وحسابات المستخدمين.' },
+        { kind: 'edu', title: 'بكالوريوس تفاعل الإنسان مع الحاسب (HCI)', org: 'جامعة أم القرى · قسم هندسة البرمجيات', date: '2026', desc: 'تصميم الواجهات وقابلية الاستخدام وعلم النفس المعرفي للمستخدم، على أساس من هندسة البرمجيات.' }
       ],
       contactLabel: 'تواصل',
-      contactH: 'لنصنع شيئاً يستحق الاستخدام.',
+      contactH: 'لنعمل معاً.',
       contactP: 'عندك مشروع أو فرصة عمل؟ يسعدني أسمع منك.',
       call: 'اتصال', whatsapp: 'واتساب', emailLbl: 'البريد', linkedin: 'لينكدإن',
       localTime: 'الدمام، المنطقة الشرقية',
@@ -87,7 +104,16 @@ window.SITE = {
     en: {
       dir: 'ltr', langBtn: 'ع',
       brand: 'Yousef Hakeem',
-      nav: { about: 'About', work: 'Work', process: 'Process', contact: 'Contact' },
+      nav: { work: 'Work', about: 'About', experience: 'Experience', skills: 'Skills', process: 'Process', contact: 'Contact' },
+      lead: {
+        work: 'Six selected projects across web, mobile and Apple Watch. Flip through the screens right here, or open a project to see my role and what I did.',
+        about: 'UI/UX designer and IT specialist — I design for real users and build what I design.',
+        experience: 'Where I have applied design and engineering in real organisations, and what I studied.',
+        skills: 'Research, design, development and IT support — the toolkit behind my work.',
+        process: 'A clear, repeatable way to move from a real problem to a product people can use.'
+      },
+      expLabel: 'Experience', eduLabel: 'Education', skillsLabel: 'Skills',
+      caseRole: 'Role', casePlatform: 'Platform', caseTools: 'Tools', caseDid: 'What I did', liveDemo: 'Visit live site',
       menu: 'Menu', close: 'Close',
       firstName: 'Yousef', lastName: 'Hakeem',
       fullName: 'Yousef Zain Alabdeen Hakeem',
@@ -118,6 +144,14 @@ window.SITE = {
         mindwell: { title: 'MindWell', sub: 'Mental health & mindfulness', tag: 'Mobile app · Mental health · UI/UX', desc: 'A calming mental-health app: daily mood check-ins, guided breathing, meditation sessions and an insights dashboard of mood and contributing factors — a soothing Arabic (RTL) interface.' }
       },
       processLabel: 'Process',
+      C: {
+        scrapbid: { role: 'UI/UX design', platform: 'Web · Mobile · Admin', did: ['Two-step business registration verified by commercial registration and ID', 'Live bidding with countdowns, plus fixed-price listings', 'Seller workspace for listings, bids and purchase requests', 'Admin console for verification, content review, users and revenue', 'Arabic & English, light & dark, desktop & mobile'] },
+        studybuddy: { role: 'UI/UX design & full-stack development', platform: 'Web', tools: 'Figma · Flutter · PostgreSQL', did: ['One platform for courses, notes, meetings and an AI assistant', 'GPA tracking, progress and badges', 'Designed in Figma, then built with Flutter and PostgreSQL', 'Arabic & English with light and dark modes'] },
+        qurrat: { role: 'Design & development (client work)', platform: 'Website + admin dashboard', did: ['Landing, About, Programs, Governance and Contact pages in the association’s identity', 'Arabic CMS dashboard so non-technical staff manage every section', 'Delivered end to end as the association’s Technical Lead'] },
+        nusuk: { role: 'UX research & UI design', platform: 'Apple Watch', tools: 'Figma', did: ['Heuristic evaluation of the Nusuk app using Nielsen’s heuristics', 'Crowd-heatmap study', 'Apple Watch companion prototype: Tawaf & Sa’i lap counter with haptics, prayer times, Haram map and SOS'] },
+        mister: { role: 'Brand identity & product design', platform: 'Mobile app', tools: 'Figma', did: ['Logo, owl mascot, colour system and brand guidelines', 'Student experience: per-subject chats, library, tasks, points and streaks', 'Parent dashboard to follow progress, chats and tasks'] },
+        mindwell: { role: 'Design & Flutter development', platform: 'Mobile (cross-platform)', tools: 'Flutter · Firebase', did: ['15 screens: daily mood check-ins, guided breathing, meditation and insights', 'Sign-in with Firebase Authentication', 'Fully Arabic, right-to-left interface'] }
+      },
       processH: 'How I turn a problem into a product worth shipping.',
       process: [
         { n: '01', t: 'Research', d: 'Understand the user and the problem before any pixel: interviews, analysis, journey maps.' },
@@ -135,12 +169,12 @@ window.SITE = {
       tools: ['Human-Computer Interaction', 'UX Research', 'Usability Testing', 'Prototyping', 'Design Systems', 'IT Support', 'System Administration', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
       timelineLabel: 'Education & experience',
       timeline: [
-        { title: 'Technical Lead', org: 'Qoratayn Youth Association · Dammam · Jan – Aug 2026', desc: 'Built the association’s complete system from scratch — website, back end and an Arabic CMS dashboard — and delivered it single-handedly to non-technical staff who now manage content themselves.' },
-        { title: 'IT Trainee (Cooperative Training)', org: 'Saudi Arabian Amiantit Company · Mar – Jul 2025', desc: 'Help Desk and System Administration: resolved hardware, software and network issues, and managed servers and user accounts.' },
-        { title: 'Bachelor of Human–Computer Interaction (HCI)', org: 'Umm Al-Qura University · Software Engineering Department · 2026', desc: 'Interface design, usability and user cognition, built on a software engineering foundation.' }
+        { kind: 'work', title: 'Technical Lead', org: 'Qoratayn Youth Association · Dammam', date: 'Jan – Aug 2026', desc: 'Built the association’s complete system from scratch — website, back end and an Arabic CMS dashboard — and delivered it single-handedly to non-technical staff who now manage content themselves.' },
+        { kind: 'work', title: 'IT Trainee (Cooperative Training)', org: 'Saudi Arabian Amiantit Company', date: 'Mar – Jul 2025', desc: 'Help Desk and System Administration: resolved hardware, software and network issues, and managed servers and user accounts.' },
+        { kind: 'edu', title: 'Bachelor of Human–Computer Interaction (HCI)', org: 'Umm Al-Qura University · Software Engineering Department', date: '2026', desc: 'Interface design, usability and user cognition, built on a software engineering foundation.' }
       ],
       contactLabel: 'Contact',
-      contactH: 'Let’s make something worth using.',
+      contactH: 'Let’s work together.',
       contactP: 'Have a project or an opportunity? I’d love to hear from you.',
       call: 'Call', whatsapp: 'WhatsApp', emailLbl: 'Email', linkedin: 'LinkedIn',
       localTime: 'Dammam, Eastern Province',

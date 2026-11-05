@@ -33,3 +33,16 @@ Agreed decisions (keep these as the source of truth for the redesign).
 - CV button → `Yousef_Hakeem_CV.pdf` (current: HCI version).
 - Content edits already made: "UX Improvement" instead of Information Architecture; Accessibility/WCAG removed.
 - URL stays: https://yousef-hakeem.github.io/
+
+## UX audit (Nov 2026) — applied
+Audit by Oubydiallah Abumansour. Changes:
+- Sections follow page order and are all in the nav: 01 Work, 02 About, 03 Experience, 04 Skills, 05 Process, 06 Contact.
+- Compact two-column section headers (title + short lead) instead of full-width giant titles with empty space.
+- Showcase respects reading direction: story text on the reading side, gallery on the other.
+- About bento uses one type scale; quote tile and auto-scrolling tags marquee removed; skills are static chips.
+- Experience is its own section (work / education) before Skills.
+- Contact: smaller heading, email shown once, no giant name signature; scroll-hint mouse icon removed.
+- Hero floaters re-composed symmetrically and kept clear of the nav bar.
+- Case studies show role, platform, tools and "what I did"; ScrapBid links to its live site.
+- Still needs the owner's input: real UX artefacts per project (problem, research findings, flows, test results) and
+  prototype/demo links (e.g. Figma) to fully answer "show the UX work, let me try a demo".

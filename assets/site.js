@@ -22,9 +22,9 @@
     sun: '<svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
   };
   var L = {
-    ar: { workH: 'كل مشروع قصة — من المشكلة إلى الشاشة.', aboutH: 'تصميم يبدأ من الإنسان.', processH: 'أربع خطوات، تجربة واحدة واضحة.', expH: 'أدوات ومهارات أعمل بها.',
+    ar: { workH: 'كل مشروع قصة — من المشكلة إلى الشاشة.', aboutH: 'تصميم يبدأ من الإنسان.', processH: 'أربع خطوات، تجربة واحدة واضحة.', expH: 'أدوات ومهارات أعمل بها.', tlH: 'خبرة عملية وأساس أكاديمي.',
       hint: 'اسحب يمين ويسار لتقليب الشاشات', open: 'افتح', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
-    en: { workH: 'Every project is a story — from problem to screen.', aboutH: 'Design that starts with people.', processH: 'Four steps, one clear experience.', expH: 'The tools and skills I work with.',
+    en: { workH: 'Every project is a story — from problem to screen.', aboutH: 'Design that starts with people.', processH: 'Four steps, one clear experience.', expH: 'The tools and skills I work with.', tlH: 'Hands-on experience, academic grounding.',
       hint: 'Swipe left and right to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
@@ -34,9 +34,10 @@
     nusuk: ['#b08a35', '#3a2d12', '#6b5a2a'], mister: ['#4f6ff0', '#7b5cff', '#2aa8f0'], mindwell: ['#1f6b6e', '#2f8f77', '#155a7a']
   };
   // Floating screens around the hero: [project, image index, left%, top%, width(vw), depth]
+  // A mirrored composition: web / phone / small phone down each side, clear of the nav bar and the name.
   var FLOAT = [
-    ['studybuddy', 4, 1.5, 13, 16, .9], ['mister', 6, 84, 9, 8.5, .6], ['scrapbid', 1, 75, 68, 17, 1],
-    ['mindwell', 2, 4, 62, 7.5, .5], ['nusuk', 2, 88.5, 43, 9.5, .35], ['scrapbid', 15, 18, 76, 6.5, .3]
+    ['studybuddy', 4, 3, 24, 15, .9], ['mindwell', 2, 6, 52, 7, .5], ['scrapbid', 15, 15, 72, 6.5, .35],
+    ['mister', 6, 87, 20, 7.5, .6], ['nusuk', 2, 85.5, 47, 9.5, .4], ['scrapbid', 1, 76, 70, 16, 1]
   ];
   // Fanned phone screens under the hero on small screens: [project, image index]
   var DECK = [['mindwell', 2], ['scrapbid', 13], ['mister', 0]];
@@ -69,9 +70,16 @@
   }
 
   /* ---------- templates ---------- */
+  var SECTIONS = ['work', 'about', 'experience', 'skills', 'process', 'contact'];
+  var num = function (id) { return pad(SECTIONS.indexOf(id) + 1); };
+  // Section header: eyebrow + title on one side, a short lead filling the other side.
+  function secHead(id, label, title, lead) {
+    return '<div class="sec-head"><div class="sec-title"><span class="eyebrow glass"><b class="on-grad">' + num(id) + '</b>' + esc(label) + '</span>' +
+      '<h2 class="h2 kufi" data-reveal>' + W(title) + '</h2></div>' + (lead ? '<p class="sec-lead" data-fade>' + esc(lead) + '</p>' : '') + '</div>';
+  }
   function tpl() {
     var t = S.tr(), l = L[S.lang()];
-    var ids = ['about', 'work', 'process', 'contact'];
+    var ids = SECTIONS;
     var links = ids.map(function (id) { return '<a href="#' + id + '" data-scroll="' + id + '">' + esc(t.nav[id]) + '</a>'; }).join('');
     var floaters = FLOAT.map(function (f, i) {
       var im = S.img(f[0], f[1]);
@@ -85,20 +93,24 @@
         '<div class="sc-body"><span class="sc-n">' + pad(i + 1) + ' — ' + pad(S.order.length) + badge + '</span>' +
         '<p class="sc-tag">' + esc(p.tag) + '</p><h3 class="kufi">' + W(p.title) + '</h3><p class="sc-sub">' + esc(p.sub) + '</p>' +
         '<p class="sc-desc">' + esc(p.desc) + '</p>' +
-        '<span class="sc-btn glass">' + esc(t.viewCase) + ' <small>' + window.MEDIA[id].length + '</small><i class="on-grad">' + ICON.arrow + '</i></span></div></article>';
+        '<div class="sc-actions"><span class="sc-btn glass">' + esc(t.viewCase) + ' <small>' + window.MEDIA[id].length + '</small><i class="on-grad">' + ICON.arrow + '</i></span>' +
+        (m.demo ? '<a class="sc-demo" href="' + m.demo + '" target="_blank" rel="noopener">' + esc(t.liveDemo) + ' ↗</a>' : '') + '</div></div></article>';
     }).join('');
     var stats = t.stats.map(function (s) {
       var n = parseInt(s[0], 10), suf = s[0].replace(/^\d+/, '');
       return '<div class="tile t-stat glass spot" data-tilt><b class="grad" data-n="' + n + '" data-s="' + suf + '">' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>';
     });
     var facts = t.facts.map(function (f) { return '<li><span>' + esc(f[0]) + '</span><strong>' + esc(f[1]) + '</strong></li>'; }).join('');
-    var tools = t.tools.concat(t.tools, t.tools, t.tools).map(function (x) { return '<span' + (/[\u0600-\u06FF]/.test(x) ? ' class="ar"' : '') + '>' + esc(x) + '</span>'; }).join('');
     var steps = t.process.map(function (s) {
       return '<div class="step glass spot" data-tilt><div class="step-ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" cx="32" cy="32" r="28"/></svg><b>' + s.n + '</b></div>' +
         '<div><h3 class="kufi">' + esc(s.t) + '</h3><p>' + esc(s.d) + '</p></div></div>';
     }).join('');
-    var exp = t.expertise.map(function (g) { return '<div class="exp-col glass spot" data-fade><h3 class="kufi">' + esc(g.h) + '</h3><ul>' + g.items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>'; }).join('');
-    var tl = t.timeline.map(function (e, i) { return '<div class="tl-item"><b>' + pad(i + 1) + '</b><div><h3>' + esc(e.title) + '</h3><small>' + esc(e.org) + '</small></div><p>' + esc(e.desc) + '</p></div>'; }).join('');
+    var exp = t.expertise.map(function (g) { return '<div class="exp-col glass spot" data-fade><h3 class="kufi">' + esc(g.h) + '</h3><ul class="chips">' + g.items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>'; }).join('');
+    var tlGroup = function (kind, label) {
+      return '<div class="tl-group"><h3 class="tl-label">' + esc(label) + '</h3>' + t.timeline.filter(function (e) { return e.kind === kind; }).map(function (e) {
+        return '<div class="tl-item"><span class="tl-date">' + esc(e.date) + '</span><div class="tl-main"><h4>' + esc(e.title) + '</h4><small>' + esc(e.org) + '</small></div><p>' + esc(e.desc) + '</p></div>';
+      }).join('') + '</div>';
+    };
     var cvLinks = [[S.cv, t.cvUX, t.cvUXd], [S.cvIT, t.cvIT, t.cvITd]].map(function (c) {
       return '<a role="menuitem" href="' + S.url(c[0]) + '" target="_blank" rel="noopener"><b>' + esc(c[1]) + '</b><small>' + esc(c[2]) + '</small><i>PDF ↓</i></a>';
     }).join('');
@@ -128,10 +140,9 @@
           '<div class="cv-pick"><button class="cta glass cv-toggle" data-mag type="button" aria-expanded="false" aria-haspopup="true">' + esc(t.ctaCV) + ' <small>PDF</small>' + ICON.down + '</button>' +
             '<div class="cv-menu glass" role="menu">' + cvLinks + '</div></div></div></div>' +
         '<div class="hero-deck">' + DECK.map(function (d, k) { var im = S.img(d[0], d[1]); return '<img class="d' + (k + 1) + '" data-proj="' + d[0] + '" src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="' + esc(t.P[d[0]].title) + '">'; }).join('') + '</div>' +
-        '<span class="scroll-hint" aria-hidden="true"></span>' +
       '</section>' +
 
-      '<section class="showcase" id="work"><div class="sc-head"><span class="eyebrow glass"><b class="on-grad">02</b>' + esc(t.workLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.workH) + '</h2></div>' +
+      '<section class="showcase" id="work">' + secHead('work', t.workLabel, l.workH, t.lead.work) +
         '<div class="sc-wrap"><div class="sc-sticky">' +
           '<div class="sc-stage glass" tabindex="0" role="region" aria-roledescription="carousel">' +
             '<div class="sc-glow"></div><div class="sc-slides"></div>' +
@@ -144,33 +155,32 @@
           '</div><div class="sc-dots">' + dots + '</div></div>' +
         '<div class="sc-list">' + items + '</div></div></section>' +
 
-      '<section id="about"><div class="sc-head"><span class="eyebrow glass"><b class="on-grad">01</b>' + esc(t.aboutLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.aboutH) + '</h2></div>' +
+      '<section id="about">' + secHead('about', t.aboutLabel, l.aboutH, t.lead.about) +
         '<div class="bento">' +
           '<div class="tile t-statement glass spot"><p>' + W(t.statement, 'sw') + '</p><small>' + esc(t.aboutP) + '</small></div>' +
           stats[0] + stats[1] +
-          '<div class="tile t-facts glass spot" data-tilt><ul>' + facts + '</ul></div>' +
-          '<div class="tile t-quote glass spot" data-tilt><p class="kufi">' + esc(t.quote) + '</p></div>' +
-          '<div class="tile t-tools glass"><div class="tools-row">' + tools + '</div></div>' +
+          '<div class="tile t-facts glass spot"><ul>' + facts + '</ul></div>' +
         '</div></section>' +
 
-      '<section id="process"><div class="sc-head"><span class="eyebrow glass"><b class="on-grad">03</b>' + esc(t.processLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.processH) + '</h2></div>' +
+      '<section id="experience">' + secHead('experience', t.expLabel, l.tlH, t.lead.experience) +
+        '<div class="tl glass" data-fade>' + tlGroup('work', t.expLabel) + tlGroup('edu', t.eduLabel) + '</div></section>' +
+
+      '<section id="skills">' + secHead('skills', t.skillsLabel, l.expH, t.lead.skills) +
+        '<div class="exp">' + exp + '</div></section>' +
+
+      '<section id="process">' + secHead('process', t.processLabel, l.processH, t.lead.process) +
         '<div class="steps">' + steps + '</div></section>' +
 
-      '<section id="expertise"><div class="sc-head"><span class="eyebrow glass"><b class="on-grad">04</b>' + esc(t.expertiseLabel) + '</span><h2 class="h2 kufi" data-reveal>' + W(l.expH) + '</h2></div>' +
-        '<div class="exp">' + exp + '</div><div class="tl glass" data-fade>' + tl + '</div></section>' +
-
-      '<section id="contact" data-fab-hide><div class="contact-card glass"><span class="eyebrow glass"><b class="on-grad">05</b>' + esc(t.contactLabel) + '</span>' +
+      '<section id="contact" data-fab-hide><div class="contact-card glass"><span class="eyebrow glass"><b class="on-grad">' + num('contact') + '</b>' + esc(t.contactLabel) + '</span>' +
         '<h2 class="contact-h kufi" data-reveal>' + W(t.contactH) + '</h2><p class="contact-p">' + esc(t.contactP) + '</p>' +
         '<a class="mail grad" href="mailto:' + S.email + '">' + S.email + '</a>' +
         '<div class="c-grid">' +
           '<a class="c-item glass" href="tel:' + S.phone + '"><span>' + esc(t.call) + '</span><strong>' + S.phoneDisplay + '</strong></a>' +
           '<a class="c-item glass" href="' + S.whatsapp + '" target="_blank" rel="noopener"><span>' + esc(t.whatsapp) + '</span><strong>WhatsApp ↗</strong></a>' +
           '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>LinkedIn ↗</strong></a>' +
-          '<a class="c-item glass" href="mailto:' + S.email + '"><span>' + esc(t.emailLbl) + '</span><strong>Email ↗</strong></a>' +
-          '<a class="c-item glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvUX) + ' ↓</strong></a>' +
-          '<a class="c-item glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvIT) + ' ↓</strong></a>' +
+          '<a class="c-item c-cv glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvUX) + ' ↓</strong></a>' +
+          '<a class="c-item c-cv glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvIT) + ' ↓</strong></a>' +
         '</div></div>' +
-        '<div class="sig kufi" aria-hidden="true"><span class="grad">' + esc(t.firstName + ' ' + t.lastName) + '</span></div>' +
         '<div class="footer"><span>' + esc(t.footer) + '</span><span>' + esc(t.localTime) + ' · <span class="clock" dir="ltr">--:--</span></span><button type="button" class="to-top">' + esc(t.backTop) + ' ↑</button></div>' +
       '</section>' +
       '</main>';
@@ -440,7 +450,7 @@
     function navState(down) { nav.classList.toggle('is-hidden', !menuOpen && (pinned || (down && window.scrollY > innerHeight * .7))); }
     ST.create({ start: 0, end: 'max', onUpdate: function (s) { navState(s.direction === 1); } });
     ST.create({ trigger: '.sc-wrap', start: 'top 80px', end: 'bottom 60%', onToggle: function (s) { pinned = s.isActive && isSmall(); navState(s.direction === 1); } });
-    ['about', 'work', 'process', 'contact'].forEach(function (id) {
+    SECTIONS.forEach(function (id) {
       ST.create({ trigger: '#' + id, start: 'top 50%', end: 'bottom 50%', onToggle: function (s) { if (s.isActive) app.querySelectorAll('.nav-links a').forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('data-scroll') === id); }); } });
     });
 
@@ -522,13 +532,11 @@
       b.textContent = '0' + suf;
       gsap.to(o, { v: end, duration: 2, ease: 'power3.out', scrollTrigger: { trigger: b, start: 'top 92%' }, onUpdate: function () { b.textContent = Math.round(o.v) + suf; } });
     });
-    gsap.to('.tools-row', { xPercent: -50, ease: 'none', duration: 32, repeat: -1 });
     gsap.utils.toArray('.step').forEach(function (s, i) {
       gsap.to(s.querySelector('.fg'), { strokeDashoffset: 176 - 176 * (i + 1) / 4, duration: 1.8, ease: 'power3.inOut', scrollTrigger: { trigger: s, start: 'top 85%' } });
       gsap.from(s, { y: 60, rotationX: 18, transformPerspective: 900, opacity: 0, duration: 1.2, delay: (isSmall() ? 0 : i * .08), ease: 'expo.out', scrollTrigger: { trigger: isSmall() ? s : '.steps', start: 'top 88%' } });
     });
     gsap.from('.contact-card', { scale: .9, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.contact-card', start: 'top bottom', end: 'top 35%', scrub: 1 } });
-    gsap.from('.sig span', { yPercent: 75, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.sig', start: 'top bottom', end: 'bottom bottom', scrub: 1 } });
   }
 
   /* ---------- custom cursor: a dot plus a trailing ring that hints at what a click will do ---------- */
@@ -586,24 +594,12 @@
     introAt = 1.65; // the hero starts settling as the curtain lifts
   }
 
-  // The signature wordmark always spans the full content width.
-  function fitSig() {
-    var box = app.querySelector('.sig'), sp = box && box.querySelector('span');
-    if (!sp) return;
-    sp.style.fontSize = '100px';
-    var w = sp.getBoundingClientRect().width;
-    if (w) sp.style.fontSize = Math.min(100 * box.clientWidth / w * .97, 260) + 'px';
-  }
-  var fitT = null;
-  window.addEventListener('resize', function () { clearTimeout(fitT); fitT = setTimeout(fitSig, 150); });
-
   function mount(first) {
     if (ctx) ctx.revert();
     setMenu(false);
     app.innerHTML = tpl();
     document.title = S.tr().brand + ' — ' + S.tr().role;
     bindUI();
-    fitSig();
     ctx = gsap.context(function () { motion(first); }, app);
     ST.refresh();
     window.dispatchEvent(new Event('page:render'));
@@ -622,6 +618,6 @@
   playLoader();
   initCursor();
   mount(true);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitSig(); ST.refresh(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
   window.addEventListener('load', function () { ST.refresh(); });
 })();

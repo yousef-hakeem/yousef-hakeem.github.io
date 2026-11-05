@@ -66,7 +66,7 @@
       '<div class="pv-tag">' + esc(p.tag) + '</div>' +
       '<h2 class="pv-title">' + esc(p.title) + '</h2>' +
       '<p class="pv-sub">' + esc(p.sub) + '</p>' +
-      '<p class="pv-desc">' + esc(p.desc) + '</p>' +
+      '<p class="pv-desc">' + esc(p.desc) + '</p>' + caseBlock(id, t, m) +
       '<span class="pv-count">' + imgs.length + ' ' + esc(t.screens) + '</span>';
     list.dataset.kind = m.kind;
     list.innerHTML = imgs.map(function (im, i) {
@@ -90,6 +90,17 @@
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { root: scroller, rootMargin: '0px 0px -6% 0px' });
     shots.forEach(function (s) { io.observe(s); });
+  }
+
+  // Case facts: role, platform, tools, what I did, and a live link when the project has one.
+  function caseBlock(id, t, m) {
+    var c = t.C && t.C[id];
+    if (!c) return '';
+    var facts = [[t.caseRole, c.role], [t.casePlatform, c.platform], [t.caseTools, c.tools]].filter(function (f) { return f[1]; })
+      .map(function (f) { return '<div><dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd></div>'; }).join('');
+    return '<div class="pv-case"><dl class="pv-facts">' + facts + '</dl>' +
+      (c.did ? '<div class="pv-did"><h3>' + esc(t.caseDid) + '</h3><ul>' + c.did.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul></div>' : '') +
+      (m.demo ? '<a class="pv-demo" href="' + m.demo + '" target="_blank" rel="noopener">' + esc(t.liveDemo) + ' ↗</a>' : '') + '</div>';
   }
 
   function open(id, fromHistory, opts) {
@@ -301,6 +312,8 @@
   document.addEventListener('click', function (e) {
     var el = e.target.closest && e.target.closest('[data-proj]');
     if (!el) return;
+    var a = e.target.closest('a');
+    if (a && a !== el && el.contains(a)) return; // real links inside a project card (e.g. the live site) keep working
     e.preventDefault();
     open(el.getAttribute('data-proj'));
   });
