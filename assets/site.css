@@ -71,21 +71,23 @@ main, .nav { position: relative; z-index: 1; }
 .cursor { display: none; }
 .has-cursor, .has-cursor * { cursor: none !important; }
 .has-cursor .cursor { display: block; position: fixed; left: 0; top: 0; z-index: 10000; pointer-events: none; }
-.cur-dot { position: fixed; left: -3px; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transition: opacity .25s; }
-.cur-ring { position: fixed; left: -19px; top: -19px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
-  display: flex; align-items: center; justify-content: center; transition: width .45s var(--ease), height .45s var(--ease), left .45s var(--ease), top .45s var(--ease), background .35s, border-color .35s, opacity .3s; }
-.cur-ring i { display: flex; color: var(--accent); opacity: 0; scale: .6; transition: opacity .3s, scale .45s var(--ease); }
+.cur-dot { position: fixed; left: 0; top: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transition: opacity .2s, width .25s, height .25s; will-change: transform; }
+.cur-ring { position: fixed; left: 0; top: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--ink) 38%, transparent);
+  display: flex; align-items: center; justify-content: center; will-change: transform;
+  transition: width .35s var(--ease), height .35s var(--ease), border-radius .35s var(--ease), background .3s, border-color .3s, opacity .25s; }
+.cur-ring i { display: flex; color: var(--accent); opacity: 0; scale: .6; transition: opacity .25s, scale .35s var(--ease); }
 .cur-ring i svg { width: 16px; height: 16px; }
-/* links and projects: the ring tightens around the target */
-.cursor.is-link .cur-ring { width: 44px; height: 44px; left: -22px; top: -22px; border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
-.cursor.is-link .cur-dot { opacity: 0; }
+/* plain links: a tight accent ring */
+.cursor.is-link .cur-ring { width: 40px; height: 40px; border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.cursor.is-link .cur-dot { width: 4px; height: 4px; }
+/* buttons: the ring wraps the button's own shape */
+.cursor.is-stick .cur-ring { border-color: color-mix(in srgb, var(--accent) 75%, transparent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.cursor.is-stick .cur-dot { opacity: 0; }
 /* gallery / zoomable screens: a small frosted ring with a quiet hint icon */
-.cursor.is-hint .cur-ring { width: 46px; height: 46px; left: -23px; top: -23px; border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+.cursor.is-hint .cur-ring { width: 46px; height: 46px; border-color: color-mix(in srgb, var(--accent) 70%, transparent);
   background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .cursor.is-hint .cur-ring i { opacity: 1; scale: 1; }
 .cursor.is-hint .cur-dot { opacity: 0; }
-.cursor.is-down .cur-ring { scale: .86; }
-.cur-ring { transition-property: width, height, left, top, background, border-color, opacity, scale; }
 .cursor.is-hidden .cur-dot, .cursor.is-hidden .cur-ring { opacity: 0; }
 
 /* glass */

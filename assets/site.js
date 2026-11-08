@@ -552,29 +552,66 @@
     el.innerHTML = '<i class="cur-dot"></i><span class="cur-ring"><i></i></span>';
     document.body.appendChild(el);
     document.documentElement.classList.add('has-cursor');
-    var dot = el.querySelector('.cur-dot'), ring = el.querySelector('.cur-ring'), lab = ring.querySelector('i'), shown = false, last = '';
-    var dx = gsap.quickTo(dot, 'x', { duration: .12, ease: 'power3' }), dy = gsap.quickTo(dot, 'y', { duration: .12, ease: 'power3' });
-    var rx = gsap.quickTo(ring, 'x', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .5, ease: 'power3' });
+    var dot = el.querySelector('.cur-dot'), ring = el.querySelector('.cur-ring'), icon = ring.querySelector('i');
+    var STICK = '.cta, .gbtn, .sc-btn, .sc-open, .sc-nav, .c-item, .cv-menu a, .pv-demo, .pv-close, .pv-next, .nav-links a, .logo, .to-top, .menu-links a';
+    var mx = -100, my = -100, rx = -100, ry = -100, lastHint = '', stick = null, stickR = '', down = false, running = false, seen = false;
+    var size = { w: 0, h: 0, r: '' };
+
+    function setBox(w, h, radius) { // only touch layout when the box really changes
+      if (w === size.w && h === size.h && radius === size.r) return;
+      size = { w: w, h: h, r: radius };
+      ring.style.width = w ? w + 'px' : ''; ring.style.height = h ? h + 'px' : ''; ring.style.borderRadius = radius;
+    }
+    function frame() {
+      // the dot is glued to the pointer; the ring eases after it (tight, ~4 frames) and wraps buttons it is over
+      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
+      var tx = mx, ty = my, stretch = '';
+      if (stick && stick.isConnected) {
+        var r = stick.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        tx = cx + (mx - cx) * .12; ty = cy + (my - cy) * .12;
+        setBox(Math.round(r.width + 10), Math.round(r.height + 10), stickR);
+      } else {
+        if (stick) { stick = null; el.classList.remove('is-stick'); }
+        setBox(0, 0, '');
+      }
+      var vx = tx - rx, vy = ty - ry;
+      rx += vx * .26; ry += vy * .26;
+      if (!stick && !lastHint) { // a light stretch in the direction of travel
+        var speed = Math.min(Math.hypot(vx, vy) / 60, .22);
+        if (speed > .01) stretch = ' rotate(' + Math.atan2(vy, vx) + 'rad) scale(' + (1 + speed) + ',' + (1 - speed * .6) + ')';
+      }
+      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)' + stretch + (down ? ' scale(.86)' : '');
+      if (Math.abs(vx) + Math.abs(vy) > .1 || stick) requestAnimationFrame(frame); else running = false;
+    }
+    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+
     window.addEventListener('pointermove', function (e) {
       if (e.pointerType !== 'mouse') return;
-      if (!shown) { gsap.set([dot, ring], { x: e.clientX, y: e.clientY }); shown = true; }
+      mx = e.clientX; my = e.clientY;
+      if (!seen) { rx = mx; ry = my; seen = true; }
       el.classList.remove('is-hidden');
-      dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
-    });
+      kick();
+    }, { passive: true });
     document.addEventListener('pointerover', function (e) {
-      var t = e.target, hint = '', link = false;
+      var t = e.target, hint = '', link = false, s = null;
       if (!t.closest) return;
-      if (t.closest('.sc-nav, .sc-open')) link = true;
+      if (t.closest('.sc-nav, .sc-open')) s = t.closest('.sc-nav, .sc-open');
       else if (t.closest('.sc-stage')) hint = 'drag';
       else if (t.closest('.pv-shot')) hint = 'zoom';
+      else if ((s = t.closest(STICK))) {}
       else if (t.closest('a, button, [role="button"], label, .fl')) link = true;
-      if (hint !== last) { if (hint) lab.innerHTML = CUR[hint]; last = hint; }
+      if (hint !== lastHint) { if (hint) icon.innerHTML = CUR[hint]; lastHint = hint; }
+      if (s && s !== stick) stickR = (parseFloat(getComputedStyle(s).borderTopLeftRadius) || 0) + 5 + 'px';
+      stick = s;
+      el.classList.toggle('is-stick', !!s);
       el.classList.toggle('is-hint', !!hint);
       el.classList.toggle('is-link', link);
+      kick();
     });
     document.documentElement.addEventListener('mouseleave', function () { el.classList.add('is-hidden'); });
-    window.addEventListener('pointerdown', function () { el.classList.add('is-down'); });
-    window.addEventListener('pointerup', function () { el.classList.remove('is-down'); });
+    window.addEventListener('pointerdown', function () { down = true; kick(); });
+    window.addEventListener('pointerup', function () { down = false; kick(); });
+    window.addEventListener('scroll', kick, { passive: true }); // keep a wrapped button tracked while the page moves
   }
 
   /* ---------- intro curtain (first visit per session) ---------- */
