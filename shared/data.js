@@ -5,8 +5,8 @@ window.SITE = {
   whatsapp: 'https://wa.me/966590700541',
   email: 'yousef.z.hakeem@gmail.com',
   linkedin: 'https://www.linkedin.com/in/yousef-hakeem-b09663279/',
-  cv: 'Yousef_Hakeem_CV.pdf?v=20261105a',
-  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261105a',
+  cv: 'Yousef_Hakeem_CV.pdf?v=20261108a',
+  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261108a',
 
   order: ['scrapbid', 'studybuddy', 'qurrat', 'nusuk', 'mister', 'mindwell'],
   meta: {

@@ -594,12 +594,33 @@
     introAt = 1.65; // the hero starts settling as the curtain lifts
   }
 
+  // Keep the floating screens clear of the hero text and the nav bar at every screen size:
+  // layout boxes (offsets, not transformed rects) are compared, and any screen that would touch the text is hidden.
+  function placeFloaters() {
+    var hero = app.querySelector('.hero'), inner = hero && hero.querySelector('.hero-inner');
+    if (!inner || !hero.querySelector('.fl')) return;
+    var W = hero.clientWidth, H = hero.clientHeight, pad = 28, top = 96;
+    var blocks = [].map.call(inner.children, function (n) {
+      var l = inner.offsetLeft + n.offsetLeft, t = inner.offsetTop + n.offsetTop;
+      return { l: l - pad, t: t - pad, r: l + n.offsetWidth + pad, b: t + n.offsetHeight + pad };
+    });
+    hero.querySelectorAll('.fl').forEach(function (f) {
+      f.classList.remove('is-off');
+      var l = parseFloat(f.style.left) / 100 * W, t = parseFloat(f.style.top) / 100 * H, w = f.offsetWidth, h = f.offsetHeight;
+      var hit = t < top || l < 8 || l + w > W - 8 || blocks.some(function (b) { return l < b.r && l + w > b.l && t < b.b && t + h > b.t; });
+      f.classList.toggle('is-off', hit);
+    });
+  }
+  var floatT = null;
+  window.addEventListener('resize', function () { clearTimeout(floatT); floatT = setTimeout(placeFloaters, 120); });
+
   function mount(first) {
     if (ctx) ctx.revert();
     setMenu(false);
     app.innerHTML = tpl();
     document.title = S.tr().brand + ' — ' + S.tr().role;
     bindUI();
+    placeFloaters();
     ctx = gsap.context(function () { motion(first); }, app);
     ST.refresh();
     window.dispatchEvent(new Event('page:render'));
@@ -618,6 +639,6 @@
   playLoader();
   initCursor();
   mount(true);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { placeFloaters(); ST.refresh(); });
   window.addEventListener('load', function () { ST.refresh(); });
 })();
