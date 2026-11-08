@@ -23,9 +23,9 @@
   };
   var L = {
     ar: { workH: 'كل مشروع قصة — من المشكلة إلى الشاشة.', aboutH: 'تصميم يبدأ من الإنسان.', processH: 'أربع خطوات، تجربة واحدة واضحة.', expH: 'أدوات ومهارات أعمل بها.', tlH: 'خبرة عملية وأساس أكاديمي.',
-      hint: 'اسحب يمين ويسار لتقليب الشاشات', open: 'افتح', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
+      hint: 'اسحب يمين ويسار لتقليب الشاشات', hintDesk: 'اسحب أو استخدم الأسهم لتقليب الشاشات', open: 'افتح', cover: 'الغلاف', prev: 'الشاشة السابقة', next: 'الشاشة التالية', toLight: 'الوضع الفاتح', toDark: 'الوضع الداكن' },
     en: { workH: 'Every project is a story — from problem to screen.', aboutH: 'Design that starts with people.', processH: 'Four steps, one clear experience.', expH: 'The tools and skills I work with.', tlH: 'Hands-on experience, academic grounding.',
-      hint: 'Swipe left and right to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
+      hint: 'Swipe left and right to flip through the screens', hintDesk: 'Drag or use the arrows to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
   var BRAND = ['#2f8f77', '#4b3bd6', '#0f5bd8'];
@@ -125,7 +125,7 @@
         '<div class="nav-actions">' +
           '<button class="gbtn theme-btn" type="button" aria-label="' + esc(dark ? l.toLight : l.toDark) + '">' + ICON.moon + ICON.sun + '</button>' +
           '<button class="gbtn lang" type="button" aria-label="Language">' + t.langBtn + '</button>' +
-          '<a class="gbtn gbtn-grad on-grad" href="#contact" data-scroll="contact">' + esc(t.nav.contact) + '</a>' +
+          '<a class="gbtn gbtn-grad on-grad" href="#contact" data-scroll="contact">' + esc(t.navCta) + '</a>' +
           '<button class="gbtn menu-btn" type="button">' + esc(t.menu) + '</button></div></header>' +
       '<div class="menu"><nav class="menu-links">' + links + '</nav><div class="menu-foot"><a class="gbtn" href="mailto:' + S.email + '">' + esc(t.emailLbl) + '</a>' +
         '<a class="gbtn" href="' + S.whatsapp + '" target="_blank" rel="noopener">' + esc(t.whatsapp) + '</a><a class="gbtn" href="' + S.url(S.cv) + '" target="_blank" rel="noopener">' + esc(t.cvUX) + ' PDF</a><a class="gbtn" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener">' + esc(t.cvIT) + ' PDF</a></div></div>' +
@@ -151,7 +151,7 @@
             '<button class="sc-nav sc-prev" type="button" aria-label="' + esc(l.prev) + '"></button>' +
             '<button class="sc-nav sc-next" type="button" aria-label="' + esc(l.next) + '"></button>' +
             '<div class="sc-meter"><span class="sc-count"></span><div class="sc-bar"><i></i></div></div>' +
-            '<div class="sc-hint">' + ICON.swipe + esc(l.hint) + '</div>' +
+            '<div class="sc-hint">' + ICON.swipe + esc(fine ? l.hintDesk : l.hint) + '</div>' +
           '</div><div class="sc-dots">' + dots + '</div></div>' +
         '<div class="sc-list">' + items + '</div></div></section>' +
 
@@ -175,11 +175,11 @@
         '<h2 class="contact-h kufi" data-reveal>' + W(t.contactH) + '</h2><p class="contact-p">' + esc(t.contactP) + '</p>' +
         '<a class="mail grad" href="mailto:' + S.email + '">' + S.email + '</a>' +
         '<div class="c-grid">' +
-          '<a class="c-item glass" href="tel:' + S.phone + '"><span>' + esc(t.call) + '</span><strong>' + S.phoneDisplay + '</strong></a>' +
-          '<a class="c-item glass" href="' + S.whatsapp + '" target="_blank" rel="noopener"><span>' + esc(t.whatsapp) + '</span><strong>WhatsApp ↗</strong></a>' +
-          '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>LinkedIn ↗</strong></a>' +
-          '<a class="c-item c-cv glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvUX) + ' ↓</strong></a>' +
-          '<a class="c-item c-cv glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>PDF</span><strong>' + esc(t.cvIT) + ' ↓</strong></a>' +
+          '<a class="c-item glass" href="tel:' + S.phone + '"><span>' + esc(t.call) + '</span><strong class="ltr">' + S.phoneDisplay + '</strong></a>' +
+          '<a class="c-item glass" href="' + S.whatsapp + '" target="_blank" rel="noopener"><span>' + esc(t.whatsapp) + '</span><strong>' + esc(t.waAct) + '</strong></a>' +
+          '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>' + esc(t.liAct) + '</strong></a>' +
+          '<a class="c-item c-cv glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>' + esc(t.cvUX) + '</span><strong>' + esc(t.dlAct) + '</strong></a>' +
+          '<a class="c-item c-cv glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>' + esc(t.cvIT) + '</span><strong>' + esc(t.dlAct) + '</strong></a>' +
         '</div></div>' +
         '<div class="footer"><span>' + esc(t.footer) + '</span><span>' + esc(t.localTime) + ' · <span class="clock" dir="ltr">--:--</span></span><button type="button" class="to-top">' + esc(t.backTop) + ' ↑</button></div>' +
       '</section>' +

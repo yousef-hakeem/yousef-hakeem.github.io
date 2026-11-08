@@ -5,8 +5,8 @@ window.SITE = {
   whatsapp: 'https://wa.me/966590700541',
   email: 'yousef.z.hakeem@gmail.com',
   linkedin: 'https://www.linkedin.com/in/yousef-hakeem-b09663279/',
-  cv: 'Yousef_Hakeem_CV.pdf?v=20261108a',
-  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261108a',
+  cv: 'Yousef_Hakeem_CV.pdf?v=20261108b',
+  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261108b',
 
   order: ['scrapbid', 'studybuddy', 'qurrat', 'nusuk', 'mister', 'mindwell'],
   meta: {
@@ -81,8 +81,8 @@ window.SITE = {
       expertise: [
         { h: 'البحث والتقييم', items: ['مقابلات المستخدمين', 'الشخصيات (Personas)', 'خرائط رحلة المستخدم', 'اختبار قابلية الاستخدام', 'التقييم الإرشادي (Nielsen)'] },
         { h: 'التصميم والنمذجة', items: ['تحسين تجربة المستخدم', 'المخططات الهيكلية', 'نماذج تفاعلية عالية الدقة', 'أنظمة التصميم والمكوّنات'] },
-        { h: 'التطوير', items: ['HTML · CSS · JavaScript', 'تطبيقات Flutter (Dart)', 'PostgreSQL · SQL · Firebase', 'لوحات تحكم وأنظمة إدارة محتوى', 'Git ونشر المواقع'] },
-        { h: 'الدعم التقني والأنظمة', items: ['الدعم الفني (Help Desk)', 'تشخيص الأجهزة والبرامج والشبكات', 'إدارة الخوادم وحسابات المستخدمين', 'إدارة التذاكر حتى الحل'] }
+        { h: 'التطوير', items: ['HTML · CSS · JavaScript', 'تطبيقات Flutter', 'PostgreSQL · SQL · Firebase', 'لوحات تحكم وأنظمة محتوى', 'Git ونشر المواقع'] },
+        { h: 'الدعم التقني والأنظمة', items: ['الدعم الفني (Help Desk)', 'تشخيص الأجهزة والشبكات', 'إدارة الخوادم والحسابات', 'إدارة التذاكر'] }
       ],
       tools: ['تفاعل الإنسان مع الحاسب', 'بحث المستخدم', 'قابلية الاستخدام', 'النماذج الأولية', 'أنظمة التصميم', 'الدعم التقني', 'إدارة الأنظمة', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
       timelineLabel: 'التعليم والخبرة',
@@ -95,6 +95,7 @@ window.SITE = {
       contactH: 'لنعمل معاً.',
       contactP: 'عندك مشروع أو فرصة عمل؟ يسعدني أسمع منك.',
       call: 'اتصال', whatsapp: 'واتساب', emailLbl: 'البريد', linkedin: 'لينكدإن',
+      waAct: 'أرسل رسالة ↗', liAct: 'عرض الحساب ↗', dlAct: 'تحميل PDF ↓', navCta: 'تواصل معي',
       localTime: 'الدمام، المنطقة الشرقية',
       footer: '© ٢٠٢٦ يوسف حكيم',
       backTop: 'للأعلى',
@@ -164,7 +165,7 @@ window.SITE = {
         { h: 'Research & Evaluation', items: ['User interviews', 'Personas', 'Journey mapping', 'Usability testing', 'Heuristic evaluation (Nielsen)'] },
         { h: 'Design & Prototyping', items: ['UX improvement', 'Wireframes', 'High-fidelity prototypes', 'Design systems'] },
         { h: 'Development', items: ['HTML · CSS · JavaScript', 'Flutter (Dart) apps', 'PostgreSQL · SQL · Firebase', 'Admin dashboards & CMS', 'Git & web deployment'] },
-        { h: 'IT Support & Systems', items: ['Help Desk support', 'Hardware, software & network troubleshooting', 'Server & user-account management', 'Ticket management to resolution'] }
+        { h: 'IT Support & Systems', items: ['Help Desk support', 'Hardware & network troubleshooting', 'Server & account management', 'Ticket management'] }
       ],
       tools: ['Human-Computer Interaction', 'UX Research', 'Usability Testing', 'Prototyping', 'Design Systems', 'IT Support', 'System Administration', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
       timelineLabel: 'Education & experience',
@@ -177,6 +178,7 @@ window.SITE = {
       contactH: 'Let’s work together.',
       contactP: 'Have a project or an opportunity? I’d love to hear from you.',
       call: 'Call', whatsapp: 'WhatsApp', emailLbl: 'Email', linkedin: 'LinkedIn',
+      waAct: 'Send a message ↗', liAct: 'View profile ↗', dlAct: 'Download PDF ↓', navCta: 'Get in touch',
       localTime: 'Dammam, Eastern Province',
       footer: '© 2026 Yousef Hakeem',
       backTop: 'Back to top',
