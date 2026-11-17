@@ -28,7 +28,7 @@
       hint: 'Swipe left and right to flip through the screens', hintDesk: 'Drag or use the arrows to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
-  var BRAND = ['#2f8f77', '#4b3bd6', '#0f5bd8'];
+  var BRAND = ['#2a7d68', '#b8915a', '#5b6f96']; // emerald, champagne, slate
   var PAL = {
     scrapbid: ['#c4561f', '#5a2410', '#e0883a'], studybuddy: ['#6d5bd0', '#3b2fa8', '#2a6bf0'], qurrat: ['#1d6b5f', '#b08a35', '#0f5b4f'],
     nusuk: ['#b08a35', '#3a2d12', '#6b5a2a'], mister: ['#4f6ff0', '#7b5cff', '#2aa8f0'], mindwell: ['#1f6b6e', '#2f8f77', '#155a7a']
@@ -52,7 +52,7 @@
     document.documentElement.dataset.theme = th;
     try { localStorage.setItem('yh-theme', th); } catch (e) {}
     var mc = document.querySelector('meta[name="theme-color"]');
-    if (mc) mc.content = th === 'light' ? '#f2f4f9' : '#070a12';
+    if (mc) mc.content = th === 'light' ? '#f6f4ef' : '#0b0c10';
     var b = app.querySelector('.theme-btn');
     if (b) b.setAttribute('aria-label', th === 'light' ? L[S.lang()].toDark : L[S.lang()].toLight);
   }
