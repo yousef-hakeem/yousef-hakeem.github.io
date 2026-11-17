@@ -5,7 +5,7 @@
   --accent: #7cf2c8; --accent-2: #8b7bff; --on-accent: #070a12;
   --grad: linear-gradient(100deg, #7cf2c8, #b6f7ff 40%, #8b7bff);
   --c1: #2f8f77; --c2: #4b3bd6; --c3: #0f5bd8; --aurora-op: .55;
-  --grid-line: rgba(255,255,255,.035); --vignette: rgba(7,10,18,.85); --bg-fade: rgba(7,10,18,.92);
+  --vignette: rgba(7,10,18,.85); --bg-fade: rgba(7,10,18,.92);
   --stage-bg: rgba(9,12,22,.55); --stage-bg-m: rgba(9,12,22,.86); --chip-bg: rgba(7,10,18,.55); --menu-bg: rgba(7,10,18,.92);
   --shadow: rgba(0,0,0,.8); --bar: #1a2030; --bar-dot: #3a4255; --spot: rgba(124,242,200,.14);
   --nav-h: 74px; --pad: clamp(16px, 4.4vw, 64px); --maxw: 1320px;
@@ -21,7 +21,7 @@
   --glass: rgba(255,255,255,.62); --glass-2: rgba(255,255,255,.88); --glass-line: rgba(14,20,36,.1);
   --accent: #0c9e74; --accent-2: #6a4cff; --on-accent: #ffffff;
   --grad: linear-gradient(100deg, #0c9e74, #2b7fff 48%, #6a4cff);
-  --aurora-op: .3; --grid-line: rgba(14,20,36,.05); --vignette: rgba(242,244,249,.7); --bg-fade: rgba(242,244,249,.94);
+  --aurora-op: .3; --vignette: rgba(242,244,249,.7); --bg-fade: rgba(242,244,249,.94);
   --stage-bg: rgba(255,255,255,.5); --stage-bg-m: rgba(255,255,255,.86); --chip-bg: rgba(255,255,255,.8); --menu-bg: rgba(242,244,249,.95);
   --shadow: rgba(25,35,70,.28); --bar: #e6e9f0; --bar-dot: #c7ccd6; --spot: rgba(12,158,116,.1);
   --pv-bg: #f6f7fb; --pv-ink: #0e1424; --pv-muted: #5a6379; --pv-line: rgba(14,20,36,.1); --pv-accent: #0c9e74; --pv-surface: #ffffff; --pv-backdrop: rgba(20,26,45,.35);
@@ -51,8 +51,6 @@ img { max-width: 100%; display: block; }
 @keyframes drift1 { to { transform: translate(18vw, 14vh) scale(1.15); } }
 @keyframes drift2 { to { transform: translate(-16vw, -18vh) scale(1.1); } }
 @keyframes drift3 { to { transform: translate(-20vw, 10vh) scale(.85); } }
-.aurora-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 64px 64px; mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%); }
 .aurora-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 40%, var(--vignette)); }
 main, .nav { position: relative; z-index: 1; }
 .progress { position: fixed; top: 0; inset-inline: 0; height: 2px; z-index: 8600; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform: scaleX(0); transform-origin: var(--po, right); pointer-events: none; }

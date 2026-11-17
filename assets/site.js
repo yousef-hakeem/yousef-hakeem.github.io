@@ -118,7 +118,7 @@
     var dark = theme() === 'dark';
 
     return '' +
-      '<div class="aurora" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i><div class="aurora-grid"></div><div class="aurora-vignette"></div></div>' +
+      '<div class="aurora" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i><div class="aurora-vignette"></div></div>' +
       '<div class="progress" aria-hidden="true"></div>' +
       '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--accent)"/><stop offset="1" style="stop-color:var(--accent-2)"/></linearGradient></defs></svg>' +
       '<header class="nav glass"><a class="logo" href="#top" data-scroll="top"><i class="on-grad">YH</i><span>' + esc(t.brand) + '</span></a><nav class="nav-links">' + links + '</nav>' +
