@@ -5,8 +5,8 @@ window.SITE = {
   whatsapp: 'https://wa.me/966590700541',
   email: 'yousef.z.hakeem@gmail.com',
   linkedin: 'https://www.linkedin.com/in/yousef-hakeem-b09663279/',
-  cv: 'Yousef_Hakeem_CV.pdf?v=20261117a',
-  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261117a',
+  cv: 'Yousef_Hakeem_CV.pdf?v=20261117b',
+  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261117b',
 
   order: ['scrapbid', 'studybuddy', 'qurrat', 'nusuk', 'mister', 'mindwell'],
   meta: {
@@ -122,8 +122,8 @@ window.SITE = {
       roleSub: 'Design · IT support · Development',
       available: 'Open to new opportunities',
       intro: 'I design clear, easy-to-use digital experiences and build them end to end, with hands-on experience in IT support and system administration. Human–Computer Interaction graduate from the Software Engineering Department at Umm Al-Qura University.',
-      ctaWork: 'View my work', ctaCV: 'Résumé',
-      cvUX: 'UI/UX résumé', cvUXd: 'Design & user experience', cvIT: 'IT résumé', cvITd: 'IT support, systems & development',
+      ctaWork: 'View my work', ctaCV: 'Resume',
+      cvUX: 'UI/UX Resume', cvUXd: 'Design & user experience', cvIT: 'IT Resume', cvITd: 'IT support, systems & development',
       scroll: 'Scroll',
       marquee: ['UI Design', 'UX Design', 'Usability', 'User Research', 'Design Systems', 'Prototyping', 'Interaction Design'],
       aboutLabel: 'About',

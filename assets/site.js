@@ -495,7 +495,8 @@
       var d = +f.dataset.depth;
       gsap.to(f, { yPercent: -120 * d, rotation: (d - .6) * 14, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
     });
-    gsap.to('.hero-inner', { y: 120, opacity: 0, scale: .94, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '80% top', scrub: 1 } });
+    // Desktop: the hero text sinks and fades as you leave. Phones keep it still, so it never slides into the screens below it.
+    if (!isSmall()) gsap.to('.hero-inner', { y: 120, opacity: 0, scale: .94, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '80% top', scrub: 1 } });
 
     /* reveals */
     gsap.utils.toArray('[data-reveal]').forEach(function (el) {
@@ -523,9 +524,9 @@
       var dst = { trigger: deck, start: 'top 85%', end: 'bottom top', scrub: 1 };
       gsap.fromTo(d1, { xPercent: -98, rotation: -9, y: 22 }, { xPercent: -125, rotation: -20, y: 40, ease: 'none', scrollTrigger: dst });
       gsap.fromTo(d3, { xPercent: -2, rotation: 9, y: 22 }, { xPercent: 25, rotation: 20, y: 40, ease: 'none', scrollTrigger: dst });
-      gsap.fromTo(d2, { scale: 1, y: 0 }, { scale: 1.08, y: -30, ease: 'none', scrollTrigger: dst });
+      gsap.fromTo(d2, { scale: 1, y: 0 }, { scale: 1.06, y: 12, ease: 'none', scrollTrigger: dst }); // grows in place, never climbs into the buttons
       gsap.from(deck, { y: 90, opacity: 0, scale: .9, duration: 1.4, delay: .4, ease: 'expo.out' });
-      gsap.to(deck, { y: -10, duration: 2.4, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 1.9 });
+      gsap.to(deck, { y: 8, duration: 2.4, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 1.9 });
     }
     gsap.utils.toArray('.t-stat b').forEach(function (b) {
       var end = +b.dataset.n, suf = b.dataset.s || '', o = { v: 0 };
