@@ -100,7 +100,7 @@
       .map(function (f) { return '<div><dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd></div>'; }).join('');
     return '<div class="pv-case"><dl class="pv-facts">' + facts + '</dl>' +
       (c.did ? '<div class="pv-did"><h3>' + esc(t.caseDid) + '</h3><ul>' + c.did.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul></div>' : '') +
-      (m.demo ? '<a class="pv-demo" href="' + m.demo + '" target="_blank" rel="noopener">' + esc(t.liveDemo) + ' ↗</a>' : '') + '</div>';
+      (m.demo ? '<a class="pv-demo" href="' + m.demo + '" target="_blank" rel="noopener">' + esc(t.liveDemo) + S.arw('ne') + '</a>' : '') + '</div>';
   }
 
   function open(id, fromHistory, opts) {

@@ -5,8 +5,8 @@ window.SITE = {
   whatsapp: 'https://wa.me/966590700541',
   email: 'yousef.z.hakeem@gmail.com',
   linkedin: 'https://www.linkedin.com/in/yousef-hakeem-b09663279/',
-  cv: 'Yousef_Hakeem_CV.pdf?v=20261117c',
-  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261117c',
+  cv: 'Yousef_Hakeem_CV.pdf?v=20261121c',
+  cvIT: 'Yousef_Hakeem_CV_IT.pdf?v=20261121c',
 
   order: ['scrapbid', 'studybuddy', 'qurrat', 'nusuk', 'mister', 'mindwell'],
   meta: {
@@ -27,7 +27,7 @@ window.SITE = {
         work: 'ستة مشاريع مختارة على الويب والجوال وApple Watch. قلّب الشاشات هنا مباشرة، أو افتح المشروع لترى دوري وما قمت به.',
         about: 'مصمم UI/UX ومتخصص تقنية معلومات — أصمّم للمستخدم الحقيقي وأبني ما أصمّمه.',
         experience: 'أين طبّقت التصميم والهندسة في جهات حقيقية، وما درسته.',
-        skills: 'البحث والتصميم والتطوير والدعم التقني — الأدوات التي أعمل بها.',
+        skills: 'البحث والتصميم والتطوير وتقنية المعلومات — الأدوات التي أعمل بها.',
         process: 'طريقة واضحة وقابلة للتكرار للانتقال من مشكلة حقيقية إلى منتج سهل الاستخدام.'
       },
       expLabel: 'الخبرة', eduLabel: 'التعليم', skillsLabel: 'المهارات',
@@ -36,16 +36,16 @@ window.SITE = {
       firstName: 'يوسف', lastName: 'حكيم',
       fullName: 'يوسف زين العابدين حكيم',
       role: 'مصمم UI/UX ومتخصص تقنية معلومات',
-      roleSub: 'تصميم · دعم تقني · تطوير',
+      roleSub: 'تصميم · تقنية معلومات · تطوير',
       available: 'متاح لفرص جديدة',
-      intro: 'أصمّم تجارب رقمية واضحة وسهلة الاستخدام وأبنيها من الواجهة إلى الخادم، مع خبرة عملية في الدعم التقني وإدارة الأنظمة. خريج تفاعل الإنسان مع الحاسب من قسم هندسة البرمجيات بجامعة أم القرى.',
+      intro: 'أصمّم تجارب رقمية واضحة وسهلة الاستخدام وأبنيها من الواجهة إلى الخادم، مع خبرة عملية في تقنية المعلومات وإدارة الأنظمة. خريج تفاعل الإنسان مع الحاسب من قسم هندسة البرمجيات بجامعة أم القرى.',
       ctaWork: 'شاهد أعمالي', ctaCV: 'السيرة الذاتية',
-      cvUX: 'سيرة UI/UX', cvUXd: 'التصميم وتجربة المستخدم', cvIT: 'سيرة IT', cvITd: 'الدعم التقني والأنظمة والتطوير',
+      cvUX: 'سيرة UI/UX', cvUXd: 'التصميم وتجربة المستخدم', cvIT: 'سيرة IT', cvITd: 'تقنية المعلومات والأنظمة والتطوير',
       scroll: 'مرّر',
       marquee: ['تصميم الواجهات', 'تجربة المستخدم', 'قابلية الاستخدام', 'بحث المستخدم', 'أنظمة التصميم', 'النماذج التفاعلية', 'تصميم التفاعل'],
       aboutLabel: 'نبذة',
       statement: 'أؤمن أن التصميم الجيّد يبدأ من المستخدم — من احتياجاته وسياقه والمشكلة الحقيقية التي يواجهها. أحوّل الأفكار المعقّدة إلى واجهات بسيطة وممتعة وقابلة للاستخدام.',
-      aboutP: 'أعمل عبر دورة كاملة: من البحث والنماذج الأوّلية إلى التصميم البصري والبرمجة والإطلاق — ومعها خبرة عملية في الدعم التقني وإدارة الخوادم وحسابات المستخدمين والشبكات.',
+      aboutP: 'أعمل عبر دورة كاملة: من البحث والنماذج الأوّلية إلى التصميم البصري والبرمجة والإطلاق — ومعها خبرة عملية في تقنية المعلومات وإدارة الخوادم وحسابات المستخدمين والشبكات.',
       quote: 'البساطة ليست غياب التفاصيل، بل وضوح المقصد.',
       facts: [['الجامعة', 'جامعة أم القرى'], ['التخصص', 'تفاعل الإنسان مع الحاسب'], ['المجال', 'UI/UX · تقنية المعلومات'], ['اللغات', 'العربية · English']],
       stats: [['6', 'مشاريع مختارة'], ['65+', 'شاشة مصمّمة'], ['3', 'منصّات: ويب · جوال · ساعة']],
@@ -79,23 +79,23 @@ window.SITE = {
       ],
       expertiseLabel: 'الخبرات',
       expertise: [
-        { h: 'البحث والتقييم', items: ['مقابلات المستخدمين', 'الشخصيات (Personas)', 'خرائط رحلة المستخدم', 'اختبار قابلية الاستخدام', 'التقييم الإرشادي (Nielsen)'] },
-        { h: 'التصميم والنمذجة', items: ['تحسين تجربة المستخدم', 'المخططات الهيكلية', 'نماذج تفاعلية عالية الدقة', 'أنظمة التصميم والمكوّنات'] },
-        { h: 'التطوير', items: ['HTML · CSS · JavaScript', 'تطبيقات Flutter', 'PostgreSQL · SQL · Firebase', 'لوحات تحكم وأنظمة محتوى', 'Git ونشر المواقع'] },
-        { h: 'الدعم التقني والأنظمة', items: ['الدعم الفني (Help Desk)', 'تشخيص الأجهزة والشبكات', 'إدارة الخوادم والحسابات', 'إدارة التذاكر'] }
+        { h: 'بحث تجربة المستخدم', items: ['مقابلات المستخدمين', 'الشخصيات (Personas)', 'خرائط رحلة المستخدم', 'اختبار قابلية الاستخدام', 'التقييم الإرشادي (Nielsen)', 'تحليل تجربة المستخدم'] },
+        { h: 'تصميم الواجهات والتفاعل', items: ['هندسة المعلومات', 'مسارات المستخدم', 'المخططات الهيكلية', 'واجهات عالية الدقة', 'النماذج التفاعلية', 'أنظمة التصميم', 'التصميم المتجاوب', 'واجهات عربية (RTL) وثنائية اللغة', 'الهوية البصرية', 'Figma · Adobe XD'] },
+        { h: 'التطوير', items: ['HTML · CSS · JavaScript', 'Flutter (Dart)', 'PostgreSQL · SQL', 'Firebase', 'لوحات تحكم وأنظمة محتوى', 'Git ونشر المواقع'] },
+        { h: 'تقنية المعلومات والأنظمة', items: ['إدارة الأنظمة', 'إدارة الخوادم', 'إدارة حسابات المستخدمين', 'تشخيص مشاكل الشبكات والأنظمة', 'أساسيات SAP ABAP'] }
       ],
-      tools: ['تفاعل الإنسان مع الحاسب', 'بحث المستخدم', 'قابلية الاستخدام', 'النماذج الأولية', 'أنظمة التصميم', 'الدعم التقني', 'إدارة الأنظمة', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
+      tools: ['تفاعل الإنسان مع الحاسب', 'بحث المستخدم', 'قابلية الاستخدام', 'النماذج الأولية', 'أنظمة التصميم', 'تقنية المعلومات', 'إدارة الأنظمة', 'SAP ABAP', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
       timelineLabel: 'التعليم والخبرة',
       timeline: [
         { kind: 'work', title: 'قائد تقني', org: 'جمعية قرة عين · الدمام', date: 'يناير – أغسطس 2026', desc: 'بنيت نظام الجمعية كاملاً من الصفر: الموقع والخادم ولوحة تحكم عربية لإدارة المحتوى، وسلّمته وحدي لفريق غير تقني يدير المحتوى بنفسه.' },
-        { kind: 'work', title: 'متدرب تقنية معلومات (تدريب تعاوني)', org: 'شركة أميانتيت العربية السعودية', date: 'مارس – يوليو 2025', desc: 'دعم فني في مكتب المساعدة وإدارة الأنظمة: حل مشاكل الأجهزة والبرامج والشبكات، وإدارة الخوادم وحسابات المستخدمين.' },
+        { kind: 'work', title: 'متدرب تقنية معلومات (تدريب تعاوني)', org: 'شركة أميانتيت العربية السعودية', date: 'مارس – يوليو 2025', desc: 'تدريب في إدارة الأنظمة: إدارة الخوادم وحسابات المستخدمين وتشخيص مشاكل الأنظمة والشبكات، مع تجربة عملية في تطوير SAP ABAP.' },
         { kind: 'edu', title: 'بكالوريوس تفاعل الإنسان مع الحاسب (HCI)', org: 'جامعة أم القرى · قسم هندسة البرمجيات', date: '2026', desc: 'تصميم الواجهات وقابلية الاستخدام وعلم النفس المعرفي للمستخدم، على أساس من هندسة البرمجيات.' }
       ],
       contactLabel: 'تواصل',
       contactH: 'لنعمل معاً.',
       contactP: 'عندك مشروع أو فرصة عمل؟ يسعدني أسمع منك.',
       call: 'اتصال', whatsapp: 'واتساب', emailLbl: 'البريد', linkedin: 'لينكدإن',
-      waAct: 'أرسل رسالة ↗', liAct: 'عرض الحساب ↗', dlAct: 'تحميل PDF ↓', navCta: 'تواصل معي',
+      waAct: 'أرسل رسالة', liAct: 'عرض الحساب', dlAct: 'تحميل PDF', navCta: 'تواصل معي',
       localTime: 'الدمام، المنطقة الشرقية',
       footer: '© ٢٠٢٦ يوسف حكيم',
       backTop: 'للأعلى',
@@ -110,7 +110,7 @@ window.SITE = {
         work: 'Six selected projects across web, mobile and Apple Watch. Flip through the screens right here, or open a project to see my role and what I did.',
         about: 'UI/UX designer and IT specialist — I design for real users and build what I design.',
         experience: 'Where I have applied design and engineering in real organisations, and what I studied.',
-        skills: 'Research, design, development and IT support — the toolkit behind my work.',
+        skills: 'Research, design, development and information technology — the toolkit behind my work.',
         process: 'A clear, repeatable way to move from a real problem to a product people can use.'
       },
       expLabel: 'Experience', eduLabel: 'Education', skillsLabel: 'Skills',
@@ -119,16 +119,16 @@ window.SITE = {
       firstName: 'Yousef', lastName: 'Hakeem',
       fullName: 'Yousef Zain Alabdeen Hakeem',
       role: 'UI/UX Designer & IT Specialist',
-      roleSub: 'Design · IT support · Development',
+      roleSub: 'Design · Information Technology · Development',
       available: 'Open to new opportunities',
-      intro: 'I design clear, easy-to-use digital experiences and build them end to end, with hands-on experience in IT support and system administration. Human–Computer Interaction graduate from the Software Engineering Department at Umm Al-Qura University.',
+      intro: 'I design clear, easy-to-use digital experiences and build them end to end, with hands-on experience in information technology and system administration. Human–Computer Interaction graduate from the Software Engineering Department at Umm Al-Qura University.',
       ctaWork: 'View my work', ctaCV: 'Resume',
-      cvUX: 'UI/UX Resume', cvUXd: 'Design & user experience', cvIT: 'IT Resume', cvITd: 'IT support, systems & development',
+      cvUX: 'UI/UX Resume', cvUXd: 'Design & user experience', cvIT: 'IT Resume', cvITd: 'Information technology, systems & development',
       scroll: 'Scroll',
       marquee: ['UI Design', 'UX Design', 'Usability', 'User Research', 'Design Systems', 'Prototyping', 'Interaction Design'],
       aboutLabel: 'About',
       statement: 'I believe good design starts with the user — their needs, their context, and the real problem they face. I turn complex ideas into simple, enjoyable, usable interfaces.',
-      aboutP: 'I work across the full cycle — from research and prototyping to visual design, development and launch — backed by hands-on experience in IT support, servers, user accounts and networks.',
+      aboutP: 'I work across the full cycle — from research and prototyping to visual design, development and launch — backed by hands-on experience in information technology, servers, user accounts and networks.',
       quote: 'Simplicity isn’t the absence of detail — it’s clarity of intent.',
       facts: [['University', 'Umm Al-Qura University'], ['Specialty', 'Human–Computer Interaction'], ['Field', 'UI/UX · Information Technology'], ['Languages', 'Arabic · English']],
       stats: [['6', 'Selected projects'], ['65+', 'Screens designed'], ['3', 'Platforms: web · mobile · watch']],
@@ -162,23 +162,23 @@ window.SITE = {
       ],
       expertiseLabel: 'Expertise',
       expertise: [
-        { h: 'Research & Evaluation', items: ['User interviews', 'Personas', 'Journey mapping', 'Usability testing', 'Heuristic evaluation (Nielsen)'] },
-        { h: 'Design & Prototyping', items: ['UX improvement', 'Wireframes', 'High-fidelity prototypes', 'Design systems'] },
-        { h: 'Development', items: ['HTML · CSS · JavaScript', 'Flutter (Dart) apps', 'PostgreSQL · SQL · Firebase', 'Admin dashboards & CMS', 'Git & web deployment'] },
-        { h: 'IT Support & Systems', items: ['Help Desk support', 'Hardware & network troubleshooting', 'Server & account management', 'Ticket management'] }
+        { h: 'UX Research', items: ['User interviews', 'Personas', 'Journey mapping', 'Usability testing', 'Heuristic evaluation (Nielsen)', 'UX audits'] },
+        { h: 'UI & Interaction Design', items: ['Information architecture', 'User flows', 'Wireframing', 'High-fidelity UI', 'Interactive prototyping', 'Design systems', 'Responsive design', 'Arabic (RTL) & bilingual UI', 'Visual identity', 'Figma · Adobe XD'] },
+        { h: 'Development', items: ['HTML · CSS · JavaScript', 'Flutter (Dart)', 'PostgreSQL · SQL', 'Firebase', 'Admin dashboards & CMS', 'Git & web deployment'] },
+        { h: 'IT & Systems', items: ['System administration', 'Server management', 'User account management', 'Network & system troubleshooting', 'SAP ABAP fundamentals'] }
       ],
-      tools: ['Human-Computer Interaction', 'UX Research', 'Usability Testing', 'Prototyping', 'Design Systems', 'IT Support', 'System Administration', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
+      tools: ['Human-Computer Interaction', 'UX Research', 'Usability Testing', 'Prototyping', 'Design Systems', 'Information Technology', 'System Administration', 'SAP ABAP', 'Figma', 'Adobe XD', 'HTML / CSS', 'JavaScript', 'Flutter', 'PostgreSQL', 'Firebase'],
       timelineLabel: 'Education & experience',
       timeline: [
         { kind: 'work', title: 'Technical Lead', org: 'Qoratayn Youth Association · Dammam', date: 'Jan – Aug 2026', desc: 'Built the association’s complete system from scratch — website, back end and an Arabic CMS dashboard — and delivered it single-handedly to non-technical staff who now manage content themselves.' },
-        { kind: 'work', title: 'IT Trainee (Cooperative Training)', org: 'Saudi Arabian Amiantit Company', date: 'Mar – Jul 2025', desc: 'Help Desk and System Administration: resolved hardware, software and network issues, and managed servers and user accounts.' },
+        { kind: 'work', title: 'IT Trainee (Cooperative Training)', org: 'Saudi Arabian Amiantit Company', date: 'Mar – Jul 2025', desc: 'Trained in System Administration — managing servers and user accounts and troubleshooting system and network issues — with hands-on exposure to SAP ABAP development.' },
         { kind: 'edu', title: 'Bachelor of Human–Computer Interaction (HCI)', org: 'Umm Al-Qura University · Software Engineering Department', date: '2026', desc: 'Interface design, usability and user cognition, built on a software engineering foundation.' }
       ],
       contactLabel: 'Contact',
       contactH: 'Let’s work together.',
       contactP: 'Have a project or an opportunity? I’d love to hear from you.',
       call: 'Call', whatsapp: 'WhatsApp', emailLbl: 'Email', linkedin: 'LinkedIn',
-      waAct: 'Send a message ↗', liAct: 'View profile ↗', dlAct: 'Download PDF ↓', navCta: 'Get in touch',
+      waAct: 'Send a message', liAct: 'View profile', dlAct: 'Download PDF', navCta: 'Get in touch',
       localTime: 'Dammam, Eastern Province',
       footer: '© 2026 Yousef Hakeem',
       backTop: 'Back to top',
@@ -195,6 +195,11 @@ window.SITE.img = function (id, i) { return window.MEDIA[id][i]; };
 window.SITE.url = function (p) { return (window.SITE_ROOT || '') + p; };
 window.SITE.esc = function (s) {
   return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+};
+/* Small arrow icons (font arrows differ in size between typefaces). */
+window.SITE.arw = function (dir) {
+  var d = { ne: 'M7 17 17 7M8 7h9v9', down: 'M12 5v14M6 13l6 6 6-6', up: 'M12 19V5M6 11l6-6 6 6' }[dir];
+  return '<svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>';
 };
 /* Wrap each word in a span (never split Arabic letters — it breaks letter joining). */
 window.SITE.words = function (text, cls) {

@@ -28,17 +28,14 @@
       hint: 'Swipe left and right to flip through the screens', hintDesk: 'Drag or use the arrows to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
-  var BRAND = ['#2a7d68', '#b8915a', '#5b6f96']; // emerald, champagne, slate
+  var BRAND = ['#5b54e8', '#3aa0e6', '#8b7cf0']; // indigo, sky, violet
   var PAL = {
     scrapbid: ['#c4561f', '#5a2410', '#e0883a'], studybuddy: ['#6d5bd0', '#3b2fa8', '#2a6bf0'], qurrat: ['#1d6b5f', '#b08a35', '#0f5b4f'],
     nusuk: ['#b08a35', '#3a2d12', '#6b5a2a'], mister: ['#4f6ff0', '#7b5cff', '#2aa8f0'], mindwell: ['#1f6b6e', '#2f8f77', '#155a7a']
   };
   // Floating screens around the hero: [project, image index, left%, top%, width(vw), depth]
   // A mirrored composition: web / phone / small phone down each side, clear of the nav bar and the name.
-  var FLOAT = [
-    ['studybuddy', 4, 3, 24, 15, .9], ['mindwell', 2, 6, 52, 7, .5], ['scrapbid', 15, 15, 72, 6.5, .35],
-    ['mister', 6, 87, 20, 7.5, .6], ['nusuk', 2, 85.5, 47, 9.5, .4], ['scrapbid', 1, 76, 70, 16, 1]
-  ];
+  var FLOAT = []; // the desktop hero stays clean: name, role, intro, actions
   // Fanned phone screens under the hero on small screens: [project, image index]
   var DECK = [['mindwell', 2], ['scrapbid', 13], ['mister', 0]];
 
@@ -52,7 +49,7 @@
     document.documentElement.dataset.theme = th;
     try { localStorage.setItem('yh-theme', th); } catch (e) {}
     var mc = document.querySelector('meta[name="theme-color"]');
-    if (mc) mc.content = th === 'light' ? '#f6f4ef' : '#0b0c10';
+    if (mc) mc.content = th === 'light' ? '#f7f8fc' : '#0b0c14';
     var b = app.querySelector('.theme-btn');
     if (b) b.setAttribute('aria-label', th === 'light' ? L[S.lang()].toDark : L[S.lang()].toLight);
   }
@@ -94,15 +91,15 @@
         '<p class="sc-tag">' + esc(p.tag) + '</p><h3 class="kufi">' + W(p.title) + '</h3><p class="sc-sub">' + esc(p.sub) + '</p>' +
         '<p class="sc-desc">' + esc(p.desc) + '</p>' +
         '<div class="sc-actions"><span class="sc-btn glass">' + esc(t.viewCase) + ' <small>' + window.MEDIA[id].length + '</small><i class="on-grad">' + ICON.arrow + '</i></span>' +
-        (m.demo ? '<a class="sc-demo" href="' + m.demo + '" target="_blank" rel="noopener">' + esc(t.liveDemo) + ' ↗</a>' : '') + '</div></div></article>';
+        (m.demo ? '<a class="sc-demo" href="' + m.demo + '" target="_blank" rel="noopener">' + esc(t.liveDemo) + S.arw('ne') + '</a>' : '') + '</div></div></article>';
     }).join('');
     var stats = t.stats.map(function (s) {
       var n = parseInt(s[0], 10), suf = s[0].replace(/^\d+/, '');
-      return '<div class="tile t-stat glass spot" data-tilt><b class="grad" data-n="' + n + '" data-s="' + suf + '">' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>';
+      return '<div class="tile t-stat glass spot"><b class="grad" data-n="' + n + '" data-s="' + suf + '">' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>';
     });
     var facts = t.facts.map(function (f) { return '<li><span>' + esc(f[0]) + '</span><strong>' + esc(f[1]) + '</strong></li>'; }).join('');
     var steps = t.process.map(function (s) {
-      return '<div class="step glass spot" data-tilt><div class="step-ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" cx="32" cy="32" r="28"/></svg><b>' + s.n + '</b></div>' +
+      return '<div class="step glass spot"><div class="step-ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" cx="32" cy="32" r="28"/></svg><b>' + s.n + '</b></div>' +
         '<div><h3 class="kufi">' + esc(s.t) + '</h3><p>' + esc(s.d) + '</p></div></div>';
     }).join('');
     var exp = t.expertise.map(function (g) { return '<div class="exp-col glass spot" data-fade><h3 class="kufi">' + esc(g.h) + '</h3><ul class="chips">' + g.items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>'; }).join('');
@@ -112,7 +109,7 @@
       }).join('') + '</div>';
     };
     var cvLinks = [[S.cv, t.cvUX, t.cvUXd], [S.cvIT, t.cvIT, t.cvITd]].map(function (c) {
-      return '<a role="menuitem" href="' + S.url(c[0]) + '" target="_blank" rel="noopener"><b>' + esc(c[1]) + '</b><small>' + esc(c[2]) + '</small><i>PDF ↓</i></a>';
+      return '<a role="menuitem" href="' + S.url(c[0]) + '" target="_blank" rel="noopener"><b>' + esc(c[1]) + '</b><small>' + esc(c[2]) + '</small><i>PDF' + S.arw('down') + '</i></a>';
     }).join('');
     var name = '<span class="w"><span>' + esc(t.firstName) + '</span></span> <span class="w"><span class="grad">' + esc(t.lastName) + '</span></span>';
     var dark = theme() === 'dark';
@@ -132,12 +129,12 @@
 
       '<main>' +
       '<section class="hero" id="top" data-fab-hide><div class="floaters">' + floaters + '</div>' +
-        '<div class="hero-inner"><span class="avail glass"><i></i>' + esc(t.available) + '</span>' +
+        '<div class="hero-inner">' +
           '<h1 class="hero-name kufi" aria-label="' + esc(t.fullName) + '">' + name + '</h1>' +
           '<p class="hero-role">' + esc(t.role) + ' <span class="rs"><i>·</i> ' + esc(t.roleSub) + '</span></p>' +
           '<p class="hero-intro">' + esc(t.intro) + '</p>' +
-          '<div class="hero-cta"><a class="cta cta-grad on-grad" data-mag href="#work" data-scroll="work">' + esc(t.ctaWork) + ICON.down + '</a>' +
-          '<div class="cv-pick"><button class="cta glass cv-toggle" data-mag type="button" aria-expanded="false" aria-haspopup="true">' + esc(t.ctaCV) + ' <small>PDF</small>' + ICON.down + '</button>' +
+          '<div class="hero-cta"><a class="cta cta-grad on-grad" href="#work" data-scroll="work">' + esc(t.ctaWork) + ICON.down + '</a>' +
+          '<div class="cv-pick"><button class="cta glass cv-toggle" type="button" aria-expanded="false" aria-haspopup="true">' + esc(t.ctaCV) + ' <small>PDF</small>' + ICON.down + '</button>' +
             '<div class="cv-menu glass" role="menu">' + cvLinks + '</div></div></div></div>' +
         '<div class="hero-deck">' + DECK.map(function (d, k) { var im = S.img(d[0], d[1]); return '<img class="d' + (k + 1) + '" data-proj="' + d[0] + '" src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="' + esc(t.P[d[0]].title) + '">'; }).join('') + '</div>' +
       '</section>' +
@@ -176,12 +173,12 @@
         '<a class="mail grad" href="mailto:' + S.email + '">' + S.email + '</a>' +
         '<div class="c-grid">' +
           '<a class="c-item glass" href="tel:' + S.phone + '"><span>' + esc(t.call) + '</span><strong class="ltr">' + S.phoneDisplay + '</strong></a>' +
-          '<a class="c-item glass" href="' + S.whatsapp + '" target="_blank" rel="noopener"><span>' + esc(t.whatsapp) + '</span><strong>' + esc(t.waAct) + '</strong></a>' +
-          '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>' + esc(t.liAct) + '</strong></a>' +
-          '<a class="c-item c-cv glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>' + esc(t.cvUX) + '</span><strong>' + esc(t.dlAct) + '</strong></a>' +
-          '<a class="c-item c-cv glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>' + esc(t.cvIT) + '</span><strong>' + esc(t.dlAct) + '</strong></a>' +
+          '<a class="c-item glass" href="' + S.whatsapp + '" target="_blank" rel="noopener"><span>' + esc(t.whatsapp) + '</span><strong>' + esc(t.waAct) + S.arw('ne') + '</strong></a>' +
+          '<a class="c-item glass" href="' + S.linkedin + '" target="_blank" rel="noopener"><span>' + esc(t.linkedin) + '</span><strong>' + esc(t.liAct) + S.arw('ne') + '</strong></a>' +
+          '<a class="c-item c-cv glass" href="' + S.url(S.cv) + '" target="_blank" rel="noopener"><span>' + esc(t.cvUX) + '</span><strong>' + esc(t.dlAct) + S.arw('down') + '</strong></a>' +
+          '<a class="c-item c-cv glass" href="' + S.url(S.cvIT) + '" target="_blank" rel="noopener"><span>' + esc(t.cvIT) + '</span><strong>' + esc(t.dlAct) + S.arw('down') + '</strong></a>' +
         '</div></div>' +
-        '<div class="footer"><span>' + esc(t.footer) + '</span><span>' + esc(t.localTime) + ' · <span class="clock" dir="ltr">--:--</span></span><button type="button" class="to-top">' + esc(t.backTop) + ' ↑</button></div>' +
+        '<div class="footer"><span>' + esc(t.footer) + '</span><span>' + esc(t.localTime) + ' · <span class="clock" dir="ltr">--:--</span></span><button type="button" class="to-top">' + esc(t.backTop) + S.arw('up') + '</button></div>' +
       '</section>' +
       '</main>';
   }
@@ -336,17 +333,6 @@
       acc += e.deltaX;
       if (Math.abs(acc) > 46) { flip(stepFromDx(-acc)); acc = 0; lock = Date.now() + 520; }
     }, { passive: false });
-    if (fine && !reduce) { // subtle depth tilt following the mouse
-      var rx = 0, ry = 0;
-      Stage.el.addEventListener('pointermove', function (e) {
-        if (drag) return;
-        var r = Stage.el.getBoundingClientRect(), cv = Stage.cur && Stage.cur.querySelector('.cv');
-        if (!cv) return;
-        ry = ((e.clientX - r.left) / r.width - .5) * 8; rx = -((e.clientY - r.top) / r.height - .5) * 6;
-        gsap.to(cv, { rotationY: ry, rotationX: rx, duration: .8, ease: 'power3.out', overwrite: 'auto' });
-      });
-      Stage.el.addEventListener('pointerleave', function () { var cv = Stage.cur && Stage.cur.querySelector('.cv'); if (cv) gsap.to(cv, { rotationY: 0, rotationX: 0, duration: .9, ease: 'power3.out' }); });
-    }
   }
 
   // Drag tracking lives on window so a swipe can leave the stage without getting stuck.
@@ -416,29 +402,6 @@
           el.style.setProperty('--my', (e.clientY - r.top) + 'px');
         });
       });
-      app.querySelectorAll('[data-tilt]').forEach(function (el) {
-        var rx = gsap.quickTo(el, 'rotationX', { duration: .7, ease: 'power3' }), ry = gsap.quickTo(el, 'rotationY', { duration: .7, ease: 'power3' });
-        var clamp = gsap.utils.clamp(-.5, .5), box = null;
-        gsap.set(el, { transformPerspective: 900 });
-        // Measure once on entry: the tilted box would feed back into its own angle and run away.
-        el.addEventListener('pointerenter', function () { box = el.getBoundingClientRect(); });
-        el.addEventListener('pointermove', function (e) {
-          if (!box) box = el.getBoundingClientRect();
-          ry(clamp((e.clientX - box.left) / box.width - .5) * 7);
-          rx(-clamp((e.clientY - box.top) / box.height - .5) * 7);
-        });
-        el.addEventListener('pointerleave', function () { box = null; rx(0); ry(0); });
-      });
-      app.querySelectorAll('[data-mag]').forEach(function (el) {
-        var xTo = gsap.quickTo(el, 'x', { duration: .7, ease: 'elastic.out(1, .45)' }), yTo = gsap.quickTo(el, 'y', { duration: .7, ease: 'elastic.out(1, .45)' });
-        el.addEventListener('pointermove', function (e) { var r = el.getBoundingClientRect(); xTo((e.clientX - r.left - r.width / 2) * .28); yTo((e.clientY - r.top - r.height / 2) * .4); });
-        el.addEventListener('pointerleave', function () { xTo(0); yTo(0); });
-      });
-      var movers = gsap.utils.toArray(app.querySelectorAll('.fl')).map(function (f) { return { d: +f.dataset.depth, x: gsap.quickTo(f, 'x', { duration: 1.4, ease: 'power3' }), y: gsap.quickTo(f, 'y', { duration: 1.4, ease: 'power3' }) }; });
-      app.querySelector('.hero').addEventListener('pointermove', function (e) {
-        var cx = e.clientX / innerWidth - .5, cy = e.clientY / innerHeight - .5;
-        movers.forEach(function (m) { m.x(cx * -60 * m.d); m.y(cy * -40 * m.d); });
-      });
     }
   }
 
@@ -455,7 +418,7 @@
     });
 
     /* showcase: the stage follows the active story */
-    var items = gsap.utils.toArray('.sc-item'), dots = gsap.utils.toArray('.sc-dots i'), active = -1;
+    var items = gsap.utils.toArray('.sc-item'), dots = gsap.utils.toArray('.sc-dots i'), active = -1, inShow = false;
     function activate(i) {
       if (i === active) return;
       var dir = i > active ? 1 : -1;
@@ -463,7 +426,7 @@
       items.forEach(function (it, k) { it.classList.toggle('is-active', k === i); });
       dots.forEach(function (d, k) { d.classList.toggle('is-on', k === i); });
       stageProject(S.order[i], dir, Stage.id === null);
-      setPalette(S.order[i]);
+      if (inShow) setPalette(S.order[i]);
     }
     // The active story is the last one whose top crossed the activation line; recomputed every update so
     // fast flings and jumps never skip a project. On phones the stage pins to the top half, so the line sits lower.
@@ -473,8 +436,9 @@
       activate(idx);
     }
     ST.create({ trigger: '.sc-list', start: 'top bottom', end: 'bottom top', onUpdate: pickActive, onRefresh: pickActive });
-    ST.create({ trigger: '.showcase', start: 'top 60%', end: 'bottom 40%', onEnter: hintOnce, onEnterBack: hintOnce,
-      onLeave: function () { setPalette(null); }, onLeaveBack: function () { setPalette(null); } });
+    function showIn() { inShow = true; setPalette(S.order[Math.max(active, 0)]); hintOnce(); }
+    function showOut() { inShow = false; setPalette(null); }
+    ST.create({ trigger: '.showcase', start: 'top 60%', end: 'bottom 40%', onEnter: showIn, onEnterBack: showIn, onLeave: showOut, onLeaveBack: showOut });
     activate(0);
     setPalette(null, true);
 
@@ -484,11 +448,11 @@
 
     /* intro */
     var tl = gsap.timeline({ delay: first ? introAt : 0, defaults: { ease: 'expo.out' } });
-    tl.from('.avail', { y: -16, opacity: 0, duration: 1 })
-      .from('.hero-name .w > span', { yPercent: 120, rotation: 4, filter: 'blur(12px)', duration: 1.5, stagger: .14, clearProps: 'filter' }, .1)
+    tl.from('.hero-name .w > span', { yPercent: 120, rotation: 4, filter: 'blur(12px)', duration: 1.5, stagger: .14, clearProps: 'filter' }, .1)
       .from('.hero-role, .hero-intro', { y: 26, opacity: 0, filter: 'blur(6px)', duration: 1.2, stagger: .08, clearProps: 'filter' }, .45)
-      .from('.hero-cta > *', { y: 24, opacity: 0, duration: 1.1, stagger: .08 }, .6)
-      .from('.fl', { opacity: 0, scale: .7, z: -420, duration: 1.8, stagger: { each: .08, from: 'random' } }, .25);
+      .from('.hero-cta > *', { y: 24, opacity: 0, duration: 1.1, stagger: .08 }, .6);
+
+    if (FLOAT.length) tl.from('.fl', { opacity: 0, scale: .7, z: -420, duration: 1.8, stagger: { each: .08, from: 'random' } }, .25);
 
     /* hero on scroll */
     gsap.utils.toArray('.fl').forEach(function (f) {
@@ -538,81 +502,6 @@
       gsap.from(s, { y: 60, rotationX: 18, transformPerspective: 900, opacity: 0, duration: 1.2, delay: (isSmall() ? 0 : i * .08), ease: 'expo.out', scrollTrigger: { trigger: isSmall() ? s : '.steps', start: 'top 88%' } });
     });
     gsap.from('.contact-card', { scale: .9, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.contact-card', start: 'top bottom', end: 'top 35%', scrub: 1 } });
-  }
-
-  /* ---------- custom cursor: a dot plus a trailing ring that hints at what a click will do ---------- */
-  var CUR = {
-    drag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg>',
-    zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M11 8.5v5M8.5 11h5M20 20l-4.2-4.2"/></svg>'
-  };
-  function initCursor() {
-    if (!fine || reduce) return;
-    var el = document.createElement('div');
-    el.className = 'cursor is-hidden';
-    el.setAttribute('aria-hidden', 'true');
-    el.innerHTML = '<i class="cur-dot"></i><span class="cur-ring"><i></i></span>';
-    document.body.appendChild(el);
-    document.documentElement.classList.add('has-cursor');
-    var dot = el.querySelector('.cur-dot'), ring = el.querySelector('.cur-ring'), icon = ring.querySelector('i');
-    var STICK = '.cta, .gbtn, .sc-btn, .sc-open, .sc-nav, .c-item, .cv-menu a, .pv-demo, .pv-close, .pv-next, .nav-links a, .logo, .to-top, .menu-links a';
-    var mx = -100, my = -100, rx = -100, ry = -100, lastHint = '', stick = null, stickR = '', down = false, running = false, seen = false;
-    var size = { w: 0, h: 0, r: '' };
-
-    function setBox(w, h, radius) { // only touch layout when the box really changes
-      if (w === size.w && h === size.h && radius === size.r) return;
-      size = { w: w, h: h, r: radius };
-      ring.style.width = w ? w + 'px' : ''; ring.style.height = h ? h + 'px' : ''; ring.style.borderRadius = radius;
-    }
-    function frame() {
-      // the dot is glued to the pointer; the ring eases after it (tight, ~4 frames) and wraps buttons it is over
-      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
-      var tx = mx, ty = my, stretch = '';
-      if (stick && stick.isConnected) {
-        var r = stick.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        tx = cx + (mx - cx) * .12; ty = cy + (my - cy) * .12;
-        setBox(Math.round(r.width + 10), Math.round(r.height + 10), stickR);
-      } else {
-        if (stick) { stick = null; el.classList.remove('is-stick'); }
-        setBox(0, 0, '');
-      }
-      var vx = tx - rx, vy = ty - ry;
-      rx += vx * .26; ry += vy * .26;
-      if (!stick && !lastHint) { // a light stretch in the direction of travel
-        var speed = Math.min(Math.hypot(vx, vy) / 60, .22);
-        if (speed > .01) stretch = ' rotate(' + Math.atan2(vy, vx) + 'rad) scale(' + (1 + speed) + ',' + (1 - speed * .6) + ')';
-      }
-      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)' + stretch + (down ? ' scale(.86)' : '');
-      if (Math.abs(vx) + Math.abs(vy) > .1 || stick) requestAnimationFrame(frame); else running = false;
-    }
-    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
-
-    window.addEventListener('pointermove', function (e) {
-      if (e.pointerType !== 'mouse') return;
-      mx = e.clientX; my = e.clientY;
-      if (!seen) { rx = mx; ry = my; seen = true; }
-      el.classList.remove('is-hidden');
-      kick();
-    }, { passive: true });
-    document.addEventListener('pointerover', function (e) {
-      var t = e.target, hint = '', link = false, s = null;
-      if (!t.closest) return;
-      if (t.closest('.sc-nav, .sc-open')) s = t.closest('.sc-nav, .sc-open');
-      else if (t.closest('.sc-stage')) hint = 'drag';
-      else if (t.closest('.pv-shot')) hint = 'zoom';
-      else if ((s = t.closest(STICK))) {}
-      else if (t.closest('a, button, [role="button"], label, .fl')) link = true;
-      if (hint !== lastHint) { if (hint) icon.innerHTML = CUR[hint]; lastHint = hint; }
-      if (s && s !== stick) stickR = (parseFloat(getComputedStyle(s).borderTopLeftRadius) || 0) + 5 + 'px';
-      stick = s;
-      el.classList.toggle('is-stick', !!s);
-      el.classList.toggle('is-hint', !!hint);
-      el.classList.toggle('is-link', link);
-      kick();
-    });
-    document.documentElement.addEventListener('mouseleave', function () { el.classList.add('is-hidden'); });
-    window.addEventListener('pointerdown', function () { down = true; kick(); });
-    window.addEventListener('pointerup', function () { down = false; kick(); });
-    window.addEventListener('scroll', kick, { passive: true }); // keep a wrapped button tracked while the page moves
   }
 
   /* ---------- intro curtain (first visit per session) ---------- */
@@ -675,7 +564,6 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menuOpen) setMenu(false); });
 
   playLoader();
-  initCursor();
   mount(true);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { placeFloaters(); ST.refresh(); });
   window.addEventListener('load', function () { ST.refresh(); });
