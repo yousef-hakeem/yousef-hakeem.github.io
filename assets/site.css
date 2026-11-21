@@ -348,6 +348,26 @@ section { position: relative; padding: clamp(56px, 6.5vw, 104px) var(--pad); }
   .steps { grid-template-columns: 1fr 1fr; }
 }
 .hero-deck { display: none; }
+/* desktop hero gallery: a symmetric line-up of real screens */
+.hero-show { display: none; }
+@media (min-width: 961px) {
+  .hero { min-height: auto; justify-content: flex-start; padding-top: clamp(150px, 20vh, 210px); padding-bottom: 40px; }
+  .hero-show { display: block; position: relative; z-index: 1; width: min(1180px, 92%); aspect-ratio: 1180 / 352; margin: clamp(56px, 8vh, 88px) auto 0; perspective: 1800px; }
+  .hs { position: absolute; margin: 0; overflow: hidden; cursor: pointer; background: var(--glass-2); border: 1px solid var(--glass-line); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 40px 80px -36px var(--shadow); will-change: transform; }
+  .hs img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform .8s var(--ease); }
+  .hs:hover img { transform: scale(1.03); }
+  .hs:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .hs-w { aspect-ratio: 16 / 10.6; border-radius: 14px; display: flex; flex-direction: column; }
+  .hs-w img { flex: 1; min-height: 0; }
+  .hs-bar { flex: none; height: 22px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: var(--bar); border-bottom: 1px solid var(--glass-line); }
+  .hs-bar i { width: 7px; height: 7px; border-radius: 50%; background: var(--bar-dot); }
+  .hs-p { aspect-ratio: 420 / 807; border-radius: 24px; width: 12%; top: 4%; z-index: 4; }
+  .g-c { left: 30%; width: 40%; top: 0; z-index: 5; }
+  .g-l, .g-r { width: 27%; top: 13%; z-index: 3; }
+  .g-l { left: 9.5%; } .g-r { right: 9.5%; }
+  .g-lp { left: 0; } .g-rp { right: 0; }
+  [dir="rtl"] .hero-show { direction: ltr; }
+}
 @media (max-width: 760px) {
   .floaters { display: none; }
   .sec-head { grid-template-columns: 1fr; gap: 12px; }
@@ -421,3 +441,22 @@ section { position: relative; padding: clamp(56px, 6.5vw, 104px) var(--pad); }
 
 /* arrow icons drawn as SVG so every arrow has the same size and weight */
 .arw { width: .95em; height: .95em; vertical-align: -.14em; margin-inline-start: .35em; flex: none; }
+
+/* cursor: a small dot with a soft trailing ring, plus a faint glow that follows the pointer */
+.cur { position: fixed; left: 0; top: 0; z-index: 10000; pointer-events: none; opacity: 0; transition: opacity .3s; }
+.cur.is-on { opacity: 1; }
+.cur i { position: absolute; left: 0; top: 0; display: block; border-radius: 50%; transform: translate(-50%, -50%); transition: width .35s var(--ease), height .35s var(--ease), background-color .35s, border-color .35s, opacity .3s; }
+.cur-dot i { width: 6px; height: 6px; background: var(--accent); }
+.cur-ring i { width: 34px; height: 34px; border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+.cur.is-hover.cur-ring i { width: 58px; height: 58px; background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+.cur.is-hover.cur-dot i { width: 4px; height: 4px; }
+.cur.is-down.cur-ring i { width: 26px; height: 26px; }
+html.has-cur, html.has-cur * { cursor: none !important; }
+html.has-cur input, html.has-cur textarea { cursor: text !important; }
+.cur-glow { position: fixed; z-index: 0; pointer-events: none; left: 0; top: 0; width: 560px; height: 560px; margin: -280px 0 0 -280px; border-radius: 50%; opacity: 0; transition: opacity .8s; animation: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent) 0%, transparent 65%); }
+.cur-glow.is-on { opacity: 1; }
+/* the gradient in the name drifts slowly, like light moving across it */
+.hero-name .grad { background-size: 220% 100%; animation: gradDrift 9s ease-in-out infinite alternate; }
+@keyframes gradDrift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { .hero-name .grad { animation: none; } }

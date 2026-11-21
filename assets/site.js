@@ -38,6 +38,8 @@
   var FLOAT = []; // the desktop hero stays clean: name, role, intro, actions
   // Fanned phone screens under the hero on small screens: [project, image index]
   var DECK = [['mindwell', 2], ['scrapbid', 13], ['mister', 0]];
+  // Desktop hero gallery: a calm, symmetric line-up under the actions. [project, image index, slot, kind (w = web, p = phone)]
+  var GALLERY = [['mindwell', 2, 'lp', 'p'], ['studybuddy', 1, 'l', 'w'], ['scrapbid', 1, 'c', 'w'], ['qurrat', 0, 'r', 'w'], ['mindwell', 0, 'rp', 'p']];
 
   /* ---------- language + theme ---------- */
   function setLang(l) { document.documentElement.lang = l; document.documentElement.dir = S.t[l].dir; try { localStorage.setItem('yh-lang', l); } catch (e) {} }
@@ -136,6 +138,12 @@
           '<div class="hero-cta"><a class="cta cta-grad on-grad" href="#work" data-scroll="work">' + esc(t.ctaWork) + ICON.down + '</a>' +
           '<div class="cv-pick"><button class="cta glass cv-toggle" type="button" aria-expanded="false" aria-haspopup="true">' + esc(t.ctaCV) + ' <small>PDF</small>' + ICON.down + '</button>' +
             '<div class="cv-menu glass" role="menu">' + cvLinks + '</div></div></div></div>' +
+        '<div class="hero-show">' + GALLERY.map(function (g) {
+          var im = S.img(g[0], g[1]);
+          return '<figure class="hs hs-' + g[3] + ' g-' + g[2] + '" data-proj="' + g[0] + '" role="button" tabindex="0" aria-label="' + esc(t.P[g[0]].title) + '">' +
+            (g[3] === 'w' ? '<span class="hs-bar" aria-hidden="true"><i></i><i></i><i></i></span>' : '') +
+            '<img src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="">' + '</figure>';
+        }).join('') + '</div>' +
         '<div class="hero-deck">' + DECK.map(function (d, k) { var im = S.img(d[0], d[1]); return '<img class="d' + (k + 1) + '" data-proj="' + d[0] + '" src="' + S.url(im.sm) + '" width="' + im.w + '" height="' + im.h + '" alt="' + esc(t.P[d[0]].title) + '">'; }).join('') + '</div>' +
       '</section>' +
 
@@ -372,6 +380,32 @@
     gsap.to(document.documentElement, { '--c1': c[0], '--c2': c[1], '--c3': c[2], duration: instant ? 0 : 1.6, ease: 'power2.inOut', overwrite: 'auto' });
   }
 
+  /* cursor: dot + trailing ring on precise pointers only; the native cursor comes back on touch or reduced motion */
+  function initCursor() {
+    if (reduce || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var dot = document.createElement('div'), ring = document.createElement('div');
+    dot.className = 'cur cur-dot'; ring.className = 'cur cur-ring'; dot.innerHTML = ring.innerHTML = '<i></i>';
+    dot.setAttribute('aria-hidden', 'true'); ring.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(dot); document.body.appendChild(ring);
+    var glow = document.createElement('i'); glow.className = 'cur-glow';
+    glow.setAttribute('aria-hidden', 'true'); document.body.appendChild(glow);
+    document.documentElement.classList.add('has-cur');
+    var dx = gsap.quickTo(dot, 'x', { duration: .08, ease: 'power3' }), dy = gsap.quickTo(dot, 'y', { duration: .08, ease: 'power3' });
+    var rx = gsap.quickTo(ring, 'x', { duration: .42, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .42, ease: 'power3' });
+    var gx = gsap.quickTo(glow, 'x', { duration: 1.4, ease: 'power2' }), gy = gsap.quickTo(glow, 'y', { duration: 1.4, ease: 'power2' });
+    var on = false, HOV = 'a, button, [role="button"], [data-proj], .sc-stage, label, summary';
+    window.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      if (!on) { on = true; gsap.set([dot, ring], { x: e.clientX, y: e.clientY }); gsap.set(glow, { x: e.clientX, y: e.clientY }); dot.classList.add('is-on'); ring.classList.add('is-on'); glow.classList.add('is-on'); }
+      dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); gx(e.clientX); gy(e.clientY);
+      var h = !!(e.target.closest && e.target.closest(HOV));
+      dot.classList.toggle('is-hover', h); ring.classList.toggle('is-hover', h);
+    }, { passive: true });
+    document.addEventListener('mouseleave', function () { on = false; dot.classList.remove('is-on'); ring.classList.remove('is-on'); glow.classList.remove('is-on'); });
+    window.addEventListener('pointerdown', function () { ring.classList.add('is-down'); });
+    window.addEventListener('pointerup', function () { ring.classList.remove('is-down'); });
+  }
+
   function bindUI() {
     app.querySelectorAll('[data-scroll]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); setMenu(false); scrollToId(a.getAttribute('data-scroll')); }); });
     app.querySelector('.theme-btn').addEventListener('click', toggleTheme);
@@ -460,7 +494,20 @@
       gsap.to(f, { yPercent: -120 * d, rotation: (d - .6) * 14, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
     });
     // Desktop: the hero text sinks and fades as you leave. Phones keep it still, so it never slides into the screens below it.
-    if (!isSmall()) gsap.to('.hero-inner', { y: 120, opacity: 0, scale: .94, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '80% top', scrub: 1 } });
+    // Desktop: the gallery rises in as one orderly row, then opens out gently as you scroll.
+    var show = app.querySelector('.hero-show');
+    if (show && getComputedStyle(show).display !== 'none') {
+      // a gentle cover-flow: the side screens turn in toward the centre
+      gsap.set('.g-l', { rotationY: 22, z: -40, transformOrigin: '100% 50%' });
+      gsap.set('.g-r', { rotationY: -22, z: -40, transformOrigin: '0% 50%' });
+      gsap.set('.g-lp', { rotationY: 26, z: -20, transformOrigin: '100% 50%' });
+      gsap.set('.g-rp', { rotationY: -26, z: -20, transformOrigin: '0% 50%' });
+      tl.from('.hs', { y: 80, opacity: 0, duration: 1.6, stagger: { each: .1, from: 'center' } }, .7);
+      var sst = { trigger: show, start: 'top 80%', end: 'bottom top', scrub: 1 };
+      gsap.to('.g-c', { scale: 1.05, ease: 'none', scrollTrigger: sst });
+      gsap.to('.g-l, .g-lp', { rotationY: '-=10', ease: 'none', scrollTrigger: sst });
+      gsap.to('.g-r, .g-rp', { rotationY: '+=10', ease: 'none', scrollTrigger: sst });
+    }
 
     /* reveals */
     gsap.utils.toArray('[data-reveal]').forEach(function (el) {
@@ -565,6 +612,7 @@
 
   playLoader();
   mount(true);
+  initCursor();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { placeFloaters(); ST.refresh(); });
   window.addEventListener('load', function () { ST.refresh(); });
 })();
