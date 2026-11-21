@@ -1,34 +1,34 @@
 /* Yousef Hakeem — portfolio styles (dark + light) */
 :root {
-  --bg: #0b0c14; --ink: #eef0f8; --muted: #9a9db0; --line: rgba(255,255,255,.08);
-  --glass: rgba(255,255,255,.04); --glass-2: rgba(255,255,255,.07); --glass-line: rgba(255,255,255,.09);
-  --accent: #a5b4fc; --accent-2: #7dd3fc; --on-accent: #0b0c14;
-  --grad: linear-gradient(100deg, #c7d2fe 0%, #a5b4fc 45%, #7dd3fc 100%);
-  --c1: #312e81; --c2: #0c4a6e; --c3: #3b2a6b; --aurora-op: .34; --grain: 0;
-  --vignette: rgba(11,12,20,.86); --bg-fade: rgba(11,12,20,.92);
-  --stage-bg: rgba(16,18,30,.6); --stage-bg-m: rgba(16,18,30,.9); --chip-bg: rgba(11,12,20,.6); --menu-bg: rgba(11,12,20,.94);
-  --shadow: rgba(0,0,0,.75); --bar: #1b1d2a; --bar-dot: #3a3d50; --spot: rgba(165,180,252,.1);
-  --elev: 0 1px 0 rgba(255,255,255,.04) inset, 0 24px 48px -28px rgba(0,0,0,.7);
+  --bg: #0d0b09; --ink: #f3ece1; --muted: #a39a8c; --line: rgba(255,240,220,.08);
+  --glass: rgba(255,240,220,.035); --glass-2: rgba(255,240,220,.065); --glass-line: rgba(255,240,220,.09);
+  --accent: #d6b27a; --accent-2: #a8834f; --on-accent: #0d0b09;
+  --grad: linear-gradient(100deg, #f6e7c8 0%, #d6b27a 50%, #a8834f 100%);
+  --c1: #3b2d1a; --c2: #2a2015; --c3: #4a3a22; --aurora-op: .45; --grain: 0;
+  --vignette: rgba(13,11,9,.86); --bg-fade: rgba(13,11,9,.92);
+  --stage-bg: rgba(24,20,16,.6); --stage-bg-m: rgba(24,20,16,.9); --chip-bg: rgba(13,11,9,.62); --menu-bg: rgba(13,11,9,.95);
+  --shadow: rgba(0,0,0,.75); --bar: #1c1814; --bar-dot: #3d352b; --spot: rgba(214,178,122,.08);
+  --elev: 0 1px 0 rgba(255,240,220,.04) inset, 0 24px 48px -28px rgba(0,0,0,.7);
   --nav-h: 74px; --pad: clamp(16px, 4.4vw, 64px); --maxw: 1320px;
   --ease: cubic-bezier(.22,.61,.36,1);
-  --pv-bg: #0e1018; --pv-ink: #eef0f8; --pv-muted: #9a9db0; --pv-line: rgba(255,255,255,.09); --pv-accent: #a5b4fc; --pv-surface: rgba(255,255,255,.04); --pv-backdrop: rgba(6,7,14,.72);
+  --pv-bg: #110f0c; --pv-ink: #f3ece1; --pv-muted: #a39a8c; --pv-line: rgba(255,240,220,.09); --pv-accent: #d6b27a; --pv-surface: rgba(255,240,220,.04); --pv-backdrop: rgba(8,6,4,.74);
   --pv-font: 'Alexandria', system-ui, sans-serif;
-  --fab-fg: #0b0c14; --fab-glow: rgba(165,180,252,.32); --fab-panel: #151724; --fab-ink: #eef0f8; --fab-muted: #9a9db0; --fab-line: rgba(255,255,255,.12);
+  --fab-fg: #0d0b09; --fab-glow: rgba(214,178,122,.3); --fab-panel: #1a1612; --fab-ink: #f3ece1; --fab-muted: #a39a8c; --fab-line: rgba(255,240,220,.12);
   --fab-font: 'Alexandria', system-ui, sans-serif;
   color-scheme: dark;
 }
 :root[data-theme="light"] {
-  --bg: #f7f8fc; --ink: #12131c; --muted: #61657a; --line: rgba(18,19,28,.08);
-  --glass: rgba(255,255,255,.72); --glass-2: #ffffff; --glass-line: rgba(18,19,28,.08);
-  --accent: #4f46e5; --accent-2: #0ea5e9; --on-accent: #ffffff;
-  --grad: linear-gradient(100deg, #4338ca 0%, #6d5cf6 50%, #2f95e0 100%);
-  --c1: #a5b4fc; --c2: #bae6fd; --c3: #ddd6fe;
-  --aurora-op: .22; --grain: 0; --vignette: rgba(247,248,252,.72); --bg-fade: rgba(247,248,252,.94);
-  --stage-bg: rgba(255,255,255,.6); --stage-bg-m: rgba(255,255,255,.92); --chip-bg: rgba(255,255,255,.88); --menu-bg: rgba(247,248,252,.97);
-  --shadow: rgba(30,34,80,.18); --bar: #eceef5; --bar-dot: #cdd0dc; --spot: rgba(79,70,229,.06);
-  --elev: 0 1px 2px rgba(18,19,28,.04), 0 22px 44px -28px rgba(30,34,80,.26);
-  --pv-bg: #f8f9fc; --pv-ink: #12131c; --pv-muted: #61657a; --pv-line: rgba(18,19,28,.08); --pv-accent: #4f46e5; --pv-surface: #ffffff; --pv-backdrop: rgba(18,20,44,.35);
-  --fab-fg: #ffffff; --fab-glow: rgba(79,70,229,.3); --fab-panel: #ffffff; --fab-ink: #12131c; --fab-muted: #61657a; --fab-line: rgba(18,19,28,.1);
+  --bg: #f6f2ea; --ink: #16130f; --muted: #6f675c; --line: rgba(22,19,15,.08);
+  --glass: rgba(255,255,255,.62); --glass-2: #fffdf9; --glass-line: rgba(22,19,15,.08);
+  --accent: #8c6a3c; --accent-2: #c8a36a; --on-accent: #ffffff;
+  --grad: linear-gradient(100deg, #16130f 0%, #8c6a3c 55%, #c8a36a 100%);
+  --c1: #e9d9bd; --c2: #efe4d1; --c3: #e2cfae;
+  --aurora-op: .5; --grain: 0; --vignette: rgba(246,242,234,.72); --bg-fade: rgba(246,242,234,.94);
+  --stage-bg: rgba(255,253,249,.6); --stage-bg-m: rgba(255,253,249,.92); --chip-bg: rgba(255,253,249,.88); --menu-bg: rgba(246,242,234,.97);
+  --shadow: rgba(40,30,15,.2); --bar: #ece6da; --bar-dot: #d3c8b5; --spot: rgba(140,106,60,.06);
+  --elev: 0 1px 2px rgba(22,19,15,.04), 0 22px 44px -28px rgba(40,30,15,.26);
+  --pv-bg: #f8f5ef; --pv-ink: #16130f; --pv-muted: #6f675c; --pv-line: rgba(22,19,15,.08); --pv-accent: #8c6a3c; --pv-surface: #fffdf9; --pv-backdrop: rgba(30,24,15,.35);
+  --fab-fg: #ffffff; --fab-glow: rgba(140,106,60,.3); --fab-panel: #fffdf9; --fab-ink: #16130f; --fab-muted: #6f675c; --fab-line: rgba(22,19,15,.1);
   color-scheme: light;
 }
 * { box-sizing: border-box; }
@@ -39,8 +39,8 @@ a { color: inherit; }
 img { max-width: 100%; display: block; }
 .kufi { font-family: 'Alexandria', system-ui, sans-serif; }
 
-.on-grad { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 64%, #0b0c14)); color: var(--on-accent); }
-.fab-btn, .fab-call { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 64%, #0b0c14)); color: var(--on-accent); }
+.on-grad { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 64%, #0d0b09)); color: var(--on-accent); }
+.fab-btn, .fab-call { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 64%, #0d0b09)); color: var(--on-accent); }
 .fab-btn::after { border-color: var(--accent); }
 /* theme switch: circular reveal handled by the View Transitions API */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }

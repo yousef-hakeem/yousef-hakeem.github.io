@@ -28,7 +28,14 @@
       hint: 'Swipe left and right to flip through the screens', hintDesk: 'Drag or use the arrows to flip through the screens', open: 'Open', cover: 'Cover', prev: 'Previous screen', next: 'Next screen', toLight: 'Light mode', toDark: 'Dark mode' }
   };
   // Aurora palettes per project (c1, c2, c3); default = brand.
-  var BRAND = ['#5b54e8', '#3aa0e6', '#8b7cf0']; // indigo, sky, violet
+  var BRAND = { dark: ['#3b2d1a', '#2a2015', '#4a3a22'], light: ['#e9d9bd', '#efe4d1', '#e2cfae'] }; // champagne glow
+  // In the light theme a project's colours are softened toward the paper so the glow stays a tint, never a stain.
+  function soften(hex, k) {
+    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255;
+    var m = function (c, w) { return Math.round(c + (w - c) * k); };
+    return '#' + ((1 << 24) + (m(r, 246) << 16) + (m(g, 242) << 8) + m(b, 234)).toString(16).slice(1);
+  }
+  var palId = null;
   var PAL = {
     scrapbid: ['#c4561f', '#5a2410', '#e0883a'], studybuddy: ['#6d5bd0', '#3b2fa8', '#2a6bf0'], qurrat: ['#1d6b5f', '#b08a35', '#0f5b4f'],
     nusuk: ['#b08a35', '#3a2d12', '#6b5a2a'], mister: ['#4f6ff0', '#7b5cff', '#2aa8f0'], mindwell: ['#1f6b6e', '#2f8f77', '#155a7a']
@@ -49,9 +56,10 @@
   function theme() { return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'; }
   function applyTheme(th) {
     document.documentElement.dataset.theme = th;
-    try { localStorage.setItem('yh-theme', th); } catch (e) {}
+    try { localStorage.setItem('yh-mode', th); } catch (e) {}
     var mc = document.querySelector('meta[name="theme-color"]');
-    if (mc) mc.content = th === 'light' ? '#f7f8fc' : '#0b0c14';
+    if (mc) mc.content = th === 'light' ? '#f6f2ea' : '#0d0b09';
+    if (typeof setPalette === 'function' && app.querySelector('.hero')) setPalette(palId, true);
     var b = app.querySelector('.theme-btn');
     if (b) b.setAttribute('aria-label', th === 'light' ? L[S.lang()].toDark : L[S.lang()].toLight);
   }
@@ -376,7 +384,9 @@
   }
   function setMenu(on) { menuOpen = on; document.documentElement.classList.toggle('menu-open', on); if (lenis) { if (on) lenis.stop(); else lenis.start(); } }
   function setPalette(id, instant) {
-    var c = (id && PAL[id]) || BRAND;
+    palId = id || null;
+    var light = document.documentElement.dataset.theme === 'light';
+    var c = id && PAL[id] ? (light ? PAL[id].map(function (h) { return soften(h, .62); }) : PAL[id]) : BRAND[light ? 'light' : 'dark'];
     gsap.to(document.documentElement, { '--c1': c[0], '--c2': c[1], '--c3': c[2], duration: instant ? 0 : 1.6, ease: 'power2.inOut', overwrite: 'auto' });
   }
 
